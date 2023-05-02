@@ -1,0 +1,6 @@
+[deps]
+Git = "d7ba0133-e1db-5d97-8f8c-041e4b3a1eb2"
+PackageCompiler = "9b87118b-4619-50d2-8e1e-99f35a4d4d9d"
+
+[compat]
+PackageCompiler = "2.0"
