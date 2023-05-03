@@ -1,7 +1,10 @@
 using Test
-using PSRExample
+using PSRPackageCompiler
 
-@test PSRExample.version() == ""
+function testall()
+    configuration = CompilerConfiguration("PSRClustering", raw"D:\development\psrclustering\PSRClustering.jl", raw"D:\development\psrclustering\PSRClustering.jl\compile")
 
-include("teste_simples.jl")
-include("teste_modelo_1.jl")
+    compile(configuration)
+end
+
+testall()
