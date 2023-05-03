@@ -9,9 +9,12 @@ using TOML
 import Inno
 import p7zip_jll
 
-include("string.jl")
+@service S3
+
+include("util.jl")
 include("configuration.jl")
 include("compile.jl")
 include("setup.jl")
+include("deploy.jl")
 
 end

@@ -2,7 +2,7 @@
 
 julia_version = "1.8.5"
 manifest_format = "2.0"
-project_hash = "88bde566a00457bc927af0e28b9202298f2a048e"
+project_hash = "de14d5f813eab9528c7d1f1710caee3d0e804f98"
 
 [[deps.AWS]]
 deps = ["Base64", "Compat", "Dates", "Downloads", "GitHub", "HTTP", "IniFile", "JSON", "MbedTLS", "Mocking", "OrderedCollections", "Random", "SHA", "Sockets", "URIs", "UUIDs", "XMLDict"]
@@ -108,7 +108,7 @@ version = "0.5.1"
 
 [[deps.Inno]]
 deps = ["LazyArtifacts"]
-git-tree-sha1 = "a6ce8e6f903fac20a74f21aadc85ba1585b2ccd7"
+git-tree-sha1 = "d7da2b7ae0a485839eb117e31e8ab518674e622c"
 repo-rev = "master"
 repo-url = "https://github.com/psrenergy/Inno.jl.git"
 uuid = "79823b5d-8cd7-4ac9-9032-f1255c7ccdbe"

@@ -19,11 +19,11 @@ function deploy(configuration::Configuration, aws_access_key::String, aws_secret
     aws_config = AWSConfig(; creds = aws_credentials, region = "us-east-1")
     global_aws_config(aws_config)
 
-    result = S3.list_objects_v2("psr-update-modules", Dict("prefix" => module_name))
+    result = S3.list_objects_v2("psr-update-modules", Dict("prefix" => target))
 
     versions = Vector{String}()
     for item in result["Contents"]
-        key = remove_first_occurrence(item["Key"], "$module_name/")
+        key = remove_first_occurrence(item["Key"], "$target/")
         if ends_with(key, ".zip")
             push!(versions, key)
         end
@@ -39,7 +39,7 @@ function deploy(configuration::Configuration, aws_access_key::String, aws_secret
 
     S3.put_object(
         "psr-update-modules",
-        "$module_name/releases.txt",
+        "$target/releases.txt",
         Dict(
             "body" => read(releases_path),
         ),
@@ -49,7 +49,7 @@ function deploy(configuration::Configuration, aws_access_key::String, aws_secret
 
     S3.put_object(
         "psr-update-modules",
-        "$module_name/$setup_zip",
+        "$target/$setup_zip",
         Dict(
             "body" => read(setup_zip_path),
         ),
