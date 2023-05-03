@@ -56,7 +56,7 @@ function compile(configuration::Configuration; windows_additional_files::Vector{
         executables = [target => "julia_main"],
         precompile_execution_file = precompile_path,
         incremental = false,
-        filter_stdlibs = true, # false,
+        filter_stdlibs = false,
         force = true,
         include_lazy_artifacts = true,
         include_transitive_dependencies = true,
