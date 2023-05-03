@@ -5,7 +5,7 @@ function copy(source::String, destiny::String, filename::String)
     return nothing
 end
 
-function compile(configuration::CompilerConfiguration)
+function compile(configuration::Configuration)
     target = configuration.target
     version = configuration.version
     package_path = configuration.package_path
@@ -36,9 +36,9 @@ function compile(configuration::CompilerConfiguration)
         date = readchomp(`$git --git-dir=$git_path show -s --format=%ci HEAD`)
     
         open(joinpath(src_path, "version.jl"), "w") do io
-            writeln(io, "GIT_SHA1 = \"$sha1\"")
-            writeln(io, "GIT_DATE = \"$date\"")
-            writeln(io, "PKG_VERSION = \"$version\"")
+            writeln(io, "const GIT_SHA1 = \"$sha1\"")
+            writeln(io, "const GIT_DATE = \"$date\"")
+            writeln(io, "const PKG_VERSION = \"$version\"")
             return nothing
         end
     catch
@@ -65,9 +65,9 @@ function compile(configuration::CompilerConfiguration)
 
     PSRLogger.info("COMPILE: Cleaning version.jl")
     open(joinpath(src_path, "version.jl"), "w") do io
-        writeln(io, "GIT_SHA1 = \"xxxxxxx\"")
-        writeln(io, "GIT_DATE = \"xxxx-xx-xx xx:xx:xx -xxxx\"")
-        writeln(io, "PKG_VERSION = \"x.x.x\"")
+        writeln(io, "const GIT_SHA1 = \"xxxxxxx\"")
+        writeln(io, "const GIT_DATE = \"xxxx-xx-xx xx:xx:xx -xxxx\"")
+        writeln(io, "const PKG_VERSION = \"x.x.x\"")
         return nothing
     end
 
@@ -82,4 +82,6 @@ function compile(configuration::CompilerConfiguration)
     else
         PSRLogger.fatal_error("COMPILE: Unsupported platform")
     end
+
+    touch(joinpath(compile_path, "build.ok"))
 end

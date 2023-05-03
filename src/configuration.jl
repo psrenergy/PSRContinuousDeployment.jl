@@ -1,4 +1,4 @@
-struct CompilerConfiguration
+struct Configuration
     target::String
     version::String
     package_path::String
@@ -6,11 +6,13 @@ struct CompilerConfiguration
     build_path::String
     setup_path::String
 
-    function CompilerConfiguration(target::String, package_path::String, compile_path::String)
+    function Configuration(target::String, package_path::String)
         level = Dict("Debug Level" => "debug", "Debug" => "debug", "Info" => "info", "Warn" => "warn", "Error" => "error", "Fatal Error" => "error")
         color = Dict("Debug Level" => :cyan, "Debug" => :cyan, "Info" => :cyan, "Warn" => :yellow, "Error" => :red, "Fatal Error" => :red)
         background = Dict("Debug Level" => false, "Debug" => false, "Info" => false, "Warn" => false, "Error" => false, "Fatal Error" => true)
     
+        compile_path = joinpath(package_path, "compile")
+
         PSRLogger.create_psr_logger(
             joinpath(compile_path, "compile.log"),
             level_dict = level,

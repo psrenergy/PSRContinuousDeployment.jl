@@ -2,9 +2,12 @@ using Test
 using PSRCompiler
 
 function testall()
-    configuration = CompilerConfiguration("PSRClustering", raw"D:\development\psrclustering\PSRClustering.jl", raw"D:\development\psrclustering\PSRClustering.jl\compile")
+    configuration = PSRCompiler.Configuration(
+        "PSRClustering", 
+        raw"D:\development\psrclustering\PSRClustering.jl"
+    )
 
-    compile(configuration)
+    PSRCompiler.compile(configuration)
 end
 
 testall()

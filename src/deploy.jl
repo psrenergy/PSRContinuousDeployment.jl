@@ -1,4 +1,4 @@
-function create_deploy(configuration::CompilerConfiguration, aws_access_key::String, aws_secret_key::String)
+function deploy(configuration::Configuration, aws_access_key::String, aws_secret_key::String)
     target = configuration.target
     version = configuration.version
     setup_path = configuration.setup_path

@@ -1,4 +1,4 @@
-function create_setup(configuration::CompilerConfiguration, id::String)
+function setup(configuration::Configuration, id::String)
     if !Sys.iswindows()
         PSRLogger.fatal_error("SETUP: Creating setup file is only supported on Windows")
     end
