@@ -1,5 +1,6 @@
-module PSRPackageCompiler
+module PSRCompiler
 
+using AWS
 using Git
 using PSRLogger
 using PackageCompiler

@@ -53,14 +53,14 @@ function compile(configuration::CompilerConfiguration)
 
     PackageCompiler.create_app(
         package_path,
-        build_path;
+        build_path,
         executables = [target => "julia_main"],
-        filter_stdlibs = false,
-        incremental = false,
-        include_lazy_artifacts = true,
         precompile_execution_file = precompile_path,
+        incremental = false,
+        filter_stdlibs = false, # true
         force = true,
-        include_transitive_dependencies = true
+        include_lazy_artifacts = true,
+        include_transitive_dependencies = true,
     )
 
     PSRLogger.info("COMPILE: Cleaning version.jl")

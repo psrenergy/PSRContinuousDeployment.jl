@@ -1,1 +1,1 @@
-# PSRPackageCompiler.jl
+# PSRCompiler.jl
