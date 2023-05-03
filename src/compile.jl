@@ -56,7 +56,7 @@ function compile(configuration::Configuration; windows_additional_files::Vector{
         executables = [target => "julia_main"],
         precompile_execution_file = precompile_path,
         incremental = false,
-        filter_stdlibs = false, # true
+        filter_stdlibs = true, # false,
         force = true,
         include_lazy_artifacts = true,
         include_transitive_dependencies = true,
@@ -73,14 +73,12 @@ function compile(configuration::Configuration; windows_additional_files::Vector{
     if Sys.iswindows()
         copy(lib_path, bin_path, "7z.dll")
         copy(lib_path, bin_path, "7z.exe")
-        copy(compile_path, bin_path, "$target.bat")
 
         for filename in windows_additional_files
             copy(compile_path, bin_path, filename)
         end
     elseif Sys.islinux()
         copy(lib_path, bin_path, "7z")
-        copy(compile_path, bin_path, "psrclustering.sh")
 
         for filename in linux_additional_files
             copy(compile_path, bin_path, filename)
