@@ -4,7 +4,7 @@ function copy(source::String, destiny::String, filename::String)
     return nothing
 end
 
-function compile(configuration::Configuration)
+function compile(configuration::Configuration; windows_additional_files::Vector{String} = [], linux_additional_files::Vector{String} = [])
     target = configuration.target
     version = configuration.version
     package_path = configuration.package_path
@@ -71,13 +71,20 @@ function compile(configuration::Configuration)
     end
 
     if Sys.iswindows()
-        copy(compile_path, bin_path, "$target.bat")
-        copy(compile_path, bin_path, "$target-pause.bat")
         copy(lib_path, bin_path, "7z.dll")
         copy(lib_path, bin_path, "7z.exe")
+        copy(compile_path, bin_path, "$target.bat")
+
+        for filename in windows_additional_files
+            copy(compile_path, bin_path, filename)
+        end
     elseif Sys.islinux()
-        copy(compile_path, bin_path, "psrclustering.sh")
         copy(lib_path, bin_path, "7z")
+        copy(compile_path, bin_path, "psrclustering.sh")
+
+        for filename in linux_additional_files
+            copy(compile_path, bin_path, filename)
+        end
     else
         PSRLogger.fatal_error("COMPILE: Unsupported platform")
     end

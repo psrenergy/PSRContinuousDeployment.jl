@@ -8,6 +8,11 @@ function setup(configuration::Configuration, id::String)
     build_path = configuration.build_path
     setup_path = configuration.setup_path
 
+    if !isdir(setup_path)
+        PSRLogger.info("SETUP: Creating setup directory")
+        mkdir(setup_path)
+    end
+
     wizard_image_path = joinpath(setup_path, "lateral_instalador_psr.bmp")
     write(wizard_image_path, wizard_image)
 

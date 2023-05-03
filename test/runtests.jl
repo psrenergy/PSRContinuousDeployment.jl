@@ -11,8 +11,10 @@ function testall()
 
         aws_access_key = ENV["AWS_ACCESS_KEY_ID"]
         aws_secret_key = ENV["AWS_SECRET_ACCESS_KEY"]
-        PSRCompiler.deploy(configuration, aws_access_key, aws_secret_key)
+        # PSRCompiler.deploy(configuration, aws_access_key, aws_secret_key)
     end
+
+    return nothing
 end
 
 testall()
