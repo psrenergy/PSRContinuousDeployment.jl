@@ -7,7 +7,7 @@ function testall()
     PSRCompiler.compile(configuration)
 
     if Sys.iswindows()
-        PSRCompiler.setup(configuration, "")
+        PSRCompiler.setup(configuration, "2FE8D94F-A7F8-4CC3-B62C-AD4086F803F3")
 
         aws_access_key = ENV["AWS_ACCESS_KEY_ID"]
         aws_secret_key = ENV["AWS_SECRET_ACCESS_KEY"]

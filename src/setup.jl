@@ -23,7 +23,7 @@ function setup(configuration::Configuration, id::String)
     iss = joinpath(setup_path, "setup.iss")
     open(iss, "w") do f
         writeln(f, "[Setup]")
-        writeln(f, "AppId={{2FE8D94F-A7F8-4CC3-B62C-AD4086F803F3}}")
+        writeln(f, "AppId={{$id}}")
         writeln(f, "AppName=$target")
         writeln(f, "AppVersion=$version")
         writeln(f, "AppVerName=$target $version")
