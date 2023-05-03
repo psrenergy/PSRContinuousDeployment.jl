@@ -11,6 +11,7 @@ import p7zip_jll
 
 @service S3
 
+include("images.jl")
 include("util.jl")
 include("configuration.jl")
 include("compile.jl")

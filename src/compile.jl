@@ -1,5 +1,4 @@
 
-
 function copy(source::String, destiny::String, filename::String)
     cp(joinpath(source, filename), joinpath(destiny, filename), force = true)
     return nothing
@@ -12,8 +11,8 @@ function compile(configuration::Configuration)
     compile_path = configuration.compile_path
     build_path = configuration.build_path
 
-    bin_path = joinpath(build_path, "bin")
     src_path = joinpath(package_path, "src")
+    bin_path = joinpath(build_path, "bin")
     lib_path = joinpath(Sys.BINDIR, Base.LIBEXECDIR)
 
     precompile_path = joinpath(compile_path, "precompile.jl")
@@ -34,7 +33,7 @@ function compile(configuration::Configuration)
 
         sha1 = readchomp(`$git --git-dir=$git_path rev-parse --short HEAD`)
         date = readchomp(`$git --git-dir=$git_path show -s --format=%ci HEAD`)
-    
+
         open(joinpath(src_path, "version.jl"), "w") do io
             writeln(io, "const GIT_SHA1 = \"$sha1\"")
             writeln(io, "const GIT_DATE = \"$date\"")
@@ -83,5 +82,5 @@ function compile(configuration::Configuration)
         PSRLogger.fatal_error("COMPILE: Unsupported platform")
     end
 
-    touch(joinpath(compile_path, "build.ok"))
+    return touch(joinpath(compile_path, "build.ok"))
 end

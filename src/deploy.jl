@@ -9,11 +9,9 @@ function deploy(configuration::Configuration, aws_access_key::String, aws_secret
     setup_zip = "$version.zip"
     setup_zip_path = joinpath(setup_path, setup_zip)
 
+    PSRLogger.info("DEPLOY: Zipping the $setup_exe")
     run(`$(p7zip_jll.p7zip()) a -tzip $setup_zip_path $setup_exe_path`)
-
     @assert isfile(setup_zip_path)
-
-    @info "Sending the $version to psrcore-update-modules S3 bucket"
 
     aws_credentials = AWSCredentials(aws_access_key, aws_secret_key)
     aws_config = AWSConfig(; creds = aws_credentials, region = "us-east-1")
@@ -37,23 +35,14 @@ function deploy(configuration::Configuration, aws_access_key::String, aws_secret
         end
     end
 
-    S3.put_object(
-        "psr-update-modules",
-        "$target/releases.txt",
-        Dict(
-            "body" => read(releases_path),
-        ),
-    )
+    PSRLogger.info("DEPLOY: Uploading the $releases_path")
+    S3.put_object("psr-update-modules", "$target/releases.txt", Dict("body" => read(releases_path)))
 
+    PSRLogger.info("DEPLOY: Uploading the $setup_zip")
+    S3.put_object("psr-update-modules", "$target/$setup_zip", Dict("body" => read(setup_zip_path)))
+
+    PSRLogger.info("DEPLOY: Removing temporary files")
     rm(releases_path; force = true)
-
-    S3.put_object(
-        "psr-update-modules",
-        "$target/$setup_zip",
-        Dict(
-            "body" => read(setup_zip_path),
-        ),
-    )
 
     return nothing
 end
