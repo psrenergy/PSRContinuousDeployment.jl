@@ -1,0 +1,18 @@
+name: open-asana-task
+on:
+  issues:
+    types: [opened]
+
+concurrency:
+  group: asana-${{ github.event.issue.number }}
+
+jobs:
+  open-asana-task:
+    runs-on: self-hosted
+    steps:
+      - uses: psrenergy/asana-integration@master
+        with:
+          action: "open"
+          asana-secret: "${{ secrets.ASANA_SECRET }}"
+          asana-workspace: "${{ secrets.ASANA_WORKSPACE }}"
+          asana-project: "${{ secrets.ASANA_PROJECT }}"
