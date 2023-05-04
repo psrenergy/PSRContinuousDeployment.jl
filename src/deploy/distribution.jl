@@ -10,6 +10,8 @@ function deploy_on_distribution(
 
     publish_path = joinpath(compile_path, "publish")
 
+    sha1 = read_git_sha1(package_path)
+
     if isdir(publish_path)
         PSRLogger.info("DISTRIBUTION: Removing publish directory")
         rm(publish_path, force = true, recursive = true)
@@ -33,7 +35,7 @@ function deploy_on_distribution(
     PSRLogger.info("DISTRIBUTION: Updating the $url")
     cd(publish_path) do
         run(`git add --all`)
-        run(`git commit -m "Update $target to $version"`)
+        run(`git commit -m "$version ($sha1)"`)
         run(`git pull`)
         run(`git push origin --all`)
     end

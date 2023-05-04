@@ -13,13 +13,15 @@ const git = Git.git()
 
 @service S3
 
+include("git.jl")
 include("images.jl")
 include("util.jl")
 include("configuration.jl")
 include("compile.jl")
 include("setup.jl")
-include("psrmodules.jl")
-include("psrcloud.jl")
-include("distribution.jl")
+
+include("deploy/psrmodules.jl")
+include("deploy/psrcloud.jl")
+include("deploy/distribution.jl")
 
 end

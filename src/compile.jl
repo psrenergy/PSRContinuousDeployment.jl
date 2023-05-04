@@ -1,4 +1,3 @@
-
 function copy(source::String, destiny::String, filename::String)
     cp(joinpath(source, filename), joinpath(destiny, filename), force = true)
     return nothing
@@ -28,17 +27,9 @@ function compile(configuration::Configuration; windows_additional_files::Vector{
 
     PSRLogger.info("COMPILE: Creating version.jl")
     try
-        git_path = joinpath(package_path, ".git")
-
-        sha1 = readchomp(`$git --git-dir=$git_path rev-parse --short HEAD`)
-        date = readchomp(`$git --git-dir=$git_path show -s --format=%ci HEAD`)
-
-        open(joinpath(src_path, "version.jl"), "w") do io
-            writeln(io, "const GIT_SHA1 = \"$sha1\"")
-            writeln(io, "const GIT_DATE = \"$date\"")
-            writeln(io, "const PKG_VERSION = \"$version\"")
-            return nothing
-        end
+        sha1 = read_git_sha1(package_path)
+        date = read_git_date(package_path)
+        write_version_jl(src_path, sha1, date, version)
     catch
         PSRLogger.fatal_error("COMPILE: Failed to create version.jl")
     end
@@ -62,12 +53,7 @@ function compile(configuration::Configuration; windows_additional_files::Vector{
     )
 
     PSRLogger.info("COMPILE: Cleaning version.jl")
-    open(joinpath(src_path, "version.jl"), "w") do io
-        writeln(io, "const GIT_SHA1 = \"xxxxxxx\"")
-        writeln(io, "const GIT_DATE = \"xxxx-xx-xx xx:xx:xx -xxxx\"")
-        writeln(io, "const PKG_VERSION = \"x.x.x\"")
-        return nothing
-    end
+    write_version_jl(src_path, "xxxxxxx", "xxxx-xx-xx xx:xx:xx -xxxx", "x.x.x")
 
     if Sys.iswindows()
         copy(lib_path, bin_path, "7z.dll")
