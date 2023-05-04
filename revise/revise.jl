@@ -6,8 +6,8 @@ using Revise
 Pkg.activate(dirname(@__DIR__))
 Pkg.instantiate()
 
-using PSRCompiler
+using PSRContinuousDeployment
 @info("""
-This session is using PSRCompiler with Revise.jl.
+This session is using PSRContinuousDeployment with Revise.jl.
 For more information visit https://timholy.github.io/Revise.jl/stable/.
 """)

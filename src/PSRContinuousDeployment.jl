@@ -1,4 +1,4 @@
-module PSRCompiler
+module PSRContinuousDeployment
 
 using AWS
 using PSRLogger

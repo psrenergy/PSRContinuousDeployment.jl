@@ -1,4 +1,4 @@
-function setup(configuration::Configuration, id::String)
+function create_setup(configuration::Configuration, id::String)
     if !Sys.iswindows()
         PSRLogger.fatal_error("SETUP: Creating setup file is only supported on Windows")
     end
@@ -69,6 +69,8 @@ function setup(configuration::Configuration, id::String)
     rm(iss, force = true)
     rm(wizard_image_path, force = true)
     rm(wizard_small_image_path, force = true)
+
+    PSRLogger.info("SETUP: Setup file created successfully")
 
     return nothing
 end
