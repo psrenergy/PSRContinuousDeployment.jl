@@ -35,7 +35,7 @@ function deploy_on_psrmodules(
     releases_path = abspath("releases.txt")
     open(releases_path, "w") do f
         for version in versions
-            write(f, "$version\n")
+            writeln(f, "$version")
         end
     end
 

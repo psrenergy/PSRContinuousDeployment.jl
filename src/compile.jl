@@ -3,7 +3,11 @@ function copy(source::String, destiny::String, filename::String)
     return nothing
 end
 
-function compile(configuration::Configuration; windows_additional_files::Vector{String} = Vector{String}(), linux_additional_files::Vector{String} = Vector{String}())
+function compile(
+    configuration::Configuration;
+    windows_additional_files::Vector{String} = Vector{String}(),
+    linux_additional_files::Vector{String} = Vector{String}(),
+)
     target = configuration.target
     version = configuration.version
     package_path = configuration.package_path
