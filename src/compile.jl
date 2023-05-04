@@ -28,7 +28,6 @@ function compile(configuration::Configuration; windows_additional_files::Vector{
 
     PSRLogger.info("COMPILE: Creating version.jl")
     try
-        git = Git.git()
         git_path = joinpath(package_path, ".git")
 
         sha1 = readchomp(`$git --git-dir=$git_path rev-parse --short HEAD`)
