@@ -1,4 +1,4 @@
-function deploy_on_distribution(
+function deploy_to_distribution(
     configuration::Configuration,
     url::String
 )

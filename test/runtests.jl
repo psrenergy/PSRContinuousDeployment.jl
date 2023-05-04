@@ -11,9 +11,9 @@ function testall()
 
         aws_access_key = ENV["AWS_ACCESS_KEY_ID"]
         aws_secret_key = ENV["AWS_SECRET_ACCESS_KEY"]
-        PSRContinuousDeployment.deploy_on_psrmodules(configuration, aws_access_key, aws_secret_key)
+        PSRContinuousDeployment.deploy_to_psrmodules(configuration, aws_access_key, aws_secret_key)
 
-        PSRContinuousDeployment.deploy_on_distribution(configuration, raw"https://bitbucket.org/psr/psrclustering-distribution.git")
+        PSRContinuousDeployment.deploy_to_distribution(configuration, raw"https://bitbucket.org/psr/psrclustering-distribution.git")
     end
 
     return nothing

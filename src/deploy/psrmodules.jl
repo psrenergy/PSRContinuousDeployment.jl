@@ -1,4 +1,4 @@
-function deploy_on_psrmodules(
+function deploy_to_psrmodules(
     configuration::Configuration,
     aws_access_key::String,
     aws_secret_key::String
