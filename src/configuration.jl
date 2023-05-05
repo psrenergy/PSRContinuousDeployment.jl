@@ -6,7 +6,7 @@ struct Configuration
     build_path::String
     setup_path::String
 
-    function Configuration(target::String, package_path::String)
+    function Configuration(target::AbstractString, package_path::AbstractString)
         compile_path = joinpath(package_path, "compile")
         build_path = joinpath(compile_path, "build")
         setup_path = joinpath(compile_path, "setup")

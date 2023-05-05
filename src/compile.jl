@@ -1,4 +1,4 @@
-function copy(source::String, destiny::String, filename::String)
+function copy(source::AbstractString, destiny::AbstractString, filename::AbstractString)
     cp(joinpath(source, filename), joinpath(destiny, filename), force = true)
     return nothing
 end
@@ -30,13 +30,9 @@ function compile(
     mkdir(build_path)
 
     PSRLogger.info("COMPILE: Creating version.jl")
-    try
-        sha1 = read_git_sha1(package_path)
-        date = read_git_date(package_path)
-        write_version_jl(src_path, sha1, date, version)
-    catch
-        PSRLogger.fatal_error("COMPILE: Failed to create version.jl")
-    end
+    sha1 = read_git_sha1(package_path)
+    date = read_git_date(package_path)
+    write_version_jl(src_path, sha1, date, version)
 
     ENV["XPRESSDIR"] = ""
     ENV["XPAUTH_PATH"] = ""

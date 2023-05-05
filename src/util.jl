@@ -14,13 +14,13 @@ function ends_with(string::AbstractString, substr::AbstractString)
     return range[end] == length(string)
 end
 
-function writeln(io::IO, x::String)
+function writeln(io::IO, x::AbstractString)
     write(io, x)
     write(io, Sys.iswindows() ? "\r\n" : "\n")
     return nothing
 end
 
-function write_version_jl(path::String, sha1::String, date::String, version::String)
+function write_version_jl(path::AbstractString, sha1::AbstractString, date::AbstractString, version::AbstractString)
     open(joinpath(path, "version.jl"), "w") do io
         writeln(io, "const GIT_SHA1 = \"$sha1\"")
         writeln(io, "const GIT_DATE = \"$date\"")

@@ -1,7 +1,7 @@
 function deploy_to_psrmodules(
     configuration::Configuration,
-    aws_access_key::String,
-    aws_secret_key::String
+    aws_access_key::AbstractString,
+    aws_secret_key::AbstractString
 )
     target = configuration.target
     version = configuration.version
