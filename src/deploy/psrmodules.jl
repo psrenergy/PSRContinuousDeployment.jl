@@ -29,13 +29,18 @@ function deploy_to_psrmodules(
         if ends_with(key, ".zip")
             push!(versions, key)
         end
+
+        if key == setup_zip
+            PSRLogger.fatal_error("DEPLOY: The $setup_zip already exists in the psr-update-modules bucket")
+            return nothing
+        end
     end
-    push!(versions, version)
+    push!(versions, setup_zip)
 
     releases_path = abspath("releases.txt")
     open(releases_path, "w") do f
-        for version in versions
-            writeln(f, "$version")
+        for v in versions
+            writeln(f, "$v")
         end
     end
 
