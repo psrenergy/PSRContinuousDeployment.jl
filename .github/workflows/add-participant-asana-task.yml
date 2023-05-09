@@ -8,6 +8,7 @@ concurrency:
 
 jobs:
   add-participant-asana-task:
+    if: ${{ !github.event.issue.pull_request }}
     runs-on: self-hosted
     steps:
       - uses: psrenergy/asana-integration@master
