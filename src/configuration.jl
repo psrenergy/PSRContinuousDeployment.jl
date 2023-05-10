@@ -16,7 +16,7 @@ struct Configuration
         background = Dict("Debug Level" => false, "Debug" => false, "Info" => false, "Warn" => false, "Error" => false, "Fatal Error" => true)
 
         PSRLogger.create_psr_logger(
-            joinpath(compile_path, "compile.log"),
+            joinpath(compile_path, "$target.log"),
             level_dict = level,
             color_dict = color,
             background_reverse_dict = background,
