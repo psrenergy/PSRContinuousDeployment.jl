@@ -6,8 +6,11 @@ using PackageCompiler
 using TOML
 
 import Git
-import Inno
 import p7zip_jll
+
+if Sys.iswindows()
+    import Inno
+end
 
 const git = Git.git()
 
