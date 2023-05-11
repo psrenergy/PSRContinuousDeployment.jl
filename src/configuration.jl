@@ -20,7 +20,7 @@ struct Configuration
             level_dict = level,
             color_dict = color,
             background_reverse_dict = background,
-            append_log = true,
+            # append_log = true,
         )
 
         project = TOML.parse(read(joinpath(package_path, "Project.toml"), String))
