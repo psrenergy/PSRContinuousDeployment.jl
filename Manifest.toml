@@ -2,7 +2,7 @@
 
 julia_version = "1.8.5"
 manifest_format = "2.0"
-project_hash = "de14d5f813eab9528c7d1f1710caee3d0e804f98"
+project_hash = "be51d4460a034a04479855fc2b39103d1cf3163c"
 
 [[deps.AWS]]
 deps = ["Base64", "Compat", "Dates", "Downloads", "GitHub", "HTTP", "IniFile", "JSON", "MbedTLS", "Mocking", "OrderedCollections", "Random", "SHA", "Sockets", "URIs", "UUIDs", "XMLDict"]
@@ -240,8 +240,8 @@ uuid = "efcefdf7-47ab-520b-bdef-62a2eaa19f15"
 version = "10.40.0+0"
 
 [[deps.PSRLogger]]
-deps = ["Dates", "Logging", "LoggingExtras"]
-git-tree-sha1 = "10c1884319e54cbbd81216438e512443c403e31d"
+deps = ["Dates", "Logging", "LoggingExtras", "TOML"]
+git-tree-sha1 = "f5616e580ddd5d52ca3ed1b65239ede4bf28c0bc"
 repo-rev = "master"
 repo-url = "https://github.com/psrenergy/PSRLogger.jl.git"
 uuid = "8c6dd3bf-e374-49cf-bf99-fff4475880f0"
