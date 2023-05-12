@@ -1,7 +1,5 @@
 function copy(source::AbstractString, destiny::AbstractString, filename::AbstractString)
-    if isfile(joinpath(source, filename))
-        cp(joinpath(source, filename), joinpath(destiny, filename), force = true)
-    end
+    cp(joinpath(source, filename), joinpath(destiny, filename), force = true)
     return nothing
 end
 
