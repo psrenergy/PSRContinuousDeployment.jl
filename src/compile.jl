@@ -1,5 +1,7 @@
 function copy(source::AbstractString, destiny::AbstractString, filename::AbstractString)
-    cp(joinpath(source, filename), joinpath(destiny, filename), force = true)
+    if isfile(joinpath(source, filename))
+        cp(joinpath(source, filename), joinpath(destiny, filename), force = true)
+    end
     return nothing
 end
 
@@ -16,7 +18,11 @@ function compile(
 
     src_path = joinpath(package_path, "src")
     bin_path = joinpath(build_path, "bin")
-    lib_path = joinpath(Sys.BINDIR, Base.LIBEXECDIR)
+    lib_path = if VERSION < v"1.9.0"
+        joinpath(Sys.BINDIR, Base.LIBEXECDIR)
+    else
+        joinpath(Sys.BINDIR, Base.LIBEXECDIR, "julia")
+    end 
 
     precompile_path = joinpath(compile_path, "precompile.jl")
     @assert isfile(precompile_path)
