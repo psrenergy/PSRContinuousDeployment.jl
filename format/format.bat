@@ -3,4 +3,4 @@
 SET BASEPATH=%~dp0
 DEL "%BASEPATH%\Manifest.toml"
 
-%JULIA_185% --color=yes --project=%BASEPATH% %BASEPATH%\format.jl
+%JULIA_190% --color=yes --project=%BASEPATH% %BASEPATH%\format.jl
