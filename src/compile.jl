@@ -18,7 +18,7 @@ function compile(
 
     src_path = joinpath(package_path, "src")
     bin_path = joinpath(build_path, "bin")
-    lib_path = if VERSION < v"1.9.0"
+    libexec_path = if VERSION < v"1.9.0"
         joinpath(Sys.BINDIR, Base.LIBEXECDIR)
     else
         joinpath(Sys.BINDIR, Base.LIBEXECDIR, "julia")
@@ -62,14 +62,14 @@ function compile(
     write_version_jl(src_path, "xxxxxxx", "xxxx-xx-xx xx:xx:xx -xxxx", "x.x.x")
 
     if Sys.iswindows()
-        copy(lib_path, bin_path, "7z.dll")
-        copy(lib_path, bin_path, "7z.exe")
+        copy(libexec_path, bin_path, "7z.dll")
+        copy(libexec_path, bin_path, "7z.exe")
 
         for filename in windows_additional_files
             copy(compile_path, bin_path, filename)
         end
     elseif Sys.islinux()
-        copy(lib_path, bin_path, "7z")
+        copy(libexec_path, bin_path, "7z")
 
         for filename in linux_additional_files
             copy(compile_path, bin_path, filename)

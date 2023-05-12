@@ -1,7 +1,8 @@
 function deploy_to_psrmodules(
     configuration::Configuration,
     aws_access_key::AbstractString,
-    aws_secret_key::AbstractString
+    aws_secret_key::AbstractString;
+    stable_release::Bool = false,
 )
     target = configuration.target
     version = configuration.version
@@ -44,8 +45,10 @@ function deploy_to_psrmodules(
         end
     end
 
-    PSRLogger.info("DEPLOY: Uploading the $releases_path")
-    S3.put_object("psr-update-modules", "$target/releases.txt", Dict("body" => read(releases_path)))
+    if stable_release
+        PSRLogger.info("DEPLOY: Uploading the $releases_path")
+        S3.put_object("psr-update-modules", "$target/releases.txt", Dict("body" => read(releases_path)))
+    end
 
     PSRLogger.info("DEPLOY: Uploading the $setup_zip")
     S3.put_object("psr-update-modules", "$target/$setup_zip", Dict("body" => read(setup_zip_path)))
