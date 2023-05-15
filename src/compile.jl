@@ -38,12 +38,6 @@ function compile(
     date = read_git_date(package_path)
     write_version_jl(src_path, sha1, date, version)
 
-    ENV["XPRESSDIR"] = ""
-    ENV["XPAUTH_PATH"] = ""
-    ENV["XPRESS_JL_NO_DEPS_ERROR"] = 1
-    ENV["XPRESS_JL_NO_AUTO_INIT"] = 1
-    ENV["XPRESS_JL_SKIP_LIB_CHECK"] = 1
-
     PackageCompiler.create_app(
         package_path,
         build_path,
