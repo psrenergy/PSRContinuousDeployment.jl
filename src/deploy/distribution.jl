@@ -37,7 +37,8 @@ function deploy_to_distribution(
         run(`git add --all`)
         run(`git commit -m "$version ($sha1)"`)
         run(`git pull`)
-        return run(`git push origin --all`)
+        run(`git push origin --all`)
+        return nothing
     end
 
     PSRLogger.info("DISTRIBUTION: Removing publish directory")
