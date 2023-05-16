@@ -3,6 +3,8 @@ Pkg.instantiate()
 
 using JuliaFormatter
 
-for folder in ["format", "revise", "src", "test"]
-    format(joinpath(dirname(@__DIR__), folder))
+for _ in 1:3
+    format(dirname(@__DIR__))
 end
+
+println("Done formatting")

@@ -1,6 +1,6 @@
 function deploy_to_distribution(
     configuration::Configuration,
-    url::String
+    url::String,
 )
     target = configuration.target
     version = configuration.version
@@ -38,6 +38,7 @@ function deploy_to_distribution(
         run(`git commit -m "$version ($sha1)"`)
         run(`git pull`)
         run(`git push origin --all`)
+        return nothing
     end
 
     PSRLogger.info("DISTRIBUTION: Removing publish directory")
