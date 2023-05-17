@@ -24,14 +24,14 @@ function deploy_to_psrmodules(
 
     if stable_release
         PSRLogger.info("DEPLOY: Downloading the $target/releases.txt")
-        releases = S3.get_object("psr-update-modules", "$target/releases.txt")
-        releases_versions = split(releases, "\r\n")
+        releases = String(S3.get_object("psr-update-modules", "$target/releases.txt"))
+        releases_versions = split(replace(releases, "\r\n" => "\n"), "\n")
     
         releases_path = abspath("releases.txt")
         open(releases_path, "w") do f
             for releases_version in releases_versions
                 if releases_version != ""
-                    writeln(f, "$releases_version")
+                    write(f, "$releases_version\n")
 
                     if releases_version == setup_zip
                         PSRLogger.fatal_error("DEPLOY: The $setup_zip already exists in the psr-update-modules bucket")
@@ -39,7 +39,7 @@ function deploy_to_psrmodules(
                     end
                 end
             end
-            writeln(f, "$setup_zip")
+            write(f, "$setup_zip\n")
         end
 
         PSRLogger.info("DEPLOY: Uploading the $releases_path")
