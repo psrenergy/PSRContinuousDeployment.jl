@@ -22,39 +22,35 @@ function deploy_to_psrmodules(
     aws_config = AWSConfig(; creds = aws_credentials, region = "us-east-1")
     global_aws_config(aws_config)
 
-    result = S3.list_objects_v2("psr-update-modules", Dict("prefix" => target))
-
-    versions = Vector{String}()
-    for item in result["Contents"]
-        key = remove_first_occurrence(item["Key"], "$target/")
-        if ends_with(key, ".zip")
-            push!(versions, key)
-        end
-
-        if key == setup_zip
-            PSRLogger.fatal_error("DEPLOY: The $setup_zip already exists in the psr-update-modules bucket")
-            return nothing
-        end
-    end
-    push!(versions, setup_zip)
-
-    releases_path = abspath("releases.txt")
-    open(releases_path, "w") do f
-        for v in versions
-            writeln(f, "$v")
-        end
-    end
-
     if stable_release
+        PSRLogger.info("DEPLOY: Downloading the $target/releases.txt")
+        releases = S3.get_object("psr-update-modules", "$target/releases.txt")
+        releases_versions = split(releases, "\r\n")
+    
+        releases_path = abspath("releases.txt")
+        open(releases_path, "w") do f
+            for releases_version in releases_versions
+                if releases_version != ""
+                    writeln(f, "$releases_version")
+
+                    if releases_version == setup_zip
+                        PSRLogger.fatal_error("DEPLOY: The $setup_zip already exists in the psr-update-modules bucket")
+                        return nothing
+                    end
+                end
+            end
+            writeln(f, "$setup_zip")
+        end
+
         PSRLogger.info("DEPLOY: Uploading the $releases_path")
         S3.put_object("psr-update-modules", "$target/releases.txt", Dict("body" => read(releases_path)))
+
+        PSRLogger.info("DEPLOY: Removing temporary files")
+        rm(releases_path; force = true)
     end
 
     PSRLogger.info("DEPLOY: Uploading the $setup_zip")
     S3.put_object("psr-update-modules", "$target/$setup_zip", Dict("body" => read(setup_zip_path)))
-
-    PSRLogger.info("DEPLOY: Removing temporary files")
-    rm(releases_path; force = true)
 
     return nothing
 end
