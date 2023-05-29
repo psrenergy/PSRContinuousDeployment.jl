@@ -5,8 +5,8 @@ end
 
 function compile(
     configuration::Configuration;
-    windows_additional_files::Vector{String} = Vector{String}(),
-    linux_additional_files::Vector{String} = Vector{String}(),
+    windows_additional_files_path::Vector{String} = Vector{String}(),
+    linux_additional_files_path::Vector{String} = Vector{String}(),
 )
     target = configuration.target
     version = configuration.version
@@ -36,7 +36,12 @@ function compile(
     PSRLogger.info("COMPILE: Creating version.jl")
     sha1 = read_git_sha1(package_path)
     date = read_git_date(package_path)
-    write_version_jl(src_path, sha1, date, version)
+    build_date = Dates.format(Dates.now(Dates.UTC), dateformat"yyyy-mm-dd HH:MM:SS -0000")
+    write_version_jl(src_path, sha1, date, version, build_date)
+
+    free_memory = round(Int, Sys.free_memory() / 2^20)
+    total_memory = round(Int, Sys.total_memory() / 2^20)
+    PSRLogger.info("COMPILE: memory $free_memory/$total_memory MB")
 
     PackageCompiler.create_app(
         package_path,
@@ -51,20 +56,26 @@ function compile(
     )
 
     PSRLogger.info("COMPILE: Cleaning version.jl")
-    write_version_jl(src_path, "xxxxxxx", "xxxx-xx-xx xx:xx:xx -xxxx", "x.x.x")
+    clean_version_jl(src_path)
+
+    PSRLogger.info("COMPILE: Creating $target.ver")
+    open(joinpath(bin_path, "$target.ver"), "w") do io
+        writeln(io, sha1)
+        return nothing
+    end
 
     if Sys.iswindows()
         copy(libexec_path, bin_path, "7z.dll")
         copy(libexec_path, bin_path, "7z.exe")
 
-        for filename in windows_additional_files
-            copy(compile_path, bin_path, filename)
+        for file_path in windows_additional_files_path
+            copy(dirname(file_path), bin_path, basename(file_path))
         end
     elseif Sys.islinux()
         copy(libexec_path, bin_path, "7z")
 
-        for filename in linux_additional_files
-            copy(compile_path, bin_path, filename)
+        for file_path in linux_additional_files_path
+            copy(dirname(file_path), bin_path, basename(file_path))
         end
     else
         PSRLogger.fatal_error("COMPILE: Unsupported platform")
