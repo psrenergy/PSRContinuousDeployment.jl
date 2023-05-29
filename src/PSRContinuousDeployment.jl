@@ -23,6 +23,7 @@ include("util.jl")
 include("configuration.jl")
 include("compile.jl")
 include("setup.jl")
+include("testrunner.jl")
 
 include("deploy/psrmodules.jl")
 include("deploy/psrcloud.jl")
