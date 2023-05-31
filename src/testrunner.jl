@@ -8,8 +8,12 @@ function run_testrunner(
     package_path = configuration.package_path
     testrunner_path = joinpath(configuration.package_path, "testrunner")
 
-    @show branch = cd(package_path) do
+    branch = cd(package_path) do
         readchomp(`$git branch --show-current`)
+    end
+
+    if branch == ""
+        PSRLogger.fatal_error("TESTRUNNER: Could not get current branch")
     end
 
     if isdir(testrunner_path)
