@@ -41,7 +41,8 @@ function compile(
 
     free_memory = round(Int, Sys.free_memory() / 2^20)
     total_memory = round(Int, Sys.total_memory() / 2^20)
-    PSRLogger.info("COMPILE: memory $free_memory/$total_memory MB")
+    PSRLogger.info("COMPILE: memory free $free_memory MB")
+    PSRLogger.info("COMPILE: memory total $total_memory MB")
 
     PackageCompiler.create_app(
         package_path,
