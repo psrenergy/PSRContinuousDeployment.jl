@@ -9,7 +9,7 @@ function run_testrunner(
     testrunner_path = joinpath(configuration.package_path, "testrunner")
 
     branch = cd(package_path) do
-        readchomp(`$git branch --show-current`)
+        return readchomp(`$git branch --show-current`)
     end
 
     if branch == ""
@@ -32,14 +32,17 @@ function run_testrunner(
         write(f, "compile = true\n")
         write(f, "test = true\n")
         write(f, "print_timings = true\n")
-        write(f, "run_model_from_case_path = true\n")
+        return write(f, "run_model_from_case_path = true\n")
     end
 
     xml_path = joinpath(testrunner_path, "executar.xml")
     open(xml_path, "w") do f
         writeln(f, "<?xml version=\"1.0\" encoding=\"utf-8\"?>")
         writeln(f, "<ColecaoParametro>")
-        writeln(f, "<Parametro nome=\"urlServico\" tipo=\"System.String\">https://psrcloud-prod.psr-inc.com/CamadaGerenciadoraServicoWeb/DespachanteWS.asmx</Parametro>")
+        writeln(
+            f,
+            "<Parametro nome=\"urlServico\" tipo=\"System.String\">https://psrcloud-prod.psr-inc.com/CamadaGerenciadoraServicoWeb/DespachanteWS.asmx</Parametro>",
+        )
         writeln(f, "<Parametro nome=\"usuario\" tipo=\"System.String\">$user</Parametro>")
         writeln(f, "<Parametro nome=\"senha\" tipo=\"System.String\">$password</Parametro>")
         writeln(f, "<Parametro nome=\"idioma\" tipo=\"System.Int32\">1</Parametro>")
@@ -58,7 +61,7 @@ function run_testrunner(
         writeln(f, "<Parametro nome=\"filtroDownload\" tipo=\"System.String\">Download</Parametro>")
         writeln(f, "<Parametro nome=\"tipoExecucao\" tipo=\"System.Int32\">0</Parametro>")
         writeln(f, "<Parametro nome=\"nomeCaso\" tipo=\"System.String\">GH CI $target $branch</Parametro>")
-        writeln(f, "</ColecaoParametro>")
+        return writeln(f, "</ColecaoParametro>")
     end
 
     testrunner_sh_path = joinpath(testrunner_path, "testrunner.sh")
@@ -73,7 +76,10 @@ function run_testrunner(
         write(f, "echo '### Clonning TestRunner'\n")
         write(f, "echo =======================================================================================\n")
         write(f, "rm -rf testrunner\n")
-        write(f, "git clone --depth 1 --branch $testrunner_version --recurse-submodules http://github.com/psrenergy/testrunner.git testrunner\n\n")
+        write(
+            f,
+            "git clone --depth 1 --branch $testrunner_version --recurse-submodules http://github.com/psrenergy/testrunner.git testrunner\n\n",
+        )
 
         write(f, "echo\n")
         write(f, "echo '# Current Testrunner commit:'\n")
@@ -103,7 +109,7 @@ function run_testrunner(
         write(f, "echo =======================================================================================\n\n")
 
         write(f, "dos2unix ./testrunner/run_testrunner.sh\n")
-        write(f, "./testrunner/run_testrunner.sh\n")
+        return write(f, "./testrunner/run_testrunner.sh\n")
     end
 
     # fake_console = raw"C:\FakeConsolev4_15\FakeConsole.exe"

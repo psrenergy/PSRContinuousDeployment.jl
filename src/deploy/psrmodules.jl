@@ -26,7 +26,7 @@ function deploy_to_psrmodules(
         PSRLogger.info("DEPLOY: Downloading the $target/releases.txt")
         releases = String(S3.get_object("psr-update-modules", "$target/releases.txt"))
         releases_versions = split(replace(releases, "\r\n" => "\n"), "\n")
-    
+
         releases_path = abspath("releases.txt")
         open(releases_path, "w") do f
             for releases_version in releases_versions
@@ -39,7 +39,7 @@ function deploy_to_psrmodules(
                     end
                 end
             end
-            write(f, "$setup_zip\n")
+            return write(f, "$setup_zip\n")
         end
 
         PSRLogger.info("DEPLOY: Uploading the $releases_path")

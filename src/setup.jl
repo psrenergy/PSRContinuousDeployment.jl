@@ -53,9 +53,18 @@ function create_setup(configuration::Configuration, id::AbstractString, sign_set
         writeln(f, "Name: spanish; MessagesFile: compiler:Languages/Spanish.isl")
         writeln(f, "")
         writeln(f, "[Files]")
-        writeln(f, "Source: $(joinpath(build_path, "bin", "*")); DestDir: {app}/bin; Flags: ignoreversion recursesubdirs createallsubdirs overwritereadonly; Permissions: everyone-full")
-        writeln(f, "Source: $(joinpath(build_path, "lib", "*")); DestDir: {app}/lib; Flags: ignoreversion recursesubdirs createallsubdirs overwritereadonly; Permissions: everyone-full")
-        writeln(f, "Source: $(joinpath(build_path, "share", "*")); DestDir: {app}/share; Flags: ignoreversion recursesubdirs createallsubdirs overwritereadonly; Permissions: everyone-full")
+        writeln(
+            f,
+            "Source: $(joinpath(build_path, "bin", "*")); DestDir: {app}/bin; Flags: ignoreversion recursesubdirs createallsubdirs overwritereadonly; Permissions: everyone-full",
+        )
+        writeln(
+            f,
+            "Source: $(joinpath(build_path, "lib", "*")); DestDir: {app}/lib; Flags: ignoreversion recursesubdirs createallsubdirs overwritereadonly; Permissions: everyone-full",
+        )
+        writeln(
+            f,
+            "Source: $(joinpath(build_path, "share", "*")); DestDir: {app}/share; Flags: ignoreversion recursesubdirs createallsubdirs overwritereadonly; Permissions: everyone-full",
+        )
         writeln(f, "")
         writeln(f, "[InstallDelete]")
         writeln(f, "Type: filesandordirs; Name: {app}/bin")
@@ -63,7 +72,10 @@ function create_setup(configuration::Configuration, id::AbstractString, sign_set
         writeln(f, "Type: filesandordirs; Name: {app}/share")
         writeln(f, "")
         writeln(f, "[Registry]")
-        return writeln(f, "Root: HKLM64; Subkey: SOFTWARE\\PSR\\$target\\$version; ValueType: string; ValueName: Path; ValueData: {app}; Flags: uninsdeletekey")
+        return writeln(
+            f,
+            "Root: HKLM64; Subkey: SOFTWARE\\PSR\\$target\\$version; ValueType: string; ValueName: Path; ValueData: {app}; Flags: uninsdeletekey",
+        )
     end
 
     PSRLogger.info("SETUP: Creating setup file")

@@ -1,9 +1,9 @@
 using HTTP
 
-const CERTIFICATE_SERVER_URL   = "http://hannover.local.psrservices.net:5000/"
+const CERTIFICATE_SERVER_URL = "http://hannover.local.psrservices.net:5000/"
 
 function sign_with_certificate(file_path::String)
-    url = join([CERTIFICATE_SERVER_URL,"upload"])
+    url = join([CERTIFICATE_SERVER_URL, "upload"])
     headers = []
     data = ["filename" => "", "file" => open(file_path)]
     body = HTTP.Form(data)
@@ -11,7 +11,7 @@ function sign_with_certificate(file_path::String)
     if response.status == 200
         PSRLogger.info("File upload successfully.")
         re = r"\{\"filename\":\"(.*)\"\}"
-        m = match(re,String(response))
+        m = match(re, String(response))
         filename = String(m[1])
         download_file(filename)
     else
@@ -20,11 +20,11 @@ function sign_with_certificate(file_path::String)
 end
 
 function download_file(filename::String)
-    url = join([CERTIFICATE_SERVER_URL,"download/",filename])
+    url = join([CERTIFICATE_SERVER_URL, "download/", filename])
     response = HTTP.get(url)
     if response.status == 200
         open(filename, "w") do io
-            write(io, response.body)
+            return write(io, response.body)
         end
         PSRLogger.info("File download successfully.")
     else
