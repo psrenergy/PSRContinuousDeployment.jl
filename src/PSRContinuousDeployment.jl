@@ -2,6 +2,7 @@ module PSRContinuousDeployment
 
 using AWS
 using Dates
+using HTTP
 using PSRLogger
 using PackageCompiler
 using TOML
