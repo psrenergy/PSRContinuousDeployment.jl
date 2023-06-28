@@ -71,7 +71,7 @@ function create_setup(configuration::Configuration, id::AbstractString, sign_set
 
     if sign_setup_with_certificate
         PSRLogger.info("SETUP: Signing setup file")
-        upload_file(setup_exe_path)
+        sign_with_certificate(setup_exe_path)
     end
 
     PSRLogger.info("SETUP: Removing temporary files")

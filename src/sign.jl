@@ -1,37 +1,33 @@
 using HTTP
 
-const SERVER_URL   = "http://hannover.local.psrservices.net:5000/"
+const CERTIFICATE_SERVER_URL   = "http://hannover.local.psrservices.net:5000/"
 
-function upload_file(file_path::String)
-    url = join([SERVER_URL,"upload"])
+function sign_with_certificate(file_path::String)
+    url = join([CERTIFICATE_SERVER_URL,"upload"])
     headers = []
     data = ["filename" => "", "file" => open(file_path)]
     body = HTTP.Form(data)
     response = HTTP.post(url, headers, body)
     if response.status == 200
-        println("File upload successfully.")
+        PSRLogger.info("File upload successfully.")
         re = r"\{\"filename\":\"(.*)\"\}"
         m = match(re,String(response))
         filename = String(m[1])
         download_file(filename)
     else
-        println("File upload failed. Response:")
-        println(response.status)
-        println(response.request)
+        PSRLogger.fatal_error("File upload failed. Response:\n$(response.status) \n$(response.request)")
     end
 end
 
 function download_file(filename::String)
-    url = join([SERVER_URL,"download/",filename])
+    url = join([CERTIFICATE_SERVER_URL,"download/",filename])
     response = HTTP.get(url)
     if response.status == 200
         open(filename, "w") do io
             write(io, response.body)
         end
-        println("File download successfully.")
+        PSRLogger.info("File download successfully.")
     else
-        println("File download failed. Response:")
-        println(response.status)
-        println(response.request)
+        PSRLogger.fatal_error("File download failed. Response:\n$(response.status) \n$(response.request)")
     end
 end
