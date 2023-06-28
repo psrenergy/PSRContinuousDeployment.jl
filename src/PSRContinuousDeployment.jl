@@ -22,6 +22,7 @@ include("images.jl")
 include("util.jl")
 include("configuration.jl")
 include("compile.jl")
+include("sign.jl")
 include("setup.jl")
 include("testrunner.jl")
 

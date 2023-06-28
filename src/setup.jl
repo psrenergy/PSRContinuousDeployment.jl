@@ -1,4 +1,4 @@
-function create_setup(configuration::Configuration, id::AbstractString)
+function create_setup(configuration::Configuration, id::AbstractString, sign::Bool = false)
     if !Sys.iswindows()
         PSRLogger.fatal_error("SETUP: Creating setup file is only supported on Windows")
     end
@@ -7,6 +7,8 @@ function create_setup(configuration::Configuration, id::AbstractString)
     version = configuration.version
     build_path = configuration.build_path
     setup_path = configuration.setup_path
+    setup_exe = "$target-$version-setup.exe"
+    setup_exe_path = joinpath(setup_path, setup_exe)
 
     if !isdir(setup_path)
         PSRLogger.info("SETUP: Creating setup directory")
@@ -66,6 +68,11 @@ function create_setup(configuration::Configuration, id::AbstractString)
 
     PSRLogger.info("SETUP: Creating setup file")
     Inno.run_inno(iss, flags = ["/Qp"])
+
+    if sign
+        PSRLogger.info("SETUP: Signing setup file")
+        upload_file(setup_exe_path)
+    end
 
     PSRLogger.info("SETUP: Removing temporary files")
     rm(iss, force = true)
