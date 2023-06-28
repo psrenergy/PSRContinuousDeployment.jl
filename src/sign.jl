@@ -1,6 +1,6 @@
 using HTTP
 
-SERVER_URL   = "http://hannover.local.psrservices.net:5000/"
+const SERVER_URL   = "http://hannover.local.psrservices.net:5000/"
 
 function upload_file(file_path::String)
     url = join([SERVER_URL,"upload"])

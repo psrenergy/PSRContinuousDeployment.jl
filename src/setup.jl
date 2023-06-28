@@ -1,4 +1,4 @@
-function create_setup(configuration::Configuration, id::AbstractString, sign::Bool = false)
+function create_setup(configuration::Configuration, id::AbstractString, sign_setup_with_certificate::Bool = false)
     if !Sys.iswindows()
         PSRLogger.fatal_error("SETUP: Creating setup file is only supported on Windows")
     end
@@ -69,7 +69,7 @@ function create_setup(configuration::Configuration, id::AbstractString, sign::Bo
     PSRLogger.info("SETUP: Creating setup file")
     Inno.run_inno(iss, flags = ["/Qp"])
 
-    if sign
+    if sign_setup_with_certificate
         PSRLogger.info("SETUP: Signing setup file")
         upload_file(setup_exe_path)
     end
