@@ -1,7 +1,3 @@
-using HTTP
-
-const CERTIFICATE_SERVER_URL = "http://hannover.local.psrservices.net:5000/"
-
 function sign_with_certificate(file_path::String)
     url = join([CERTIFICATE_SERVER_URL, "upload"])
     headers = []
@@ -13,18 +9,18 @@ function sign_with_certificate(file_path::String)
         re = r"\{\"filename\":\"(.*)\"\}"
         m = match(re, String(response))
         filename = String(m[1])
-        download_file(filename)
+        download_signed_file(filename)
     else
         PSRLogger.fatal_error("File upload failed. Response:\n$(response.status) \n$(response.request)")
     end
 end
 
-function download_file(filename::String)
+function download_signed_file(filename::String)
     url = join([CERTIFICATE_SERVER_URL, "download/", filename])
     response = HTTP.get(url)
     if response.status == 200
         open(filename, "w") do io
-            return write(io, response.body)
+            write(io, response.body)
         end
         PSRLogger.info("File download successfully.")
     else
