@@ -39,7 +39,8 @@ function deploy_to_psrmodules(
                     end
                 end
             end
-            return write(f, "$setup_zip\n")
+            write(f, "$setup_zip\n")
+            return nothing
         end
 
         PSRLogger.info("DEPLOY: Uploading the $releases_path")

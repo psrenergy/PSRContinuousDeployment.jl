@@ -9,7 +9,8 @@ function run_testrunner(
     testrunner_path = joinpath(configuration.package_path, "testrunner")
 
     branch = cd(package_path) do
-        return readchomp(`$git branch --show-current`)
+        readchomp(`$git branch --show-current`)
+        return nothing
     end
 
     if branch == ""
@@ -32,7 +33,8 @@ function run_testrunner(
         write(f, "compile = true\n")
         write(f, "test = true\n")
         write(f, "print_timings = true\n")
-        return write(f, "run_model_from_case_path = true\n")
+        write(f, "run_model_from_case_path = true\n")
+        return nothing
     end
 
     xml_path = joinpath(testrunner_path, "executar.xml")
@@ -61,7 +63,8 @@ function run_testrunner(
         writeln(f, "<Parametro nome=\"filtroDownload\" tipo=\"System.String\">Download</Parametro>")
         writeln(f, "<Parametro nome=\"tipoExecucao\" tipo=\"System.Int32\">0</Parametro>")
         writeln(f, "<Parametro nome=\"nomeCaso\" tipo=\"System.String\">GH CI $target $branch</Parametro>")
-        return writeln(f, "</ColecaoParametro>")
+        writeln(f, "</ColecaoParametro>")
+        return nothing
     end
 
     testrunner_sh_path = joinpath(testrunner_path, "testrunner.sh")
@@ -109,7 +112,9 @@ function run_testrunner(
         write(f, "echo =======================================================================================\n\n")
 
         write(f, "dos2unix ./testrunner/run_testrunner.sh\n")
-        return write(f, "./testrunner/run_testrunner.sh\n")
+        write(f, "./testrunner/run_testrunner.sh\n")
+
+        return nothing
     end
 
     # fake_console = raw"C:\FakeConsolev4_15\FakeConsole.exe"
