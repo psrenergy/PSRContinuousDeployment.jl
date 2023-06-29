@@ -76,10 +76,7 @@ function run_testrunner(
         write(f, "echo '### Clonning TestRunner'\n")
         write(f, "echo =======================================================================================\n")
         write(f, "rm -rf testrunner\n")
-        write(
-            f,
-            "git clone --depth 1 --branch $testrunner_version --recurse-submodules http://github.com/psrenergy/testrunner.git testrunner\n\n",
-        )
+        write(f, "git clone --depth 1 --branch $testrunner_version --recurse-submodules http://github.com/psrenergy/testrunner.git testrunner\n\n")
 
         write(f, "echo\n")
         write(f, "echo '# Current Testrunner commit:'\n")
