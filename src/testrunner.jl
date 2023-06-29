@@ -41,10 +41,7 @@ function run_testrunner(
     open(xml_path, "w") do f
         writeln(f, "<?xml version=\"1.0\" encoding=\"utf-8\"?>")
         writeln(f, "<ColecaoParametro>")
-        writeln(
-            f,
-            "<Parametro nome=\"urlServico\" tipo=\"System.String\">https://psrcloud-prod.psr-inc.com/CamadaGerenciadoraServicoWeb/DespachanteWS.asmx</Parametro>",
-        )
+        writeln(f, "<Parametro nome=\"urlServico\" tipo=\"System.String\">https://psrcloud-prod.psr-inc.com/CamadaGerenciadoraServicoWeb/DespachanteWS.asmx</Parametro>")
         writeln(f, "<Parametro nome=\"usuario\" tipo=\"System.String\">$user</Parametro>")
         writeln(f, "<Parametro nome=\"senha\" tipo=\"System.String\">$password</Parametro>")
         writeln(f, "<Parametro nome=\"idioma\" tipo=\"System.Int32\">1</Parametro>")
