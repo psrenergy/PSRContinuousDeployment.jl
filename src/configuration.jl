@@ -10,7 +10,7 @@ struct Configuration
     function Configuration(
         target::AbstractString,
         package_path::AbstractString;
-        certificate_server_url::String = "http://hannover.local.psrservices.net:5000/"
+        certificate_server_url::String = "http://hannover.local.psrservices.net:5000"
     )
         compile_path = joinpath(package_path, "compile")
         build_path = joinpath(compile_path, "build")
