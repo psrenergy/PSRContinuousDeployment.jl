@@ -1,5 +1,3 @@
-const CERTIFICATE_SERVER_URL = "http://hannover.local.psrservices.net:5000/"
-
 struct Configuration
     target::String
     version::String
@@ -8,14 +6,15 @@ struct Configuration
     build_path::String
     setup_path::String
     certificate_server_url::String
+    sign_with_certificate::Bool
 
-    function Configuration(target::AbstractString, package_path::AbstractString; kwargs...)
+    function Configuration(target::AbstractString, package_path::AbstractString; certificate_server_url = "http://hannover.local.psrservices.net:5000/", kwargs ...)
         compile_path = joinpath(package_path, "compile")
         build_path = joinpath(compile_path, "build")
         setup_path = joinpath(compile_path, "setup")
-        
+
         kwargs = Dict(kwargs)
-        certificate_server_url = get!(kwargs, "certificate_server_url", CERTIFICATE_SERVER_URL)
+        sign_with_certificate = get!(kwargs, "sign_with_certificate", false)
 
         level =
             Dict("Debug Level" => "debug", "Debug" => "debug", "Info" => "info", "Warn" => "warn", "Error" => "error", "Fatal Error" => "error")
@@ -33,6 +32,6 @@ struct Configuration
         project = TOML.parse(read(joinpath(package_path, "Project.toml"), String))
         version = project["version"]
 
-        return new(target, version, package_path, compile_path, build_path, setup_path, certificate_server_url)
+        return new(target, version, package_path, compile_path, build_path, setup_path, certificate_server_url, sign_with_certificate)
     end
 end

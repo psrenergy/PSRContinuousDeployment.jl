@@ -1,4 +1,4 @@
-function create_setup(configuration::Configuration, id::AbstractString, sign_setup_with_certificate::Bool = false)
+function create_setup(configuration::Configuration, id::AbstractString)
     if !Sys.iswindows()
         PSRLogger.fatal_error("SETUP: Creating setup file is only supported on Windows")
     end
@@ -81,9 +81,9 @@ function create_setup(configuration::Configuration, id::AbstractString, sign_set
     PSRLogger.info("SETUP: Creating setup file")
     Inno.run_inno(iss, flags = ["/Qp"])
 
-    if sign_setup_with_certificate
+    if configuration.sign_with_certificate
         PSRLogger.info("SETUP: Signing setup file")
-        sign_with_certificate(setup_exe_path)
+        sign_with_certificate(configuration.certificate_server_url, setup_exe_path)
     end
 
     PSRLogger.info("SETUP: Removing temporary files")
