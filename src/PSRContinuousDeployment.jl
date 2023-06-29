@@ -6,7 +6,6 @@ using HTTP
 using PSRLogger
 using PackageCompiler
 using TOML
-using HTTP
 
 import Git
 import p7zip_jll
