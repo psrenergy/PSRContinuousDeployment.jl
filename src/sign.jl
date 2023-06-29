@@ -1,33 +1,38 @@
-function sign_with_certificate(server_url::String, file_path::String)
-    upload_url = "$server_url/upload"
+function sync_file_with_certificate_server(configuration::Configuration, path::String)
+    filename = upload_file_to_certificate_server(configuration, path)
+    download_file_from_server(configuration, filename, path)
+    return nothing
+end
+
+function upload_file_to_certificate_server(configuration::Configuration, path::String)
+    certificate_server_url = configuration.certificate_server_url
+    url = "$certificate_server_url/upload"
 
     headers = []
-    data = ["filename" => "", "file" => open(file_path)]
+    data = ["filename" => "", "file" => open(path)]
     body = HTTP.Form(data)
-    response = HTTP.post(upload_url, headers, body)
-    
+    response = HTTP.post(url, headers, body)
+
     if response.status == 200
-        PSRLogger.info("CERTIFICATE: File upload successfully.")
         re = r"\{\"filename\":\"(.*)\"\}"
         m = match(re, String(response))
-        filename = String(m[1])
-        download_signed_file(server_url, filename)
+        return String(m[1])
     else
-        PSRLogger.fatal_error("CERTIFICATE: File upload failed, response: $(response.status) - $(response.request)")
+        PSRLogger.fatal_error("SETUP: Could not upload file to certificate server")
     end
 end
 
-function download_signed_file(server_url::String, filename::String)
-    download_url ="$server_url/download/$filename"
+function download_file_from_server(configuration::Configuration, filename::String, path::String)
+    certificate_server_url = configuration.certificate_server_url
+    url ="$certificate_server_url/download/$filename"
 
-    response = HTTP.get(download_url)
+    response = HTTP.get(url)
 
     if response.status == 200
-        open(filename, "w") do io
+        open(path, "w") do io
             write(io, response.body)
         end
-        PSRLogger.info("CERTIFICATE: File download successfully.")
     else
-        PSRLogger.fatal_error("CERTIFICATE: File download failed, response: $(response.status) - $(response.request)")
+        PSRLogger.fatal_error("SETUP: Could not download file from certificate server")
     end
 end
