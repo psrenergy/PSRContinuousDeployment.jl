@@ -6,18 +6,17 @@ struct Configuration
     build_path::String
     setup_path::String
     certificate_server_url::String
-    sign_with_certificate::Bool
 
-    function Configuration(target::AbstractString, package_path::AbstractString; certificate_server_url = "http://hannover.local.psrservices.net:5000/", kwargs ...)
+    function Configuration(
+        target::AbstractString,
+        package_path::AbstractString;
+        certificate_server_url::String = "http://hannover.local.psrservices.net:5000/"
+    )
         compile_path = joinpath(package_path, "compile")
         build_path = joinpath(compile_path, "build")
         setup_path = joinpath(compile_path, "setup")
 
-        kwargs = Dict(kwargs)
-        sign_with_certificate = get!(kwargs, "sign_with_certificate", false)
-
-        level =
-            Dict("Debug Level" => "debug", "Debug" => "debug", "Info" => "info", "Warn" => "warn", "Error" => "error", "Fatal Error" => "error")
+        level = Dict("Debug Level" => "debug", "Debug" => "debug", "Info" => "info", "Warn" => "warn", "Error" => "error", "Fatal Error" => "error")
         color = Dict("Debug Level" => :normal, "Debug" => :cyan, "Info" => :cyan, "Warn" => :yellow, "Error" => :red, "Fatal Error" => :red)
         background = Dict("Debug Level" => false, "Debug" => false, "Info" => false, "Warn" => false, "Error" => false, "Fatal Error" => true)
 
@@ -32,6 +31,14 @@ struct Configuration
         project = TOML.parse(read(joinpath(package_path, "Project.toml"), String))
         version = project["version"]
 
-        return new(target, version, package_path, compile_path, build_path, setup_path, certificate_server_url, sign_with_certificate)
+        return new(
+            target,
+            version,
+            package_path,
+            compile_path,
+            build_path,
+            setup_path,
+            certificate_server_url
+        )
     end
 end

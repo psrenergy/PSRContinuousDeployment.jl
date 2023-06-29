@@ -53,18 +53,9 @@ function create_setup(configuration::Configuration, id::AbstractString)
         writeln(f, "Name: spanish; MessagesFile: compiler:Languages/Spanish.isl")
         writeln(f, "")
         writeln(f, "[Files]")
-        writeln(
-            f,
-            "Source: $(joinpath(build_path, "bin", "*")); DestDir: {app}/bin; Flags: ignoreversion recursesubdirs createallsubdirs overwritereadonly; Permissions: everyone-full",
-        )
-        writeln(
-            f,
-            "Source: $(joinpath(build_path, "lib", "*")); DestDir: {app}/lib; Flags: ignoreversion recursesubdirs createallsubdirs overwritereadonly; Permissions: everyone-full",
-        )
-        writeln(
-            f,
-            "Source: $(joinpath(build_path, "share", "*")); DestDir: {app}/share; Flags: ignoreversion recursesubdirs createallsubdirs overwritereadonly; Permissions: everyone-full",
-        )
+        writeln(f, "Source: $(joinpath(build_path, "bin", "*")); DestDir: {app}/bin; Flags: ignoreversion recursesubdirs createallsubdirs overwritereadonly; Permissions: everyone-full")
+        writeln(f, "Source: $(joinpath(build_path, "lib", "*")); DestDir: {app}/lib; Flags: ignoreversion recursesubdirs createallsubdirs overwritereadonly; Permissions: everyone-full")
+        writeln(f, "Source: $(joinpath(build_path, "share", "*")); DestDir: {app}/share; Flags: ignoreversion recursesubdirs createallsubdirs overwritereadonly; Permissions: everyone-full")
         writeln(f, "")
         writeln(f, "[InstallDelete]")
         writeln(f, "Type: filesandordirs; Name: {app}/bin")
@@ -72,19 +63,15 @@ function create_setup(configuration::Configuration, id::AbstractString)
         writeln(f, "Type: filesandordirs; Name: {app}/share")
         writeln(f, "")
         writeln(f, "[Registry]")
-        return writeln(
-            f,
-            "Root: HKLM64; Subkey: SOFTWARE\\PSR\\$target\\$version; ValueType: string; ValueName: Path; ValueData: {app}; Flags: uninsdeletekey",
-        )
+        writeln(f, "Root: HKLM64; Subkey: SOFTWARE\\PSR\\$target\\$version; ValueType: string; ValueName: Path; ValueData: {app}; Flags: uninsdeletekey")
+        return nothing
     end
 
-    PSRLogger.info("SETUP: Creating setup file")
+    PSRLogger.info("SETUP: Running Inno Setup")
     Inno.run_inno(iss, flags = ["/Qp"])
 
-    if configuration.sign_with_certificate
-        PSRLogger.info("SETUP: Signing setup file")
-        sign_with_certificate(configuration.certificate_server_url, setup_exe_path)
-    end
+    PSRLogger.info("SETUP: Signing setup file")
+    sign_with_certificate(configuration.certificate_server_url, setup_exe_path)
 
     PSRLogger.info("SETUP: Removing temporary files")
     rm(iss, force = true)
