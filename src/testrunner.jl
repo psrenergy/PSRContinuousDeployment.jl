@@ -10,6 +10,7 @@ function run_testrunner(
 
     branch = cd(package_path) do
         readchomp(`$git branch --show-current`)
+        return nothing
     end
 
     if branch == ""
@@ -33,6 +34,7 @@ function run_testrunner(
         write(f, "test = true\n")
         write(f, "print_timings = true\n")
         write(f, "run_model_from_case_path = true\n")
+        return nothing
     end
 
     xml_path = joinpath(testrunner_path, "executar.xml")
@@ -59,6 +61,7 @@ function run_testrunner(
         writeln(f, "<Parametro nome=\"tipoExecucao\" tipo=\"System.Int32\">0</Parametro>")
         writeln(f, "<Parametro nome=\"nomeCaso\" tipo=\"System.String\">GH CI $target $branch</Parametro>")
         writeln(f, "</ColecaoParametro>")
+        return nothing
     end
 
     testrunner_sh_path = joinpath(testrunner_path, "testrunner.sh")
@@ -104,6 +107,8 @@ function run_testrunner(
 
         write(f, "dos2unix ./testrunner/run_testrunner.sh\n")
         write(f, "./testrunner/run_testrunner.sh\n")
+
+        return nothing
     end
 
     # fake_console = raw"C:\FakeConsolev4_15\FakeConsole.exe"

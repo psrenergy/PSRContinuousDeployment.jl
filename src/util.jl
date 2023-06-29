@@ -25,7 +25,7 @@ function write_version_jl(
     sha1::AbstractString,
     date::AbstractString,
     pkg_version::AbstractString,
-    pkg_build_date::AbstractString
+    pkg_build_date::AbstractString,
 )
     open(joinpath(path, "version.jl"), "w") do io
         writeln(io, "const GIT_SHA1 = \"$sha1\"")

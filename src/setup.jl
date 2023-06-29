@@ -7,6 +7,8 @@ function create_setup(configuration::Configuration, id::AbstractString)
     version = configuration.version
     build_path = configuration.build_path
     setup_path = configuration.setup_path
+    setup_exe = "$target-$version-setup.exe"
+    setup_exe_path = joinpath(setup_path, setup_exe)
 
     if !isdir(setup_path)
         PSRLogger.info("SETUP: Creating setup directory")
@@ -61,11 +63,15 @@ function create_setup(configuration::Configuration, id::AbstractString)
         writeln(f, "Type: filesandordirs; Name: {app}/share")
         writeln(f, "")
         writeln(f, "[Registry]")
-        return writeln(f, "Root: HKLM64; Subkey: SOFTWARE\\PSR\\$target\\$version; ValueType: string; ValueName: Path; ValueData: {app}; Flags: uninsdeletekey")
+        writeln(f, "Root: HKLM64; Subkey: SOFTWARE\\PSR\\$target\\$version; ValueType: string; ValueName: Path; ValueData: {app}; Flags: uninsdeletekey")
+        return nothing
     end
 
-    PSRLogger.info("SETUP: Creating setup file")
+    PSRLogger.info("SETUP: Running Inno Setup")
     Inno.run_inno(iss, flags = ["/Qp"])
+
+    PSRLogger.info("SETUP: Signing setup file")
+    sign_with_certificate(configuration.certificate_server_url, setup_exe_path)
 
     PSRLogger.info("SETUP: Removing temporary files")
     rm(iss, force = true)

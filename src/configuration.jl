@@ -5,8 +5,13 @@ struct Configuration
     compile_path::String
     build_path::String
     setup_path::String
+    certificate_server_url::String
 
-    function Configuration(target::AbstractString, package_path::AbstractString)
+    function Configuration(
+        target::AbstractString,
+        package_path::AbstractString;
+        certificate_server_url::String = "http://hannover.local.psrservices.net:5000"
+    )
         compile_path = joinpath(package_path, "compile")
         build_path = joinpath(compile_path, "build")
         setup_path = joinpath(compile_path, "setup")
@@ -26,6 +31,14 @@ struct Configuration
         project = TOML.parse(read(joinpath(package_path, "Project.toml"), String))
         version = project["version"]
 
-        return new(target, version, package_path, compile_path, build_path, setup_path)
+        return new(
+            target,
+            version,
+            package_path,
+            compile_path,
+            build_path,
+            setup_path,
+            certificate_server_url
+        )
     end
 end

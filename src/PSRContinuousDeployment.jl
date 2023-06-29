@@ -6,6 +6,7 @@ using HTTP
 using PSRLogger
 using PackageCompiler
 using TOML
+using HTTP
 
 import Git
 import p7zip_jll
@@ -23,6 +24,7 @@ include("images.jl")
 include("util.jl")
 include("configuration.jl")
 include("compile.jl")
+include("sign.jl")
 include("setup.jl")
 include("testrunner.jl")
 
