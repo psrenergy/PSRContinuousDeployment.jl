@@ -6,11 +6,12 @@ struct Configuration
     build_path::String
     setup_path::String
     certificate_server_url::String
+    package_repo_api_url::String
 
     function Configuration(
         target::AbstractString,
         package_path::AbstractString;
-        certificate_server_url::String = "http://hannover.local.psrservices.net:5000"
+        certificate_server_url::String = "http://hannover.local.psrservices.net:5000",
     )
         compile_path = joinpath(package_path, "compile")
         build_path = joinpath(compile_path, "build")
@@ -31,6 +32,8 @@ struct Configuration
         project = TOML.parse(read(joinpath(package_path, "Project.toml"), String))
         version = project["version"]
 
+        package_repo_api_url = "https://api.github.com/repos/psrenergy/$(target).jl/releases"
+
         return new(
             target,
             version,
@@ -38,7 +41,8 @@ struct Configuration
             compile_path,
             build_path,
             setup_path,
-            certificate_server_url
+            certificate_server_url,
+            package_repo_api_url,
         )
     end
 end
