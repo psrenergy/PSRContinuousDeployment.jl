@@ -5,16 +5,14 @@ on:
   workflow_dispatch:
 jobs:
   CompatHelper:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
       - name: Pkg.add("CompatHelper")
-        run: CALL %JULIA_191% -e "using Pkg; Pkg.add(\"CompatHelper\")"
-        shell: cmd
-
+        run: julia -e 'using Pkg; Pkg.add("CompatHelper")'
       - name: CompatHelper.main()
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: CALL %JULIA_191% -e "using CompatHelper; CompatHelper.main()"
-        shell: cmd
+          COMPATHELPER_PRIV: ${{ secrets.DOCUMENTER_KEY }}
+        run: julia -e 'using CompatHelper; CompatHelper.main()'
