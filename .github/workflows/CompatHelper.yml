@@ -11,10 +11,8 @@ jobs:
     steps:
       - name: Pkg.add("CompatHelper")
         run: CALL %JULIA_191% -e "using Pkg; Pkg.add(\"CompatHelper\")"
-        shell: cmd
 
       - name: CompatHelper.main()
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: CALL %JULIA_191% -e "using CompatHelper; CompatHelper.main()"
-        shell: cmd
