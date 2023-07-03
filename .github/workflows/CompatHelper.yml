@@ -8,8 +8,8 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: Pkg.add("CompatHelper")
-        run: %JULIA_191% -e 'using Pkg; Pkg.add("CompatHelper")'
+        run: \%JULIA_191\% -e 'using Pkg; Pkg.add("CompatHelper")'
       - name: CompatHelper.main()
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: %JULIA_191% -e 'using CompatHelper; CompatHelper.main()'
+        run: \%JULIA_191\% -e 'using CompatHelper; CompatHelper.main()'
