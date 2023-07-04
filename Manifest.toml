@@ -2,7 +2,7 @@
 
 julia_version = "1.9.1"
 manifest_format = "2.0"
-project_hash = "7dcbf7bf7cb735bb77b26f3500b21fe765839f49"
+project_hash = "c09dc873ff178703ba0f0e663686c5e63603b87d"
 
 [[deps.AWS]]
 deps = ["Base64", "Compat", "Dates", "Downloads", "GitHub", "HTTP", "IniFile", "JSON", "MbedTLS", "Mocking", "OrderedCollections", "Random", "SHA", "Sockets", "URIs", "UUIDs", "XMLDict"]
@@ -240,11 +240,11 @@ version = "10.42.0+0"
 
 [[deps.PSRLogger]]
 deps = ["Dates", "Logging", "LoggingExtras", "TOML"]
-git-tree-sha1 = "6272e5a4383f563c6e159a714496b99cd58a7aee"
+git-tree-sha1 = "93799ce850b232548343287c6874ee0e79d4fbf4"
 repo-rev = "master"
-repo-url = "https://github.com/psrenergy/PSRLogger.jl.git"
+repo-url = "https://github.com/psrenergy/PSRLogger.jl"
 uuid = "8c6dd3bf-e374-49cf-bf99-fff4475880f0"
-version = "0.1.0"
+version = "0.2.0"
 
 [[deps.PackageCompiler]]
 deps = ["Artifacts", "LazyArtifacts", "Libdl", "Pkg", "Printf", "RelocatableFolders", "TOML", "UUIDs"]
