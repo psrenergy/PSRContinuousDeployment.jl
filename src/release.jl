@@ -11,6 +11,11 @@ function create_release(configuration::Configuration, github_key::AbstractString
         "generate-release-notes" => true,
     )
 
+    if check_release_version(configuration, configuration.version, github_key)
+        PSRLogger.info("Release version already exists")
+        return
+    end
+
     target = configuration.target
     response = HTTP.post("https://api.github.com/repos/psrenergy/$(target).jl/releases", headers, JSON.json(data))
     
