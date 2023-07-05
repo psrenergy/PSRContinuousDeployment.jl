@@ -8,7 +8,8 @@ function create_release(configuration::Configuration, github_key::AbstractString
 
     data = Dict(
         "tag_name" => "v$(configuration.version)",
-        "generate-release-notes" => true,
+        "generate_release_notes" => true,
+        "make_latest" => "true",
     )
 
     target = configuration.target
