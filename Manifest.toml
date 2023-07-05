@@ -2,13 +2,13 @@
 
 julia_version = "1.9.1"
 manifest_format = "2.0"
-project_hash = "c7bfae951519f051e82cf736b504b796f5b25a6e"
+project_hash = "35ef4aa2ef22651fb25963b02a8345faa923c461"
 
 [[deps.AWS]]
 deps = ["Base64", "Compat", "Dates", "Downloads", "GitHub", "HTTP", "IniFile", "JSON", "MbedTLS", "Mocking", "OrderedCollections", "Random", "SHA", "Sockets", "URIs", "UUIDs", "XMLDict"]
-git-tree-sha1 = "e113452555312a7d220214229479045daeaa7ac6"
+git-tree-sha1 = "4f93e0dbdf4ac1a9f934c2d6e9f78d4736347599"
 uuid = "fbe9abb3-538b-5e4e-ba9e-bc94f4f92ebc"
-version = "1.88.0"
+version = "1.89.1"
 
 [[deps.ArgTools]]
 uuid = "0dad84c5-d112-42e6-8d28-ef12dabb789f"
@@ -33,9 +33,9 @@ version = "0.7.1"
 
 [[deps.Compat]]
 deps = ["UUIDs"]
-git-tree-sha1 = "7a60c856b9fa189eb34f5f8a6f6b5529b7942957"
+git-tree-sha1 = "4e88377ae7ebeaf29a047aa1ee40826e0b708a5d"
 uuid = "34da2185-b29b-5c13-b0c7-acf172513d20"
-version = "4.6.1"
+version = "4.7.0"
 
     [deps.Compat.extensions]
     CompatLinearAlgebraExt = "LinearAlgebra"
@@ -105,9 +105,9 @@ version = "2.36.1+2"
 
 [[deps.HTTP]]
 deps = ["Base64", "CodecZlib", "ConcurrentUtilities", "Dates", "ExceptionUnwrapping", "Logging", "LoggingExtras", "MbedTLS", "NetworkOptions", "OpenSSL", "Random", "SimpleBufferStream", "Sockets", "URIs", "UUIDs"]
-git-tree-sha1 = "2613d054b0e18a3dea99ca1594e9a3960e025da4"
+git-tree-sha1 = "7f5ef966a02a8fdf3df2ca03108a88447cb3c6f0"
 uuid = "cd3eb016-35fb-5094-929b-558a96fad6f3"
-version = "1.9.7"
+version = "1.9.8"
 
 [[deps.IniFile]]
 git-tree-sha1 = "f550e6e32074c939295eb5ea6de31849ac2c9625"
@@ -118,7 +118,7 @@ version = "0.5.1"
 deps = ["LazyArtifacts"]
 git-tree-sha1 = "d7da2b7ae0a485839eb117e31e8ab518674e622c"
 repo-rev = "master"
-repo-url = "https://github.com/psrenergy/Inno.jl.git"
+repo-url = "https://github.com/psrenergy/Inno.jl"
 uuid = "79823b5d-8cd7-4ac9-9032-f1255c7ccdbe"
 version = "0.1.0"
 
