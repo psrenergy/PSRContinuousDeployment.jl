@@ -1,5 +1,7 @@
 # https://docs.github.com/pt/rest/releases/releases?apiVersion=2022-11-28#create-a-release
 function create_release(configuration::Configuration, github_key::AbstractString)
+    target = configuration.target
+
     headers = [
         "Accept" => "application/vnd.github+json", 
         "Authorization" => "Bearer $(github_key)",
@@ -8,7 +10,7 @@ function create_release(configuration::Configuration, github_key::AbstractString
         "tag_name" => "v$(configuration.version)",
         "generate-release-notes" => true,
     )
-    response = HTTP.post(configuration.package_repo_api_url, headers, JSON.json(data))
+    response = HTTP.post("https://api.github.com/repos/psrenergy/$(target).jl/releases", headers, JSON.json(data))
     if response.status == 201
         PSRLogger.info("Release created successfully")
     else

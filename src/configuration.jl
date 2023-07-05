@@ -6,7 +6,6 @@ struct Configuration
     build_path::String
     setup_path::String
     certificate_server_url::String
-    package_repo_api_url::String
 
     function Configuration(
         target::AbstractString,
@@ -29,10 +28,9 @@ struct Configuration
             # append_log = true,
         )
 
-        project = TOML.parse(read(joinpath(package_path, "Project.toml"), String))
+        project_path = joinpath(package_path, "Project.toml")
+        project = TOML.parse(read(project_path, String))
         version = project["version"]
-
-        package_repo_api_url = "https://api.github.com/repos/psrenergy/$(target).jl/releases"
 
         return new(
             target,
@@ -42,7 +40,6 @@ struct Configuration
             build_path,
             setup_path,
             certificate_server_url,
-            package_repo_api_url,
         )
     end
 end
