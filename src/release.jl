@@ -35,8 +35,8 @@ function is_release_tag_available(configuration::Configuration, github_key::Abst
     try
         HTTP.get("https://api.github.com/repos/psrenergy/$target.jl/releases/tags/v$version", headers)
     catch
-        return false
+        return true
     end
 
-    return true
+    return false
 end
