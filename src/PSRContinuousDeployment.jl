@@ -3,10 +3,11 @@ module PSRContinuousDeployment
 using AWS
 using Dates
 using HTTP
+using JSON
 using PSRLogger
 using PackageCompiler
+using SlackAPI
 using TOML
-using JSON
 
 import Git
 import p7zip_jll
@@ -24,8 +25,9 @@ include("images.jl")
 include("util.jl")
 include("configuration.jl")
 include("compile.jl")
-include("release.jl")
+include("github.jl")
 include("sign.jl")
+include("slack.jl")
 include("setup.jl")
 include("testrunner.jl")
 

@@ -1,17 +1,24 @@
-function sync_file_with_certificate_server(configuration::Configuration, path::String)
-    filename = upload_file_to_certificate_server(configuration, path)
-    download_file_from_server(configuration, filename, path)
+function sync_file_with_certificate_server(configuration::Configuration)
+    filename = upload_file_to_certificate_server(configuration)
+    download_file_from_server(configuration, filename)
     return nothing
 end
 
-function upload_file_to_certificate_server(configuration::Configuration, path::String)
+function upload_file_to_certificate_server(configuration::Configuration)
+    target = configuration.target
+    version = configuration.version
+    setup_exe_path = joinpath(configuration.setup_path, "$target-$version-setup.exe")
+
     certificate_server_url = configuration.certificate_server_url
     url = "$certificate_server_url/upload"
 
     headers = []
-    data = ["filename" => "", "file" => open(path)]
+    data = ["filename" => "", "file" => open(setup_exe_path)]
     body = HTTP.Form(data)
+
+    t = time()
     response = HTTP.post(url, headers, body)
+    PSRLogger.info("SETUP: Uploaded file to certificate server in $(time() - t) seconds")
 
     if response.status == 200
         regex = match(r"\{\"filename\":\"(.*)\"\}", String(response))
@@ -21,14 +28,20 @@ function upload_file_to_certificate_server(configuration::Configuration, path::S
     end
 end
 
-function download_file_from_server(configuration::Configuration, filename::String, path::String)
+function download_file_from_server(configuration::Configuration, filename::String)
+    target = configuration.target
+    version = configuration.version
+    setup_exe_path = joinpath(configuration.setup_path, "$target-$version-setup.exe")
+
     certificate_server_url = configuration.certificate_server_url
     url ="$certificate_server_url/download/$filename"
 
+    t = time()
     response = HTTP.get(url)
+    PSRLogger.info("SETUP: Downloaded file from certificate server in $(time() - t) seconds")
 
     if response.status == 200
-        open(path, "w") do io
+        open(setup_exe_path, "w") do io
             write(io, response.body)
         end
     else

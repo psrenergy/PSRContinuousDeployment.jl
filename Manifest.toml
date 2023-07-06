@@ -2,7 +2,7 @@
 
 julia_version = "1.9.1"
 manifest_format = "2.0"
-project_hash = "35ef4aa2ef22651fb25963b02a8345faa923c461"
+project_hash = "d9ec8ec0a3b6a27f4a49803e298718a463831526"
 
 [[deps.AWS]]
 deps = ["Base64", "Compat", "Dates", "Downloads", "GitHub", "HTTP", "IniFile", "JSON", "MbedTLS", "Mocking", "OrderedCollections", "Random", "SHA", "Sockets", "URIs", "UUIDs", "XMLDict"]
@@ -310,6 +310,14 @@ uuid = "9e88b42a-f829-5b0c-bbe9-9e923198166b"
 git-tree-sha1 = "874e8867b33a00e784c8a7e4b60afe9e037b74e1"
 uuid = "777ac1f9-54b0-4bf8-805c-2214025038e7"
 version = "1.1.0"
+
+[[deps.SlackAPI]]
+deps = ["HTTP", "JSON"]
+git-tree-sha1 = "ec995c40e80723860414a03ab2253457332518d4"
+repo-rev = "master"
+repo-url = "https://github.com/psrenergy/SlackAPI.jl"
+uuid = "45996516-d782-4985-8a4d-8a8f0336c9da"
+version = "0.1.1"
 
 [[deps.Sockets]]
 uuid = "6462fe0b-24de-5631-8697-dd941f90decc"

@@ -7,7 +7,6 @@ function create_setup(configuration::Configuration, id::AbstractString)
     version = configuration.version
     build_path = configuration.build_path
     setup_path = configuration.setup_path
-    setup_exe_path = joinpath(setup_path, "$target-$version-setup.exe")
 
     if !isdir(setup_path)
         PSRLogger.info("SETUP: Creating setup directory")
@@ -70,7 +69,7 @@ function create_setup(configuration::Configuration, id::AbstractString)
     Inno.run_inno(iss, flags = ["/Qp"])
 
     PSRLogger.info("SETUP: Signing setup file")
-    sync_file_with_certificate_server(configuration, setup_exe_path)
+    sync_file_with_certificate_server(configuration)
 
     PSRLogger.info("SETUP: Removing temporary files")
     rm(iss, force = true)

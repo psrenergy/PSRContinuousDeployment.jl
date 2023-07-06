@@ -11,6 +11,7 @@ Inno = "79823b5d-8cd7-4ac9-9032-f1255c7ccdbe"
 JSON = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
 PSRLogger = "8c6dd3bf-e374-49cf-bf99-fff4475880f0"
 PackageCompiler = "9b87118b-4619-50d2-8e1e-99f35a4d4d9d"
+SlackAPI = "45996516-d782-4985-8a4d-8a8f0336c9da"
 TOML = "fa267f1f-6049-4f14-aa54-33bafae1ed76"
 p7zip_jll = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 
