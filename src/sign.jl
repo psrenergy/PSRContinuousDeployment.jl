@@ -14,9 +14,8 @@ function upload_file_to_certificate_server(configuration::Configuration, path::S
     response = HTTP.post(url, headers, body)
 
     if response.status == 200
-        re = r"\{\"filename\":\"(.*)\"\}"
-        m = match(re, String(response))
-        return String(m[1])
+        regex = match(r"\{\"filename\":\"(.*)\"\}", String(response))
+        return String(regex[1])
     else
         PSRLogger.fatal_error("SETUP: Could not upload file to certificate server")
     end
