@@ -4,7 +4,11 @@ function sync_file_with_certificate_server(configuration::Configuration)
     return nothing
 end
 
-function upload_file_to_certificate_server(configuration::Configuration)
+function upload_file_to_certificate_server(
+    configuration::Configuration;
+    connect_timeout::Integer = CONNECT_TIMEOUT,
+    connect_retries::Integer = CONNECT_RETRIES
+)
     target = configuration.target
     version = configuration.version
     setup_exe_path = joinpath(configuration.setup_path, "$target-$version-setup.exe")
@@ -17,7 +21,7 @@ function upload_file_to_certificate_server(configuration::Configuration)
     body = HTTP.Form(data)
 
     t = time()
-    response = HTTP.post(url, headers, body)
+    response = HTTP.post(url, headers, body, connect_timeout = connect_timeout, retry = true, retries = connect_retries)
     PSRLogger.info("SETUP: Uploaded file to certificate server in $(time() - t) seconds")
 
     if response.status == 200
@@ -28,7 +32,12 @@ function upload_file_to_certificate_server(configuration::Configuration)
     end
 end
 
-function download_file_from_server(configuration::Configuration, filename::String)
+function download_file_from_server(
+    configuration::Configuration,
+    filename::String;
+    connect_timeout::Integer = CONNECT_TIMEOUT,
+    connect_retries::Integer = CONNECT_RETRIES
+)
     target = configuration.target
     version = configuration.version
     setup_exe_path = joinpath(configuration.setup_path, "$target-$version-setup.exe")
@@ -37,7 +46,7 @@ function download_file_from_server(configuration::Configuration, filename::Strin
     url ="$certificate_server_url/download/$filename"
 
     t = time()
-    response = HTTP.get(url)
+    response = HTTP.get(url, connect_timeout = connect_timeout, retry = true, retries = connect_retries)
     PSRLogger.info("SETUP: Downloaded file from certificate server in $(time() - t) seconds")
 
     if response.status == 200

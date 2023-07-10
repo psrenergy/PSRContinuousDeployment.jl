@@ -17,6 +17,8 @@ if Sys.iswindows()
 end
 
 const git = Git.git()
+const CONNECT_TIMEOUT = 120
+const CONNECT_RETRIES = 8
 
 @service S3
 
