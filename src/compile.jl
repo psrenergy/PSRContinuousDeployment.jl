@@ -7,6 +7,7 @@ function compile(
     configuration::Configuration;
     windows_additional_files_path::Vector{String} = Vector{String}(),
     linux_additional_files_path::Vector{String} = Vector{String}(),
+    kwargs...,
 )
     target = configuration.target
     version = configuration.version
@@ -54,6 +55,7 @@ function compile(
         force = true,
         include_lazy_artifacts = true,
         include_transitive_dependencies = true,
+        kwargs...,
     )
 
     PSRLogger.info("COMPILE: Cleaning version.jl")
