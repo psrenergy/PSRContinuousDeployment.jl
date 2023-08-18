@@ -53,7 +53,7 @@ function compile(
         incremental = false,
         filter_stdlibs = false,
         force = true,
-        include_lazy_artifacts = get(kwargs, :include_lazy_artifacts, true)),
+        include_lazy_artifacts = get(kwargs, :include_lazy_artifacts, true),
         include_transitive_dependencies = get(kwargs, :include_transitive_dependencies, true),
         kwargs...,
     )
