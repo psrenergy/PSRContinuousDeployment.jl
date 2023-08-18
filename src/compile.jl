@@ -7,6 +7,8 @@ function compile(
     configuration::Configuration;
     windows_additional_files_path::Vector{String} = Vector{String}(),
     linux_additional_files_path::Vector{String} = Vector{String}(),
+    include_lazy_artifacts::Bool = true,
+    include_transitive_dependencies::Bool = true,
     kwargs...,
 )
     target = configuration.target
@@ -53,8 +55,8 @@ function compile(
         incremental = false,
         filter_stdlibs = false,
         force = true,
-        include_lazy_artifacts = get(kwargs, :include_lazy_artifacts, true),
-        include_transitive_dependencies = get(kwargs, :include_transitive_dependencies, true),
+        include_lazy_artifacts = include_lazy_artifacts,
+        include_transitive_dependencies = include_transitive_dependencies,
         kwargs...,
     )
 
