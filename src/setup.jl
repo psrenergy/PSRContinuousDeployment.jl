@@ -1,4 +1,8 @@
-function create_setup(configuration::Configuration, id::AbstractString)
+function create_setup(
+    configuration::Configuration,
+    id::AbstractString;
+    sign::Bool = true,
+)
     if !Sys.iswindows()
         PSRLogger.fatal_error("SETUP: Creating setup file is only supported on Windows")
     end
@@ -51,9 +55,7 @@ function create_setup(configuration::Configuration, id::AbstractString)
         writeln(f, "Name: spanish; MessagesFile: compiler:Languages\\Spanish.isl")
         writeln(f, "")
         writeln(f, "[Files]")
-        writeln(f, "Source: $(joinpath(build_path, "bin", "*")); DestDir: {app}\\bin; Flags: ignoreversion recursesubdirs createallsubdirs overwritereadonly; Permissions: everyone-full")
-        writeln(f, "Source: $(joinpath(build_path, "lib", "*")); DestDir: {app}\\lib; Flags: ignoreversion recursesubdirs createallsubdirs overwritereadonly; Permissions: everyone-full")
-        writeln(f, "Source: $(joinpath(build_path, "share", "*")); DestDir: {app}\\share; Flags: ignoreversion recursesubdirs createallsubdirs overwritereadonly; Permissions: everyone-full")
+        writeln(f, "Source: $(joinpath(build_path, "*")); DestDir: {app}\\; Flags: ignoreversion recursesubdirs createallsubdirs overwritereadonly; Permissions: everyone-full")
         writeln(f, "")
         writeln(f, "[InstallDelete]")
         writeln(f, "Type: filesandordirs; Name: {app}\\bin")
@@ -68,8 +70,10 @@ function create_setup(configuration::Configuration, id::AbstractString)
     PSRLogger.info("SETUP: Running Inno Setup")
     Inno.run_inno(iss, flags = ["/Qp"])
 
-    PSRLogger.info("SETUP: Signing setup file")
-    sync_file_with_certificate_server(configuration)
+    if sign
+        PSRLogger.info("SETUP: Signing setup file")
+        sync_file_with_certificate_server(configuration)
+    end
 
     PSRLogger.info("SETUP: Removing temporary files")
     rm(iss, force = true)
