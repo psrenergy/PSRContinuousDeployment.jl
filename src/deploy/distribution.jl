@@ -1,6 +1,7 @@
 function deploy_to_distribution(
     configuration::Configuration,
-    url::String,
+    url::String;
+    create_tag::Bool = false
 )
     target = configuration.target
     version = configuration.version
@@ -39,6 +40,27 @@ function deploy_to_distribution(
         run(`git pull`)
         run(`git push origin --all`)
         return nothing
+    end
+
+    if create_tag
+        PSRLogger.info("DISTRIBUTION: Creating tag $version")
+        cd(publish_path) do
+            run(`git fetch --progress --prune --force --recurse-submodules=no origin refs/heads/develop:refs/remotes/origin/develop`)
+            run(`git branch --no-track release/$version refs/heads/develop`)
+            run(`git checkout release/$version`)
+            run(`git fetch --progress --prune --force --recurse-submodules=no origin refs/heads/master:refs/remotes/origin/master`)
+            run(`git fetch --progress --prune --force --recurse-submodules=no origin refs/heads/develop:refs/remotes/origin/develop`)
+            run(`git checkout --ignore-other-worktrees master`)
+            run(`git merge --no-ff -m "Finish $version" release/$version`)
+            run(`git tag -f $version refs/heads/master`)
+            run(`git checkout --ignore-other-worktrees develop`)
+            run(`git merge --no-ff -m "Finish $version" $version`)
+            run(`git push --porcelain --progress --recurse-submodules=check origin refs/heads/develop:refs/heads/develop`)
+            run(`git push --porcelain --progress --recurse-submodules=check origin refs/heads/master:refs/heads/master`)
+            run(`git push --porcelain --progress --recurse-submodules=check origin refs/tags/$version:refs/tags/$version`)
+            run(`git branch -D release/$version`)
+            return nothing
+        end
     end
 
     PSRLogger.info("DISTRIBUTION: Removing publish directory")
