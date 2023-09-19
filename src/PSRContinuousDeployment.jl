@@ -4,12 +4,12 @@ using AWS
 using Dates
 using HTTP
 using JSON
-using PSRLogger
 using PackageCompiler
 using SlackAPI
 using TOML
 
 import Git
+import LoggingPolyglot as Log
 import p7zip_jll
 
 if Sys.iswindows()

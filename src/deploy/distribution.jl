@@ -14,11 +14,11 @@ function deploy_to_distribution(
     sha1 = read_git_sha1(package_path)
 
     if isdir(publish_path)
-        PSRLogger.info("DISTRIBUTION: Removing publish directory")
+        Log.info("DISTRIBUTION: Removing publish directory")
         rm(publish_path, force = true, recursive = true)
     end
 
-    PSRLogger.info("DISTRIBUTION: Clonning the $url")
+    Log.info("DISTRIBUTION: Clonning the $url")
     run(`git clone --branch develop $url $publish_path`)
 
     os_path = if Sys.iswindows()
@@ -26,14 +26,14 @@ function deploy_to_distribution(
     elseif Sys.islinux()
         joinpath(publish_path, "linux")
     else
-        PSRLogger.fatal_error("DISTRIBUTION: Unknown platform")
+        Log.fatal_error("DISTRIBUTION: Unknown platform")
     end
 
     rm(os_path, force = true, recursive = true)
     mkdir(os_path)
     cp(build_path, os_path, force = true)
 
-    PSRLogger.info("DISTRIBUTION: Updating the $url")
+    Log.info("DISTRIBUTION: Updating the $url")
     cd(publish_path) do
         run(`git add --all`)
         run(`git commit -m "$version ($sha1)"`)
@@ -43,7 +43,7 @@ function deploy_to_distribution(
     end
 
     if create_tag
-        PSRLogger.info("DISTRIBUTION: Creating tag $version")
+        Log.info("DISTRIBUTION: Creating tag $version")
         cd(publish_path) do
             run(`git fetch --progress --prune --force --recurse-submodules=no origin refs/heads/develop:refs/remotes/origin/develop`)
             run(`git branch --no-track release/$version refs/heads/develop`)
@@ -63,10 +63,10 @@ function deploy_to_distribution(
         end
     end
 
-    PSRLogger.info("DISTRIBUTION: Removing publish directory")
+    Log.info("DISTRIBUTION: Removing publish directory")
     rm(publish_path, force = true, recursive = true)
 
-    PSRLogger.info("DISTRIBUTION: distribution deployed successfully")
+    Log.info("DISTRIBUTION: distribution deployed successfully")
 
     return nothing
 end

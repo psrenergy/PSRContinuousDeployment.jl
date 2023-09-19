@@ -14,15 +14,15 @@ function run_testrunner(
     end
 
     if branch == ""
-        PSRLogger.fatal_error("TESTRUNNER: Could not get current branch")
+        Log.fatal_error("TESTRUNNER: Could not get current branch")
     end
 
     if isdir(testrunner_path)
-        PSRLogger.info("TESTRUNNER: Removing testrunner directory")
+        Log.info("TESTRUNNER: Removing testrunner directory")
         rm(testrunner_path, force = true, recursive = true)
     end
 
-    PSRLogger.info("TESTRUNNER: Creating testrunner directory")
+    Log.info("TESTRUNNER: Creating testrunner directory")
     mkdir(testrunner_path)
 
     cfg_path = joinpath(testrunner_path, "spec.cfg")
@@ -115,7 +115,7 @@ function run_testrunner(
     fake_console = raw"D:\PSR\FakeConsole\FakeConsole.exe"
 
     if !isfile(fake_console)
-        PSRLogger.fatal_error("TESTRUNNER: FakeConsole not found at $fake_console")
+        Log.fatal_error("TESTRUNNER: FakeConsole not found at $fake_console")
     end
 
     cd(testrunner_path) do
@@ -123,13 +123,13 @@ function run_testrunner(
             # run(`$fake_console executar.xml \| Tee-Object -file testrunner.log`)
             run(`$fake_console executar.xml`)
         else
-            PSRLogger.fatal_error("TESTRUNNER: Unsupported OS")
+            Log.fatal_error("TESTRUNNER: Unsupported OS")
         end
     end
 
     testrunner_ok_path = joinpath(testrunner_path, "testrunner.ok")
     if !isfile(testrunner_ok_path)
-        PSRLogger.fatal_error("TESTRUNNER: Cloud failed to return testrunner.ok")
+        Log.fatal_error("TESTRUNNER: Cloud failed to return testrunner.ok")
     end
 
     rm(cfg_path, force = true)

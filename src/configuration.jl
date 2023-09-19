@@ -19,7 +19,7 @@ struct Configuration
         color = Dict("Debug Level" => :normal, "Debug" => :cyan, "Info" => :cyan, "Warn" => :yellow, "Error" => :red, "Fatal Error" => :red)
         background = Dict("Debug Level" => false, "Debug" => false, "Info" => false, "Warn" => false, "Error" => false, "Fatal Error" => true)
 
-        PSRLogger.create_psr_logger(
+        Log.create_psr_logger(
             joinpath(compile_path, "$target.log"),
             level_dict = level,
             color_dict = color,

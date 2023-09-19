@@ -14,7 +14,7 @@ function deploy_to_psrmodules(
     setup_zip = "$version.zip"
     setup_zip_path = joinpath(setup_path, setup_zip)
 
-    PSRLogger.info("DEPLOY: Zipping the $setup_exe")
+    Log.info("DEPLOY: Zipping the $setup_exe")
     run(`$(p7zip_jll.p7zip()) a -tzip $setup_zip_path $setup_exe_path`)
     @assert isfile(setup_zip_path)
 
@@ -23,7 +23,7 @@ function deploy_to_psrmodules(
     global_aws_config(aws_config)
 
     if stable_release
-        PSRLogger.info("DEPLOY: Downloading the $target/releases.txt")
+        Log.info("DEPLOY: Downloading the $target/releases.txt")
         releases = String(S3.get_object("psr-update-modules", "$target/releases.txt"))
         releases_versions = split(replace(releases, "\r\n" => "\n"), "\n")
 
@@ -34,7 +34,7 @@ function deploy_to_psrmodules(
                     write(f, "$releases_version\n")
 
                     if releases_version == setup_zip
-                        PSRLogger.fatal_error("DEPLOY: The $setup_zip already exists in the psr-update-modules bucket")
+                        Log.fatal_error("DEPLOY: The $setup_zip already exists in the psr-update-modules bucket")
                         return nothing
                     end
                 end
@@ -43,14 +43,14 @@ function deploy_to_psrmodules(
             return nothing
         end
 
-        PSRLogger.info("DEPLOY: Uploading the $releases_path")
+        Log.info("DEPLOY: Uploading the $releases_path")
         S3.put_object("psr-update-modules", "$target/releases.txt", Dict("body" => read(releases_path)))
 
-        PSRLogger.info("DEPLOY: Removing temporary files")
+        Log.info("DEPLOY: Removing temporary files")
         rm(releases_path; force = true)
     end
 
-    PSRLogger.info("DEPLOY: Uploading the $setup_zip")
+    Log.info("DEPLOY: Uploading the $setup_zip")
     S3.put_object("psr-update-modules", "$target/$setup_zip", Dict("body" => read(setup_zip_path)))
 
     return nothing

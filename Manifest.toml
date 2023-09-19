@@ -1,8 +1,8 @@
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.9.1"
+julia_version = "1.9.3"
 manifest_format = "2.0"
-project_hash = "d9ec8ec0a3b6a27f4a49803e298718a463831526"
+project_hash = "681b3c275999011ceeb6e38cb3af5ed4fe1caaca"
 
 [[deps.AWS]]
 deps = ["Base64", "Compat", "Dates", "Downloads", "GitHub", "HTTP", "IniFile", "JSON", "MbedTLS", "Mocking", "OrderedCollections", "Random", "SHA", "Sockets", "URIs", "UUIDs", "XMLDict"]
@@ -184,6 +184,12 @@ git-tree-sha1 = "cedb76b37bc5a6c702ade66be44f831fa23c681e"
 uuid = "e6f89c97-d47a-5376-807f-9c37f3926c36"
 version = "1.0.0"
 
+[[deps.LoggingPolyglot]]
+deps = ["Dates", "Logging", "LoggingExtras", "TOML"]
+git-tree-sha1 = "5e570c8768b38aeafb688aa9540dded2e7e6c733"
+uuid = "211639cc-9b11-4cfd-abc6-8f7477829344"
+version = "0.1.0"
+
 [[deps.Markdown]]
 deps = ["Base64"]
 uuid = "d6f4376e-aef5-505a-96c1-9c027394607a"
@@ -238,14 +244,6 @@ deps = ["Artifacts", "Libdl"]
 uuid = "efcefdf7-47ab-520b-bdef-62a2eaa19f15"
 version = "10.42.0+0"
 
-[[deps.PSRLogger]]
-deps = ["Dates", "Logging", "LoggingExtras", "TOML"]
-git-tree-sha1 = "93799ce850b232548343287c6874ee0e79d4fbf4"
-repo-rev = "master"
-repo-url = "https://github.com/psrenergy/PSRLogger.jl"
-uuid = "8c6dd3bf-e374-49cf-bf99-fff4475880f0"
-version = "0.2.0"
-
 [[deps.PackageCompiler]]
 deps = ["Artifacts", "LazyArtifacts", "Libdl", "Pkg", "Printf", "RelocatableFolders", "TOML", "UUIDs"]
 git-tree-sha1 = "1a6a868eb755e8ea9ecd000aa6ad175def0cc85b"
@@ -261,7 +259,7 @@ version = "2.7.1"
 [[deps.Pkg]]
 deps = ["Artifacts", "Dates", "Downloads", "FileWatching", "LibGit2", "Libdl", "Logging", "Markdown", "Printf", "REPL", "Random", "SHA", "Serialization", "TOML", "Tar", "UUIDs", "p7zip_jll"]
 uuid = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
-version = "1.9.0"
+version = "1.9.2"
 
 [[deps.PrecompileTools]]
 deps = ["Preferences"]

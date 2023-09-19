@@ -4,7 +4,7 @@ function create_setup(
     sign::Bool = true,
 )
     if !Sys.iswindows()
-        PSRLogger.fatal_error("SETUP: Creating setup file is only supported on Windows")
+        Log.fatal_error("SETUP: Creating setup file is only supported on Windows")
     end
 
     target = configuration.target
@@ -13,7 +13,7 @@ function create_setup(
     setup_path = configuration.setup_path
 
     if !isdir(setup_path)
-        PSRLogger.info("SETUP: Creating setup directory")
+        Log.info("SETUP: Creating setup directory")
         mkdir(setup_path)
     end
 
@@ -23,7 +23,7 @@ function create_setup(
     wizard_small_image_path = joinpath(setup_path, "header_instalador_138.bmp")
     write(wizard_small_image_path, wizard_small_image)
 
-    PSRLogger.info("SETUP: Creating setup file for $target $version")
+    Log.info("SETUP: Creating setup file for $target $version")
     iss = joinpath(setup_path, "setup.iss")
     open(iss, "w") do f
         writeln(f, "[Setup]")
@@ -67,20 +67,20 @@ function create_setup(
         return nothing
     end
 
-    PSRLogger.info("SETUP: Running Inno Setup")
+    Log.info("SETUP: Running Inno Setup")
     Inno.run_inno(iss, flags = ["/Qp"])
 
     if sign
-        PSRLogger.info("SETUP: Signing setup file")
+        Log.info("SETUP: Signing setup file")
         sync_file_with_certificate_server(configuration)
     end
 
-    PSRLogger.info("SETUP: Removing temporary files")
+    Log.info("SETUP: Removing temporary files")
     rm(iss, force = true)
     rm(wizard_image_path, force = true)
     rm(wizard_small_image_path, force = true)
 
-    PSRLogger.info("SETUP: Setup file created successfully")
+    Log.info("SETUP: Setup file created successfully")
 
     return nothing
 end
