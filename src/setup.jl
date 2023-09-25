@@ -24,8 +24,8 @@ function create_setup(
     write(wizard_small_image_path, wizard_small_image)
 
     Log.info("SETUP: Creating setup file for $target $version")
-    iss = joinpath(setup_path, "setup.iss")
-    open(iss, "w") do f
+    iss_path = joinpath(setup_path, "setup.iss")
+    open(iss_path, "w") do f
         writeln(f, "[Setup]")
         writeln(f, "AppId={{$id}}")
         writeln(f, "AppName=$target")
@@ -67,8 +67,16 @@ function create_setup(
         return nothing
     end
 
+    Log.info("SETUP: Donwloading Inno Setup")
+    inno_url = "https://julia-artifacts.s3.amazonaws.com/inno/4b330/inno.tgz"
+    inno_hash = "4b3303c32724af530789f7844f656ba8510977222bb79c5e95e88f67350864d7"
+    inno_path = tempname()
+    @assert download_verify_unpack(inno_url, inno_hash, inno_path)
+
     Log.info("SETUP: Running Inno Setup")
-    Inno.run_inno(iss, flags = ["/Qp"])
+    inno_executable_path = joinpath(inno_path, "inno", "ISCC.exe")
+    inno_flags = Cmd(["/Qp"])
+    run(`$inno_executable_path $inno_flags $iss_path`)
 
     if sign
         Log.info("SETUP: Signing setup file")
@@ -79,6 +87,7 @@ function create_setup(
     rm(iss, force = true)
     rm(wizard_image_path, force = true)
     rm(wizard_small_image_path, force = true)
+    rm(inno_path, force = true, recursive = true)
 
     Log.info("SETUP: Setup file created successfully")
 
