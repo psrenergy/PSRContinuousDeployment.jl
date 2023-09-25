@@ -5,16 +5,13 @@ using Dates
 using HTTP
 using JSON
 using PackageCompiler
+using Pkg.PlatformEngines
 using SlackAPI
 using TOML
 
 import Git
 import LoggingPolyglot as Log
 import p7zip_jll
-
-if Sys.iswindows()
-    import Inno
-end
 
 const git = Git.git()
 const CONNECT_TIMEOUT = 120

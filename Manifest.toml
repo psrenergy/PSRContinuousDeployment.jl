@@ -2,7 +2,7 @@
 
 julia_version = "1.9.3"
 manifest_format = "2.0"
-project_hash = "beab6d00315fc0ec9746a41b7566f78348ed64fe"
+project_hash = "44928fc9aa82f00b49f4e19a89884a1228b51384"
 
 [[deps.AWS]]
 deps = ["Base64", "Compat", "Dates", "Downloads", "GitHub", "HTTP", "IniFile", "JSON", "MbedTLS", "Mocking", "OrderedCollections", "Random", "SHA", "Sockets", "URIs", "UUIDs", "XMLDict"]
@@ -113,14 +113,6 @@ version = "1.9.8"
 git-tree-sha1 = "f550e6e32074c939295eb5ea6de31849ac2c9625"
 uuid = "83e8ac13-25f8-5344-8a64-a9f2b223428f"
 version = "0.5.1"
-
-[[deps.Inno]]
-deps = ["LazyArtifacts"]
-git-tree-sha1 = "d7da2b7ae0a485839eb117e31e8ab518674e622c"
-repo-rev = "master"
-repo-url = "https://github.com/psrenergy/Inno.jl"
-uuid = "79823b5d-8cd7-4ac9-9032-f1255c7ccdbe"
-version = "0.1.0"
 
 [[deps.InteractiveUtils]]
 deps = ["Markdown"]
