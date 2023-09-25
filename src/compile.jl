@@ -5,6 +5,7 @@ end
 
 function compile(
     configuration::Configuration;
+    additional_files_path::Vector{String} = Vector{String}(),
     windows_additional_files_path::Vector{String} = Vector{String}(),
     linux_additional_files_path::Vector{String} = Vector{String}(),
     include_lazy_artifacts::Bool = true,
@@ -53,7 +54,7 @@ function compile(
         executables = [target => "julia_main"],
         precompile_execution_file = precompile_path,
         incremental = false,
-        filter_stdlibs = false,
+        filter_stdlibs = true,
         force = true,
         include_lazy_artifacts = include_lazy_artifacts,
         include_transitive_dependencies = include_transitive_dependencies,
@@ -67,6 +68,11 @@ function compile(
     open(joinpath(bin_path, "$target.ver"), "w") do io
         writeln(io, sha1)
         return nothing
+    end
+
+    Log.info("COMPILE: Copying Additional Files")
+    for file_path in additional_files_path
+        copy(dirname(file_path), bin_path, basename(file_path))
     end
 
     if Sys.iswindows()
