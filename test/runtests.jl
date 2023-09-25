@@ -8,7 +8,7 @@ function testall()
 
     configuration = PSRContinuousDeployment.Configuration(package_path)
 
-    PSRContinuousDeployment.create_setup(configuration, ID)
+    PSRContinuousDeployment.create_setup(configuration, ID, sign = false)
 
     return nothing
 end

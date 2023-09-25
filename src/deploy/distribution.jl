@@ -1,6 +1,6 @@
 function deploy_to_distribution(
     configuration::Configuration,
-    url::String;
+    url::AbstractString;
     create_tag::Bool = false
 )
     target = configuration.target

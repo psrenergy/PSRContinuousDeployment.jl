@@ -34,7 +34,7 @@ end
 
 function download_file_from_server(
     configuration::Configuration,
-    filename::String;
+    filename::AbstractString;
     connect_timeout::Integer = CONNECT_TIMEOUT,
     connect_retries::Integer = CONNECT_RETRIES
 )
