@@ -1,6 +1,8 @@
 function create_setup(
     configuration::Configuration,
     id::AbstractString;
+    password::Union{Nothing, AbstractString} = nothing,
+    setup_icon::Union{Nothing, AbstractString} = nothing,
     sign::Bool = true,
 )
     if !Sys.iswindows()
@@ -48,6 +50,12 @@ function create_setup(
         writeln(f, "PrivilegesRequired=admin")
         writeln(f, "VersionInfoCompany=PSR")
         writeln(f, "VersionInfoProductName=$target")
+        if !isnothing(password)
+            writeln(f, "Password=$password")
+        end
+        if !isnothing(setup_icon)
+            writeln(f, "SetupIconFile=$setup_icon")
+        end
         writeln(f, "")
         writeln(f, "[Languages]")
         writeln(f, "Name: english; MessagesFile: compiler:Default.isl")
