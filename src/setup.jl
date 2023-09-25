@@ -84,7 +84,7 @@ function create_setup(
     end
 
     Log.info("SETUP: Removing temporary files")
-    rm(iss, force = true)
+    rm(iss_path, force = true)
     rm(wizard_image_path, force = true)
     rm(wizard_small_image_path, force = true)
     rm(inno_path, force = true, recursive = true)

@@ -1,13 +1,15 @@
-using Test
 using PSRContinuousDeployment
 
-const ID = "2FE8D94F-A7F8-4CC3-B62C-AD4086F803F3"
+using Test
+
+const ID = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
 
 function testall()
     package_path = raw"D:\development\psrnetwork\PSRNetworkReport.jl"
 
     configuration = PSRContinuousDeployment.Configuration(package_path)
 
+    # PSRContinuousDeployment.compile(configuration)
     PSRContinuousDeployment.create_setup(configuration, ID, sign = false)
 
     return nothing
