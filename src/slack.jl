@@ -5,6 +5,6 @@ function notify_slack_channel(configuration::Configuration, slack_token::Abstrac
 
     context = SlackContext(slack_token)
     channel_message(context, channel, message)
-    
+
     return nothing
 end

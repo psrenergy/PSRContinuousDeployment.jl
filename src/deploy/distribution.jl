@@ -1,7 +1,7 @@
 function deploy_to_distribution(
     configuration::Configuration,
     url::AbstractString;
-    create_tag::Bool = false
+    create_tag::Bool = false,
 )
     target = configuration.target
     version = configuration.version
