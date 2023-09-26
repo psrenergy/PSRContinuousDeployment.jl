@@ -4,6 +4,7 @@ function create_setup(
     password::Union{Nothing, AbstractString} = nothing,
     setup_icon::Union{Nothing, AbstractString} = nothing,
     sign::Bool = true,
+    include_version::Bool = false,
 )
     if !Sys.iswindows()
         Log.fatal_error("SETUP: Creating setup file is only supported on Windows")
@@ -13,6 +14,7 @@ function create_setup(
     version = configuration.version
     build_path = configuration.build_path
     setup_path = configuration.setup_path
+    url = "http://www.psr-inc.com"
 
     if !isdir(setup_path)
         Log.info("SETUP: Creating setup directory")
@@ -34,11 +36,18 @@ function create_setup(
         writeln(f, "AppVersion=$version")
         writeln(f, "AppVerName=$target $version")
         writeln(f, "AppPublisher=PSR")
-        writeln(f, "AppPublisherURL=http://www.psr-inc.com")
-        writeln(f, "AppSupportURL=http://www.psr-inc.com")
-        writeln(f, "AppUpdatesURL=http://www.psr-inc.com")
-        writeln(f, "DefaultDirName={sd}\\PSR\\$target")
-        writeln(f, "DefaultGroupName=PSR/$target")
+        writeln(f, "AppPublisherURL=$url")
+        writeln(f, "AppSupportURL=$url")
+        writeln(f, "AppUpdatesURL=$url")
+        if include_version
+            writeln(f, "DefaultDirName={sd}\\PSR\\$target$version")
+            writeln(f, "DefaultGroupName=PSR/$target$version")
+            writeln(f, "VersionInfoProductName=$target$version")
+        else
+            writeln(f, "DefaultDirName={sd}\\PSR\\$target")
+            writeln(f, "DefaultGroupName=PSR/$target")
+            writeln(f, "VersionInfoProductName=$target")
+        end
         writeln(f, "OutputDir=.\\")
         writeln(f, "OutputBaseFilename=$target-$version-setup")
         writeln(f, "Compression=lzma")
@@ -49,7 +58,6 @@ function create_setup(
         writeln(f, "WizardSmallImageFile=$wizard_small_image_path")
         writeln(f, "PrivilegesRequired=admin")
         writeln(f, "VersionInfoCompany=PSR")
-        writeln(f, "VersionInfoProductName=$target")
         if !isnothing(password)
             writeln(f, "Password=$password")
         end
