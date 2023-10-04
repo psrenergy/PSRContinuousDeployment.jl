@@ -5,6 +5,7 @@ end
 
 function compile(
     configuration::Configuration;
+    executables::Vector{Pair{String, String}} = [configuration.target => "julia_main"],
     additional_files_path::Vector{String} = Vector{String}(),
     windows_additional_files_path::Vector{String} = Vector{String}(),
     linux_additional_files_path::Vector{String} = Vector{String}(),
@@ -51,7 +52,7 @@ function compile(
     PackageCompiler.create_app(
         package_path,
         build_path,
-        executables = [target => "julia_main"],
+        executables = executables,
         precompile_execution_file = precompile_path,
         incremental = false,
         filter_stdlibs = true,
