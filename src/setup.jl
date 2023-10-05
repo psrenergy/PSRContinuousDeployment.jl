@@ -81,7 +81,7 @@ function create_setup(
         return nothing
     end
 
-    Log.info("SETUP: Donwloading Inno Setup")
+    Log.info("SETUP: Downloading Inno Setup")
     inno_url = "https://julia-artifacts.s3.amazonaws.com/inno/4b330/inno.tgz"
     inno_hash = "4b3303c32724af530789f7844f656ba8510977222bb79c5e95e88f67350864d7"
     inno_path = tempname()
