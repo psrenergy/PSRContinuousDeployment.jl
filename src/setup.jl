@@ -44,6 +44,7 @@ function create_setup(
             writeln(f, "DefaultDirName={sd}\\PSR\\$target$version")
             writeln(f, "DefaultGroupName=PSR/$target$version")
             writeln(f, "VersionInfoProductName=$target$version")
+            writeln(f, "DisableDirPage=no")
         else
             writeln(f, "DefaultDirName={sd}\\PSR\\$target")
             writeln(f, "DefaultGroupName=PSR/$target")
