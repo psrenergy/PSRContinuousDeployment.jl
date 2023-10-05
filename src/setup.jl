@@ -42,13 +42,12 @@ function create_setup(
         writeln(f, "AppUpdatesURL=$url")
         if include_version
             writeln(f, "DefaultDirName={sd}\\PSR\\$target$version")
-            writeln(f, "DefaultGroupName=PSR/$target$version")
             writeln(f, "VersionInfoProductName=$target$version")
         else
             writeln(f, "DefaultDirName={sd}\\PSR\\$target")
-            writeln(f, "DefaultGroupName=PSR/$target")
             writeln(f, "VersionInfoProductName=$target")
         end
+        writeln(f, "DefaultGroupName=PSR/$target")
         writeln(f, "OutputDir=.\\")
         writeln(f, "OutputBaseFilename=$target-$version-setup")
         writeln(f, "Compression=lzma")
