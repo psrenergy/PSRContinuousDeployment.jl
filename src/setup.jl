@@ -5,6 +5,7 @@ function create_setup(
     setup_icon::Union{Nothing, AbstractString} = nothing,
     sign::Bool = true,
     include_version::Bool = false,
+    additional_options::Union{Nothing, AbstractString} = nothing,
 )
     if !Sys.iswindows()
         Log.fatal_error("SETUP: Creating setup file is only supported on Windows")
@@ -43,6 +44,7 @@ function create_setup(
             writeln(f, "DefaultDirName={sd}\\PSR\\$target$version")
             writeln(f, "DefaultGroupName=PSR/$target$version")
             writeln(f, "VersionInfoProductName=$target$version")
+            writeln(f, "DisableDirPage=no")
         else
             writeln(f, "DefaultDirName={sd}\\PSR\\$target")
             writeln(f, "DefaultGroupName=PSR/$target")
@@ -78,6 +80,9 @@ function create_setup(
         writeln(f, "")
         writeln(f, "[Registry]")
         writeln(f, "Root: HKLM64; Subkey: SOFTWARE\\PSR\\$target\\0.0.x\\; ValueType: string; ValueName: Path; ValueData: {app}; Flags: uninsdeletekey")
+        if !isnothing(additional_options)
+            writeln(f, additional_options)
+        end
         return nothing
     end
 
