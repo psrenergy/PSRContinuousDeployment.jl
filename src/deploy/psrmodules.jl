@@ -2,7 +2,8 @@ function deploy_to_psrmodules(
     configuration::Configuration,
     aws_access_key::AbstractString,
     aws_secret_key::AbstractString,
-    stable_release::Bool,
+    stable_release::Bool;
+    overwrite::Bool = false,
 )
     target = configuration.target
     version = configuration.version
@@ -29,17 +30,25 @@ function deploy_to_psrmodules(
 
         releases_path = abspath("releases.txt")
         open(releases_path, "w") do f
+            append = true
             for releases_version in releases_versions
                 if releases_version != ""
                     write(f, "$releases_version\n")
 
                     if releases_version == setup_zip
-                        Log.fatal_error("DEPLOY: The $setup_zip already exists in the psr-update-modules bucket")
-                        return nothing
+                        if overwrite
+                            append = false
+                            Log.info("DEPLOY: Overwriting the $setup_zip in the psr-update-modules bucket")
+                        else
+                            Log.fatal_error("DEPLOY: The $setup_zip already exists in the psr-update-modules bucket")
+                            return nothing
+                        end
                     end
                 end
             end
-            write(f, "$setup_zip\n")
+            if append
+                write(f, "$setup_zip\n")
+            end
             return nothing
         end
 
