@@ -4,7 +4,7 @@ function notify_slack_channel(configuration::Configuration, slack_token::Abstrac
     message = "Version $version has been published: https://psr-update-modules.psr-inc.com/$target/$version.zip"
 
     context = SlackContext(slack_token)
-    channel_message(context, channel, message)
+    SlackAPI.channel_message(context, channel, message)
 
     return nothing
 end
