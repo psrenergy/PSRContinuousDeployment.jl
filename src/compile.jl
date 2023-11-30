@@ -93,5 +93,7 @@ function compile(
         Log.fatal_error("COMPILE: Unsupported platform")
     end
 
+    Log.info("COMPILE: Success")
+
     return touch(joinpath(compile_path, "build.ok"))
 end

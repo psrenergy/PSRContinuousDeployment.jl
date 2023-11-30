@@ -36,7 +36,15 @@ function deploy_to_distribution(
     Log.info("DISTRIBUTION: Updating the $url")
     cd(publish_path) do
         run(`git add --all`)
-        run(`git commit -m "$version ($sha1)"`)
+
+        if Sys.iswindows()
+            run(`git commit -m "Windows $version ($sha1)"`)
+        elseif Sys.islinux()
+            run(`git commit -m "Linux $version ($sha1)"`)
+        else
+            Log.fatal_error("DISTRIBUTION: Unknown platform")
+        end
+
         run(`git pull`)
         run(`git push origin --all`)
         return nothing
@@ -66,7 +74,7 @@ function deploy_to_distribution(
     Log.info("DISTRIBUTION: Removing publish directory")
     rm(publish_path, force = true, recursive = true)
 
-    Log.info("DISTRIBUTION: distribution deployed successfully")
+    Log.info("DISTRIBUTION: Success")
 
     return nothing
 end

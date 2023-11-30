@@ -16,9 +16,9 @@ function create_release(configuration::Configuration, github_key::AbstractString
     response = HTTP.post("https://api.github.com/repos/psrenergy/$target.jl/releases", headers, JSON.json(data))
 
     if response.status == 201
-        Log.info("GITHUB: Release created successfully")
+        Log.info("GITHUB: Success")
     else
-        Log.fatal_error("GITHUB: Failed to create release")
+        Log.fatal_error("GITHUB: Failed")
     end
 end
 

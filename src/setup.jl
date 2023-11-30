@@ -108,7 +108,7 @@ function create_setup(
     rm(wizard_small_image_path, force = true)
     rm(inno_path, force = true, recursive = true)
 
-    Log.info("SETUP: Setup file created successfully")
+    Log.info("SETUP: Success")
 
     return nothing
 end
