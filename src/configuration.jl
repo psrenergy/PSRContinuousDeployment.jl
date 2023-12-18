@@ -40,7 +40,7 @@ struct Configuration
 
     function Configuration(
         package_path::AbstractString;
-        suffix::AbstractString = "",
+        version_suffix::AbstractString = "",
     )
         compile_path = joinpath(package_path, "compile")
         build_path = joinpath(compile_path, "build")
@@ -49,7 +49,7 @@ struct Configuration
         project_path = joinpath(package_path, "Project.toml")
         project = TOML.parse(read(project_path, String))
         target = project["name"]
-        version = project["version"] * suffix
+        version = project["version"] * version_suffix
 
         return Configuration(
             target,
