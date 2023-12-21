@@ -31,12 +31,14 @@ function deploy_to_psrmodules(
         releases_versions = Vector{String}()
 
         objects = S3.list_objects_v2(bucket, Dict("prefix" => target))
-        for contents in objects["Contents"]
-            key = contents[2]
-            if key == "$target/releases.txt"
-                releases = String(S3.get_object(bucket, "$target/releases.txt"))
-                releases_versions = split(replace(releases, "\r\n" => "\n"), "\n")
-                break
+        if haskey(objects, "Contents")
+            for contents in objects["Contents"]
+                key = contents[2]
+                if key == "$target/releases.txt"
+                    releases = String(S3.get_object(bucket, "$target/releases.txt"))
+                    releases_versions = split(replace(releases, "\r\n" => "\n"), "\n")
+                    break
+                end
             end
         end
 
