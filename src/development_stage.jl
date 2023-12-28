@@ -19,7 +19,7 @@ end
 function Base.parse(::Type{DevelopmentStage.T}, string::String)
     lowercase_string = lowercase(string)
 
-    if lowercase_string == "prealpha"
+    if lowercase_string == "pre alpha"
         return DevelopmentStage.PreAlpha
     elseif lowercase_string == "alpha"
         return DevelopmentStage.Alpha        
