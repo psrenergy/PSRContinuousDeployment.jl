@@ -76,5 +76,7 @@ function deploy_to_psrmodules(
     Log.info("PSRMODULES: Uploading the $setup_zip")
     S3.put_object(bucket, "$target/$setup_zip", Dict("body" => read(setup_zip_path)))
 
+    Log.info("PSRMODULES: Success")
+
     return nothing
 end
