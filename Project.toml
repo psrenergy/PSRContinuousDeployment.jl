@@ -5,6 +5,7 @@ version = "0.5.0"
 [deps]
 AWS = "fbe9abb3-538b-5e4e-ba9e-bc94f4f92ebc"
 Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
+EnumX = "4e289a0a-7415-4d19-859d-a7e5c4648b56"
 Git = "d7ba0133-e1db-5d97-8f8c-041e4b3a1eb2"
 HTTP = "cd3eb016-35fb-5094-929b-558a96fad6f3"
 JSON = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"

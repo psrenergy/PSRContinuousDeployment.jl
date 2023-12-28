@@ -5,6 +5,7 @@ struct Configuration
     compile_path::String
     build_path::String
     setup_path::String
+    development_stage::DevelopmentStage.T
     certificate_server_url::String
 
     function Configuration(
@@ -14,6 +15,7 @@ struct Configuration
         compile_path::AbstractString,
         build_path::AbstractString,
         setup_path::AbstractString,
+        development_stage::DevelopmentStage.T,
     )
         level = Dict("Debug Level" => "debug", "Debug" => "debug", "Info" => "info", "Warn" => "warn", "Error" => "error", "Fatal Error" => "error")
         color = Dict("Debug Level" => :normal, "Debug" => :cyan, "Info" => :cyan, "Warn" => :yellow, "Error" => :red, "Fatal Error" => :red)
@@ -34,12 +36,14 @@ struct Configuration
             compile_path,
             build_path,
             setup_path,
+            development_stage,
             "http://hannover.local.psrservices.net:5000",
         )
     end
 
     function Configuration(
         package_path::AbstractString;
+        development_stage::DevelopmentStage.T,
         version_suffix::AbstractString = "",
     )
         compile_path = joinpath(package_path, "compile")
@@ -49,7 +53,12 @@ struct Configuration
         project_path = joinpath(package_path, "Project.toml")
         project = TOML.parse(read(project_path, String))
         target = project["name"]
-        version = project["version"] * version_suffix
+
+        version = if isempty(version_suffix)
+            project["version"] * string(development_stage)
+        else
+            project["version"] * string(development_stage) * "." * version_suffix            
+        end
 
         return Configuration(
             target,
@@ -58,6 +67,11 @@ struct Configuration
             compile_path,
             build_path,
             setup_path,
+            development_stage,
         )
     end
+end
+
+function is_stable_release(configuration::Configuration)
+    return is_stable_release(configuration.development_stage)
 end
