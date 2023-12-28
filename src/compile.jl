@@ -30,7 +30,7 @@ function compile(
     precompile_path = joinpath(compile_path, "precompile.jl")
     @assert isfile(precompile_path)
 
-    Log.info("COMPILE: Compiling $target $version")
+    Log.info("COMPILE: Compiling $target v$version")
 
     if isdir(build_path)
         Log.info("COMPILE: Removing build directory")
