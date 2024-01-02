@@ -45,5 +45,11 @@ function bundle_psrhub(
     Log.info("PSRHUB: Removing the $psrhub_zip")
     rm(psrhub_zip_path, force = true)
 
+    Log.info("PSRHUB: Creating $target.bat")
+    open(joinpath(build_path, "$target.bat"), "w") do io
+        writeln(io, "psrhub.exe > psrhub.log 2>&1")
+        return nothing
+    end
+
     return nothing
 end
