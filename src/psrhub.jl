@@ -2,10 +2,11 @@ function bundle_psrhub(
     configuration::Configuration,
     aws_access_key::AbstractString,
     aws_secret_key::AbstractString,
-    version::AbstractString,
+    psrhub_version::AbstractString,
 )
     bucket = "psr-update-modules"
 
+    target = configuration.target
     build_path = configuration.build_path
 
     build_folders = readdir(build_path)
@@ -30,7 +31,7 @@ function bundle_psrhub(
     aws_config = AWSConfig(; creds = aws_credentials, region = "us-east-1")
     global_aws_config(aws_config)
 
-    psrhub_zip = "$version.zip"
+    psrhub_zip = "$psrhub_version.zip"
     psrhub_zip_path = joinpath(build_path, psrhub_zip)
 
     Log.info("PSRHUB: Downloading the PSRHub/$psrhub_zip")
