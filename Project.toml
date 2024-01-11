@@ -25,7 +25,7 @@ LoggingPolyglot = "0.1"
 PackageCompiler = "2.1.16"
 SlackAPI = "0.1"
 TOML = "1.0"
-julia = "1.6"
+julia = "1.10"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
