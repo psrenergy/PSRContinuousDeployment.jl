@@ -27,6 +27,26 @@ function bundle_psrhub(
         mv(source, destiny, force = true)
     end
 
+    docs_path = configuration.docs_path
+    if isdir(docs_path)
+        docs_content = readdir(docs_path)
+
+        distribution_docs_path = joinpath(build_path, "docs")
+        if isdir(distribution_docs_path)
+            Log.info("PSRHUB: Removing docs directory")
+            rm(distribution_docs_path, force = true, recursive = true)
+        end
+
+        Log.info("PSRHUB: Copying content to docs directory")
+        for content in docs_content
+            source = joinpath(docs_path, content)
+            destiny = joinpath(distribution_docs_path, content)
+            mv(source, destiny, force = true)
+        end
+    else
+        Log.warn("PSRHUB: No docs directory found. Skipping docs copy")
+    end
+
     aws_credentials = AWSCredentials(aws_access_key, aws_secret_key)
     aws_config = AWSConfig(; creds = aws_credentials, region = "us-east-1")
     global_aws_config(aws_config)
