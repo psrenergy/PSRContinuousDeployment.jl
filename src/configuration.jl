@@ -5,6 +5,7 @@ struct Configuration
     compile_path::String
     build_path::String
     setup_path::String
+    docs_path::String
     development_stage::DevelopmentStage.T
     certificate_server_url::String
 
@@ -15,6 +16,7 @@ struct Configuration
         compile_path::AbstractString,
         build_path::AbstractString,
         setup_path::AbstractString,
+        docs_path::AbstractString,
         development_stage::DevelopmentStage.T,
     )
         level = Dict("Debug Level" => "debug", "Debug" => "debug", "Info" => "info", "Warn" => "warn", "Error" => "error", "Fatal Error" => "error")
@@ -36,6 +38,7 @@ struct Configuration
             compile_path,
             build_path,
             setup_path,
+            docs_path,
             development_stage,
             "http://hannover.local.psrservices.net:5000",
         )
@@ -49,6 +52,7 @@ struct Configuration
         compile_path = joinpath(package_path, "compile")
         build_path = joinpath(compile_path, "build")
         setup_path = joinpath(compile_path, "setup")
+        docs_path = joinpath(package_path, "docs", "build")
 
         project_path = joinpath(package_path, "Project.toml")
         project = TOML.parse(read(project_path, String))
@@ -67,6 +71,7 @@ struct Configuration
             compile_path,
             build_path,
             setup_path,
+            docs_path,
             development_stage,
         )
     end
