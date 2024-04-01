@@ -31,7 +31,7 @@ function bundle_psrhub(
     if isdir(docs_path)
         docs_content = readdir(docs_path)
 
-        distribution_docs_path = joinpath(build_path, "docs")
+        distribution_docs_path = joinpath(model_path, "docs")
         if isdir(distribution_docs_path)
             Log.info("PSRHUB: Removing docs directory")
             rm(distribution_docs_path, force = true, recursive = true)
