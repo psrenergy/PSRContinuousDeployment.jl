@@ -36,6 +36,8 @@ function bundle_psrhub(
             Log.info("PSRHUB: Removing docs directory")
             rm(distribution_docs_path, force = true, recursive = true)
         end
+        Log.info("PSRHUB: Creating docs directory")
+        mkdir(distribution_docs_path)
 
         Log.info("PSRHUB: Copying content to docs directory")
         for content in docs_content
