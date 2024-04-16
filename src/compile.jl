@@ -69,7 +69,7 @@ function compile(
         return nothing
     end
 
-    Log.info("COMPILE: Copying Additional Files")
+    Log.info("COMPILE: Copying additional files")
     for file_path in additional_files_path
         copy(dirname(file_path), bin_path, basename(file_path))
     end
@@ -86,7 +86,11 @@ function compile(
         Log.fatal_error("COMPILE: Unsupported platform")
     end
 
-    Log.info("COMPILE: Success")
+    Log.info("COMPILE: Copying Project.toml")
+    copy(configuration.package_path, bin_path, "Project.toml")
 
-    return touch(joinpath(compile_path, "build.ok"))
+    Log.info("COMPILE: Success")
+    touch(joinpath(compile_path, "build.ok"))
+
+    return nothing
 end
