@@ -41,8 +41,3 @@ function clean_version_jl(path::AbstractString)
     write_version_jl(path, "xxxxxxx", "xxxx-xx-xx xx:xx:xx -xxxx", "x.x.x", "xxxx-xx-xx xx:xx:xx -xxxx")
     return nothing
 end
-
-function copy(source::AbstractString, destiny::AbstractString, filename::AbstractString)
-    cp(joinpath(source, filename), joinpath(destiny, filename), force = true)
-    return nothing
-end

@@ -1,3 +1,8 @@
+function copy(source::AbstractString, destiny::AbstractString, filename::AbstractString)
+    cp(joinpath(source, filename), joinpath(destiny, filename), force = true)
+    return nothing
+end
+
 function compile(
     configuration::Configuration;
     executables::Vector{Pair{String, String}} = [configuration.target => "julia_main"],

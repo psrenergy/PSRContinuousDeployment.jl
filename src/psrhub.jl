@@ -57,8 +57,18 @@ function bundle_psrhub(
     end
 
     if !isnothing(examples_path)
-        Log.info("PSRHUB: Copying examples to model directory")
-        copy(examples_path, build_path, "examples")
+        build_examples_path = joinpath(build_path, "examples")
+        
+        if isdir(build_examples_path)
+            Log.info("COMPILE: Removing examples directory")
+            rm(build_examples_path, force = true, recursive = true)
+        end
+    
+        Log.info("COMPILE: Creating examples directory")
+        mkdir(build_examples_path)
+
+        Log.info("PSRHUB: Copying examples")
+        cp(examples_path, build_examples_path, force = true)
     end
 
     return nothing
