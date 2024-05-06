@@ -2,7 +2,8 @@ function bundle_psrhub(
     configuration::Configuration,
     aws_access_key::AbstractString,
     aws_secret_key::AbstractString,
-    psrhub_version::AbstractString,
+    psrhub_version::AbstractString;
+    examples_path::Union{Nothing, AbstractString} = nothing,
 )
     bucket = "psr-update-modules"
 
@@ -46,10 +47,18 @@ function bundle_psrhub(
     Log.info("PSRHUB: Removing the $psrhub_zip")
     rm(psrhub_zip_path, force = true)
 
+    Log.info("PSRHUB: Renaming psrhub.exe to $target.exe")
+    mv(joinpath(build_path, "psrhub.exe"), joinpath(build_path, "$target.exe"), force = true)
+
     Log.info("PSRHUB: Creating $target.bat")
     open(joinpath(build_path, "$target.bat"), "w") do io
-        writeln(io, "psrhub.exe > psrhub.log 2>&1")
+        writeln(io, "$target.exe > psrhub.log 2>&1")
         return nothing
+    end
+
+    if !isnothing(examples_path)
+        Log.info("PSRHUB: Copying examples to model directory")
+        copy(examples_path, build_path, "examples")
     end
 
     return nothing
