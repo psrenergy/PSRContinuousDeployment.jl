@@ -4,6 +4,7 @@ function bundle_psrhub(
     aws_secret_key::AbstractString,
     psrhub_version::AbstractString;
     examples_path::Union{Nothing, AbstractString} = nothing,
+    documentation_path::Union{Nothing, AbstractString} = nothing,
 )
     bucket = "psr-update-modules"
 
@@ -69,6 +70,21 @@ function bundle_psrhub(
 
         Log.info("PSRHUB: Copying examples")
         cp(examples_path, build_examples_path, force = true)
+    end
+
+    if !isnothing(documentation_path)
+        build_documentation_path = joinpath(build_path, "documentation")
+        
+        if isdir(build_documentation_path)
+            Log.info("COMPILE: Removing documentation directory")
+            rm(build_documentation_path, force = true, recursive = true)
+        end
+    
+        Log.info("COMPILE: Creating documentation directory")
+        mkdir(build_documentation_path)
+
+        Log.info("PSRHUB: Copying documentation")
+        cp(documentation_path, build_documentation_path, force = true)
     end
 
     return nothing
