@@ -83,6 +83,10 @@ function create_setup(
         writeln(f, "")
         writeln(f, "[Registry]")
         writeln(f, "Root: HKLM64; Subkey: SOFTWARE\\PSR\\$target\\0.0.x\\; ValueType: string; ValueName: Path; ValueData: {app}; Flags: uninsdeletekey")
+        writeln(f, "")
+        writeln(f, "[Run]")
+        writeln(f, "Filename: {app}\\$target.exe; Description: {cm:LaunchProgram,$target}; Flags: postinstall nowait shellexec skipifsilent")
+        writeln(f, "")
         if !isnothing(additional_options)
             writeln(f, additional_options)
         end
