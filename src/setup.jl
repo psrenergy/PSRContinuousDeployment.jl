@@ -4,7 +4,7 @@ function create_setup(
     password::Union{Nothing, AbstractString} = nothing,
     setup_icon::Union{Nothing, AbstractString} = nothing,
     sign::Bool = true,
-    include_version::Bool = false,
+    include_version::Bool = true,
     additional_options::Union{Nothing, AbstractString} = nothing,
 )
     if !Sys.iswindows()
