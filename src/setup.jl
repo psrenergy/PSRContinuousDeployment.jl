@@ -3,7 +3,6 @@ function create_setup(
     password::Union{Nothing, AbstractString} = nothing,
     setup_icon::Union{Nothing, AbstractString} = nothing,
     sign::Bool = true,
-    include_version::Bool = true,
     additional_options::Union{Nothing, AbstractString} = nothing,
 )
     if !Sys.iswindows()
@@ -40,16 +39,10 @@ function create_setup(
         writeln(f, "AppPublisherURL=$url")
         writeln(f, "AppSupportURL=$url")
         writeln(f, "AppUpdatesURL=$url")
-        if include_version
-            writeln(f, "DefaultDirName={sd}\\PSR\\$target$version")
-            writeln(f, "DefaultGroupName=PSR/$target$version")
-            writeln(f, "VersionInfoProductName=$target$version")
-            writeln(f, "DisableDirPage=no")
-        else
-            writeln(f, "DefaultDirName={sd}\\PSR\\$target")
-            writeln(f, "DefaultGroupName=PSR/$target")
-            writeln(f, "VersionInfoProductName=$target")
-        end
+        writeln(f, "DefaultDirName={sd}\\PSR\\$target$version")
+        writeln(f, "DefaultGroupName=PSR/$target$version")
+        writeln(f, "VersionInfoProductName=$target$version")
+        writeln(f, "DisableDirPage=no")
         writeln(f, "OutputDir=.\\")
         writeln(f, "OutputBaseFilename=$target-$version-setup")
         writeln(f, "Compression=lzma")
