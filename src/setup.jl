@@ -1,16 +1,16 @@
 function create_setup(
-    configuration::Configuration,
-    id::AbstractString;
+    configuration::Configuration;
     password::Union{Nothing, AbstractString} = nothing,
     setup_icon::Union{Nothing, AbstractString} = nothing,
     sign::Bool = true,
-    include_version::Bool = false,
+    include_version::Bool = true,
     additional_options::Union{Nothing, AbstractString} = nothing,
 )
     if !Sys.iswindows()
         Log.fatal_error("SETUP: Creating setup file is only supported on Windows")
     end
 
+    id = UUIDs.uuid4() |> string |> uppercase
     target = configuration.target
     version = configuration.version
     build_path = configuration.build_path

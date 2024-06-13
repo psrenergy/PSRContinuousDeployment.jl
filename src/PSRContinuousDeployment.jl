@@ -10,6 +10,7 @@ using PackageCompiler
 using Pkg.PlatformEngines
 using SlackAPI
 using TOML
+using UUIDs
 
 import Git
 import LoggingPolyglot as Log
