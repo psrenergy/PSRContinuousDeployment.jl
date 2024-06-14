@@ -9,12 +9,15 @@ function create_setup(
         Log.fatal_error("SETUP: Creating setup file is only supported on Windows")
     end
 
-    id = UUIDs.uuid4() |> string |> uppercase
     target = configuration.target
     version = configuration.version
     build_path = configuration.build_path
     setup_path = configuration.setup_path
     url = "http://www.psr-inc.com"
+
+    # Build id from target and version
+    rng = Random.MersenneTwister(hash(target * version))
+    id = UUIDs.uuid4(rng) |> string |> uppercase
 
     if !isdir(setup_path)
         Log.info("SETUP: Creating setup directory")
