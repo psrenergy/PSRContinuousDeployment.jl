@@ -8,6 +8,7 @@ using HTTP
 using JSON
 using PackageCompiler
 using Pkg.PlatformEngines
+using Random
 using SlackAPI
 using TOML
 using UUIDs
