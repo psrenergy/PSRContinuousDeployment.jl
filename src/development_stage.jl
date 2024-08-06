@@ -4,7 +4,7 @@ function Base.string(development_stage::DevelopmentStage.T)
     if development_stage == DevelopmentStage.PreAlpha
         return "prealpha"
     elseif development_stage == DevelopmentStage.Alpha
-        return "alpha"        
+        return "alpha"
     elseif development_stage == DevelopmentStage.Beta
         return "beta"
     elseif development_stage == DevelopmentStage.ReleaseCandidate
@@ -22,7 +22,7 @@ function Base.parse(::Type{DevelopmentStage.T}, string::String)
     if lowercase_string == "pre alpha"
         return DevelopmentStage.PreAlpha
     elseif lowercase_string == "alpha"
-        return DevelopmentStage.Alpha        
+        return DevelopmentStage.Alpha
     elseif lowercase_string == "beta"
         return DevelopmentStage.Beta
     elseif lowercase_string == "release candidate"
