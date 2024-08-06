@@ -57,7 +57,7 @@ struct Configuration
         version = if isempty(version_suffix)
             project["version"] * string(development_stage)
         else
-            project["version"] * string(development_stage) * "." * version_suffix            
+            project["version"] * string(development_stage) * "." * version_suffix
         end
 
         return Configuration(

@@ -40,6 +40,7 @@ function bundle_psrhub(
 
     open(psrhub_zip_path, "w") do f
         S3.get_object(bucket, "PSRHub/$psrhub_zip", Dict("response_stream" => f))
+        return nothing
     end
 
     Log.info("PSRHUB: Extracting the $psrhub_zip")
@@ -59,12 +60,12 @@ function bundle_psrhub(
 
     if !isnothing(examples_path)
         build_examples_path = joinpath(build_path, "examples")
-        
+
         if isdir(build_examples_path)
             Log.info("COMPILE: Removing examples directory")
             rm(build_examples_path, force = true, recursive = true)
         end
-    
+
         Log.info("COMPILE: Creating examples directory")
         mkdir(build_examples_path)
 
@@ -74,12 +75,12 @@ function bundle_psrhub(
 
     if !isnothing(documentation_path)
         build_documentation_path = joinpath(build_path, "documentation")
-        
+
         if isdir(build_documentation_path)
             Log.info("COMPILE: Removing documentation directory")
             rm(build_documentation_path, force = true, recursive = true)
         end
-    
+
         Log.info("COMPILE: Creating documentation directory")
         mkdir(build_documentation_path)
 
