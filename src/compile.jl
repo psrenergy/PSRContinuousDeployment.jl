@@ -94,9 +94,8 @@ function compile(
 
     Log.info("COMPILE: Copying Project.toml")
 
-    project_toml = TOML.parsefile(joinpath(configuration.package_path, "Project.toml"))
     open(joinpath(bin_path, "Project.toml"), "w") do io
-        return TOML.print(io, Dict("name" => project_toml["name"], "version" => project_toml["version"]))
+        return TOML.print(io, Dict("name" => configuration.target, "version" => configuration.version))
     end
 
     Log.info("COMPILE: Removing julia.exe")
