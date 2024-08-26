@@ -24,3 +24,7 @@ docs/site/
 Manifest.toml
 format/Manifest.toml
 revise/Manifest.toml
+
+test/Example.jl/compile/build/
+test/Example.jl/compile/Example.log
+test/Example.jl/compile/build.ok

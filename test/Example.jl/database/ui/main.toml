@@ -1,0 +1,4 @@
+model = "Example"
+extension = "example"
+executable = "Example.bat"
+collections = []

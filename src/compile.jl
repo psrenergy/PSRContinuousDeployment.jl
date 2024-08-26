@@ -12,6 +12,7 @@ function compile(
     filter_stdlibs::Bool = true,
     include_lazy_artifacts::Bool = true,
     include_transitive_dependencies::Bool = true,
+    skip_version_jl::Bool = false,
     kwargs...,
 )
     target = configuration.target
@@ -36,40 +37,44 @@ function compile(
     Log.info("COMPILE: Creating build directory")
     mkdir(build_path)
 
-    Log.info("COMPILE: Creating version.jl")
-    sha1 = read_git_sha1(package_path)
-    date = read_git_date(package_path)
-    build_date = Dates.format(Dates.now(Dates.UTC), dateformat"yyyy-mm-dd HH:MM:SS -0000")
-    write_version_jl(src_path, sha1, date, version, build_date)
+    if !skip_version_jl
+        Log.info("COMPILE: Creating version.jl")
+        sha1 = read_git_sha1(package_path)
+        date = read_git_date(package_path)
+        build_date = Dates.format(Dates.now(Dates.UTC), dateformat"yyyy-mm-dd HH:MM:SS -0000")
+        write_version_jl(src_path, sha1, date, version, build_date)
 
-    free_memory = round(Int, Sys.free_memory() / 2^20)
-    total_memory = round(Int, Sys.total_memory() / 2^20)
-    Log.info("COMPILE: memory free $free_memory MB")
-    Log.info("COMPILE: memory total $total_memory MB")
-
-    PackageCompiler.create_app(
-        package_path,
-        build_path,
-        executables = executables,
-        precompile_execution_file = precompile_path,
-        incremental = false,
-        filter_stdlibs = filter_stdlibs,
-        force = true,
-        include_lazy_artifacts = include_lazy_artifacts,
-        include_transitive_dependencies = include_transitive_dependencies,
-        sysimage_build_args = "--strip-metadata --strip-ir",
-        kwargs...,
-    )
-
-    Log.info("COMPILE: Cleaning version.jl")
-    clean_version_jl(src_path)
-
-    Log.info("COMPILE: Creating $target.ver")
-    open(joinpath(bin_path, "$target.ver"), "w") do io
-        writeln(io, sha1)
-        return nothing
+        free_memory = round(Int, Sys.free_memory() / 2^20)
+        total_memory = round(Int, Sys.total_memory() / 2^20)
+        Log.info("COMPILE: memory free $free_memory MB")
+        Log.info("COMPILE: memory total $total_memory MB")
     end
 
+        PackageCompiler.create_app(
+            package_path,
+            build_path,
+            executables = executables,
+            precompile_execution_file = precompile_path,
+            incremental = false,
+            filter_stdlibs = filter_stdlibs,
+            force = true,
+            include_lazy_artifacts = include_lazy_artifacts,
+            include_transitive_dependencies = include_transitive_dependencies,
+            sysimage_build_args = `--strip-metadata --strip-ir`,
+            kwargs...,
+        )
+    if !skip_version_jl
+
+        Log.info("COMPILE: Cleaning version.jl")
+        clean_version_jl(src_path)
+        
+        Log.info("COMPILE: Creating $target.ver")
+        open(joinpath(bin_path, "$target.ver"), "w") do io
+            writeln(io, sha1)
+            return nothing
+        end
+    end
+        
     Log.info("COMPILE: Copying additional files")
     for file_path in additional_files_path
         copy(dirname(file_path), bin_path, basename(file_path))

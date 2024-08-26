@@ -4,15 +4,17 @@ using Test
 
 const ID = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
 
-function testall()
-    package_path = raw"D:\development\psrnetwork\PSRNetworkReport.jl"
+# function testall()
+#     package_path = raw"D:\development\psrnetwork\PSRNetworkReport.jl"
 
-    configuration = PSRContinuousDeployment.Configuration(package_path)
+#     configuration = PSRContinuousDeployment.Configuration(package_path)
 
-    # PSRContinuousDeployment.compile(configuration)
-    PSRContinuousDeployment.create_setup(configuration, ID, sign = false)
+#     # PSRContinuousDeployment.compile(configuration)
+#     PSRContinuousDeployment.create_setup(configuration, ID, sign = false)
 
-    return nothing
-end
+#     return nothing
+# end
 
-testall()
+# testall()
+
+include("compile_example.jl")
