@@ -95,7 +95,8 @@ function compile(
     Log.info("COMPILE: Copying Project.toml")
 
     open(joinpath(bin_path, "Project.toml"), "w") do io
-        return TOML.print(io, Dict("name" => configuration.target, "version" => configuration.version))
+        writeln(io, "name = \"$target\"")
+        writeln(io, "version = \"$version\"")
     end
 
     Log.info("COMPILE: Removing julia.exe")
