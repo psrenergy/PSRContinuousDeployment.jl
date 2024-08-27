@@ -103,7 +103,7 @@ function compile(
         Log.info("COMPILE: Removing julia.exe")
         rm(joinpath(bin_path, "julia.exe"), force = true)
     elseif Sys.islinux()
-    Log.info("COMPILE: Removing julia")
+        Log.info("COMPILE: Removing julia")
         rm(joinpath(bin_path, "julia"), force = true)
     end
 
