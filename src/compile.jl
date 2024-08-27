@@ -99,8 +99,14 @@ function compile(
         writeln(io, "version = \"$version\"")
     end
 
-    Log.info("COMPILE: Removing julia.exe")
-    rm(joinpath(bin_path, "julia.exe"), force = true)
+    if Sys.iswindows()
+        Log.info("COMPILE: Removing julia.exe")
+        rm(joinpath(bin_path, "julia.exe"), force = true)
+    elseif Sys.islinux()
+        Log.info("COMPILE: Removing julia")
+        rm(joinpath(bin_path, "julia"), force = true)
+    end
+
 
     Log.info("COMPILE: Success")
     touch(joinpath(compile_path, "build.ok"))
