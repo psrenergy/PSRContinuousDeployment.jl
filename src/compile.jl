@@ -60,9 +60,10 @@ function compile(
         force = true,
         include_lazy_artifacts = include_lazy_artifacts,
         include_transitive_dependencies = include_transitive_dependencies,
-        sysimage_build_args = `--strip-metadata --strip-ir`,
+        sysimage_build_args = `--strip-metadata --strip-ir --compile=all`,
         kwargs...,
     )
+
     if !skip_version_jl
         Log.info("COMPILE: Cleaning version.jl")
         clean_version_jl(src_path)
