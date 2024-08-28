@@ -1,5 +1,4 @@
 function main(args::Vector{String})
-    
     println("Example.jl")
 
     return nothing

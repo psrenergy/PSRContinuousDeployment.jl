@@ -2,8 +2,6 @@ using PSRContinuousDeployment
 
 using Test
 
-const ID = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-
 function testall()
     package_path = joinpath(@__DIR__, "Example.jl")
     database_path = joinpath(package_path, "database")

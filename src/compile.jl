@@ -50,31 +50,31 @@ function compile(
         Log.info("COMPILE: memory total $total_memory MB")
     end
 
-        PackageCompiler.create_app(
-            package_path,
-            build_path,
-            executables = executables,
-            precompile_execution_file = precompile_path,
-            incremental = false,
-            filter_stdlibs = filter_stdlibs,
-            force = true,
-            include_lazy_artifacts = include_lazy_artifacts,
-            include_transitive_dependencies = include_transitive_dependencies,
-            sysimage_build_args = `--strip-metadata --strip-ir --compile=all`,
-            kwargs...,
-        )
-    if !skip_version_jl
+    PackageCompiler.create_app(
+        package_path,
+        build_path,
+        executables = executables,
+        precompile_execution_file = precompile_path,
+        incremental = false,
+        filter_stdlibs = filter_stdlibs,
+        force = true,
+        include_lazy_artifacts = include_lazy_artifacts,
+        include_transitive_dependencies = include_transitive_dependencies,
+        sysimage_build_args = `--strip-metadata --strip-ir --compile=all`,
+        kwargs...,
+    )
 
+    if !skip_version_jl
         Log.info("COMPILE: Cleaning version.jl")
         clean_version_jl(src_path)
-        
+
         Log.info("COMPILE: Creating $target.ver")
         open(joinpath(bin_path, "$target.ver"), "w") do io
             writeln(io, sha1)
             return nothing
         end
     end
-        
+
     Log.info("COMPILE: Copying additional files")
     for file_path in additional_files_path
         copy(dirname(file_path), bin_path, basename(file_path))
@@ -97,10 +97,15 @@ function compile(
     open(joinpath(bin_path, "Project.toml"), "w") do io
         writeln(io, "name = \"$target\"")
         writeln(io, "version = \"$version\"")
+        return nothing
     end
 
-    Log.info("COMPILE: Removing julia.exe")
-    rm(joinpath(bin_path, "julia.exe"), force = true)
+    Log.info("COMPILE: Removing julia")
+    if Sys.iswindows()
+        rm(joinpath(bin_path, "julia.exe"), force = true)
+    elseif Sys.islinux()
+        rm(joinpath(bin_path, "julia"), force = true)
+    end
 
     Log.info("COMPILE: Success")
     touch(joinpath(compile_path, "build.ok"))
