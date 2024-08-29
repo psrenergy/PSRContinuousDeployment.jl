@@ -60,7 +60,12 @@ function compile(
         force = true,
         include_lazy_artifacts = include_lazy_artifacts,
         include_transitive_dependencies = include_transitive_dependencies,
-        sysimage_build_args = `--strip-metadata --strip-ir --compile=all`,
+        sysimage_build_args =
+        Cmd([
+            "--strip-metadata",
+            # "--strip-ir",
+            # "--compile=all",
+        ]),
         kwargs...,
     )
 
