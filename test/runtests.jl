@@ -7,7 +7,7 @@ function testall()
     database_path = joinpath(package_path, "database")
 
     configuration = PSRContinuousDeployment.Configuration(
-        package_path = package_path,
+        package_path,
         development_stage = PSRContinuousDeployment.DevelopmentStage.Alpha,
     )
 

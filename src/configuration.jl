@@ -40,36 +40,36 @@ struct Configuration
             "http://hannover.local.psrservices.net:5000",
         )
     end
+end
 
-    function Configuration(;
-        package_path::AbstractString,
-        development_stage::DevelopmentStage.T,
-        version_suffix::AbstractString = "",
-    )
-        compile_path = joinpath(package_path, "compile")
-        build_path = joinpath(compile_path, "build")
-        setup_path = joinpath(compile_path, "setup")
+function Configuration(
+    package_path::AbstractString;
+    development_stage::DevelopmentStage.T,
+    version_suffix::AbstractString = "",
+)
+    compile_path = joinpath(package_path, "compile")
+    build_path = joinpath(compile_path, "build")
+    setup_path = joinpath(compile_path, "setup")
 
-        project_path = joinpath(package_path, "Project.toml")
-        project = TOML.parse(read(project_path, String))
-        target = project["name"]
+    project_path = joinpath(package_path, "Project.toml")
+    project = TOML.parse(read(project_path, String))
+    target = project["name"]
 
-        version = if isempty(version_suffix)
-            project["version"] * string(development_stage)
-        else
-            project["version"] * string(development_stage) * "." * version_suffix
-        end
-
-        return Configuration(
-            target = target,
-            version = version,
-            package_path = package_path,
-            compile_path = compile_path,
-            build_path = build_path,
-            setup_path = setup_path,
-            development_stage = development_stage,
-        )
+    version = if isempty(version_suffix)
+        project["version"] * string(development_stage)
+    else
+        project["version"] * string(development_stage) * "." * version_suffix
     end
+
+    return Configuration(
+        target = target,
+        version = version,
+        package_path = package_path,
+        compile_path = compile_path,
+        build_path = build_path,
+        setup_path = setup_path,
+        development_stage = development_stage,
+    )
 end
 
 function is_stable_release(configuration::Configuration)
