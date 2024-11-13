@@ -1,6 +1,6 @@
 name = "PSRContinuousDeployment"
 uuid = "f0087d4c-ff99-426e-93c9-09c1a88911f9"
-version = "0.8.2"
+version = "0.9.0"
 
 [deps]
 AWS = "fbe9abb3-538b-5e4e-ba9e-bc94f4f92ebc"
