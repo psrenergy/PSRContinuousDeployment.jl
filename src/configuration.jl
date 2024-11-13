@@ -8,7 +8,7 @@ struct Configuration
     development_stage::DevelopmentStage.T
     certificate_server_url::String
 
-    function Configuration(
+    function Configuration(;
         target::AbstractString,
         version::AbstractString,
         package_path::AbstractString,
@@ -41,8 +41,8 @@ struct Configuration
         )
     end
 
-    function Configuration(
-        package_path::AbstractString;
+    function Configuration(;
+        package_path::AbstractString,
         development_stage::DevelopmentStage.T,
         version_suffix::AbstractString = "",
     )
@@ -61,13 +61,13 @@ struct Configuration
         end
 
         return Configuration(
-            target,
-            version,
-            package_path,
-            compile_path,
-            build_path,
-            setup_path,
-            development_stage,
+            target = target,
+            version = version,
+            package_path = package_path,
+            compile_path = compile_path,
+            build_path = build_path,
+            setup_path = setup_path,
+            development_stage = development_stage,
         )
     end
 end
