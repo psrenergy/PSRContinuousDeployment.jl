@@ -52,8 +52,8 @@ function bundle_psrhub(
     Log.info("PSRHUB: Renaming psrhub.exe to $target.exe")
     mv(joinpath(build_path, "psrhub.exe"), joinpath(build_path, "$target.exe"), force = true)
 
-    Log.info("PSRHUB: Creating $target.bat")
-    open(joinpath(build_path, "$target.bat"), "w") do io
+    Log.info("PSRHUB: Creating $target-debug.bat")
+    open(joinpath(build_path, "$target-debug.bat"), "w") do io
         writeln(io, "$target.exe > psrhub.log 2>&1")
         return nothing
     end
