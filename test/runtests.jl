@@ -14,7 +14,7 @@ function testall()
 
     configuration = PSRContinuousDeployment.Configuration(
         package_path,
-        development_stage = PSRContinuousDeployment.DevelopmentStage.Alpha,
+        development_stage = PSRContinuousDeployment.DevelopmentStage.StableRelease,
     )
 
     PSRContinuousDeployment.compile(
@@ -30,7 +30,7 @@ function testall()
 
     create_setup(
         configuration,
-        sign = false,
+        sign = true,
     )
 
     url = deploy_to_psrmodels(
