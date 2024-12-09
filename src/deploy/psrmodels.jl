@@ -24,7 +24,7 @@ function generate_unique_key(; bucket::AbstractString, version::AbstractString, 
     end
 
     for _ in 1:10
-        hash = randstring(['a':'z'; '0':'9'], 4)
+        hash = randstring(['a':'z'; '0':'9'], 6)
         key = "$target/$version/$hash/$setup_zip"
 
         objects = S3.list_objects_v2(bucket, Dict("prefix" => target))
