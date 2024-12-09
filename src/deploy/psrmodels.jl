@@ -1,8 +1,17 @@
+function get_key(contents::Pair)
+    return contents.second
+end
+
+function get_key(contents::Dict)
+    return contents["Key"]
+end
+
 function generate_unique_key(; bucket::AbstractString, version::AbstractString, target::AbstractString, setup_zip::AbstractString, overwrite::Bool = false)
     objects = S3.list_objects_v2(bucket, Dict("prefix" => target))
     if haskey(objects, "Contents")
         for contents in objects["Contents"]
-            key = contents["Key"]
+            key = get_key(contents)
+
             if startswith(key, "$target/$version/")
                 if overwrite
                     Log.info("PSRMODELS: Overwriting the $setup_zip in the $bucket bucket")
@@ -22,7 +31,7 @@ function generate_unique_key(; bucket::AbstractString, version::AbstractString, 
         if haskey(objects, "Contents")
             unique = true
             for contents in objects["Contents"]
-                if key == contents["Key"]
+                if key == get_key(contents)
                     unique = false
                     break
                 end
