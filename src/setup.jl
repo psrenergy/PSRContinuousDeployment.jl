@@ -16,7 +16,7 @@ function create_setup(
     url = "http://www.psr-inc.com"
 
     # Build id from target and version
-    rng = Random.MersenneTwister(hash(target * version))
+    rng = Random.MersenneTwister(hash("$target$version"))
     id = UUIDs.uuid4(rng) |> string |> uppercase
 
     if !isdir(setup_path)

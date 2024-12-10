@@ -30,7 +30,7 @@ function is_release_tag_available(configuration::Configuration, github_key::Abst
     ]
 
     target = configuration.target
-    version = configuration.version
+    version = VersionNumber(configuration.version.major, configuration.version.minor, configuration.version.patch)
 
     try
         HTTP.get("https://api.github.com/repos/psrenergy/$target.jl/releases/tags/v$version", headers)

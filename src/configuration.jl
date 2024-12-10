@@ -1,6 +1,6 @@
 struct Configuration
     target::String
-    version::String
+    version::VersionNumber
     package_path::String
     compile_path::String
     build_path::String
@@ -31,7 +31,7 @@ struct Configuration
 
         return new(
             target,
-            version,
+            VersionNumber(version),
             package_path,
             compile_path,
             build_path,
