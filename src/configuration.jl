@@ -56,9 +56,9 @@ function Configuration(
     target = project["name"]
 
     version = if isempty(version_suffix)
-        VersionNumber(project["version"] * string(development_stage))
+        project["version"] * string(development_stage)
     else
-        VersionNumber(project["version"] * string(development_stage) * "." * version_suffix)
+        project["version"] * string(development_stage) * "." * version_suffix
     end
 
     return Configuration(

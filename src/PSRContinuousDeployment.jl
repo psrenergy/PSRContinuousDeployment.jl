@@ -49,7 +49,6 @@ include("testrunner.jl")
 
 include("deploy/psrmodels.jl")
 include("deploy/psrmodules.jl")
-include("deploy/psrcloud.jl")
 include("deploy/distribution.jl")
 
 end
