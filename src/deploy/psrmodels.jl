@@ -6,7 +6,13 @@ function get_key(contents::Dict)
     return contents["Key"]
 end
 
-function generate_unique_key(; bucket::AbstractString, version::AbstractString, target::AbstractString, setup_zip::AbstractString, overwrite::Bool = false)
+function generate_unique_key(;
+    bucket::AbstractString,
+    version::VersionNumber,
+    target::AbstractString,
+    setup_zip::AbstractString,
+    overwrite::Bool = false,
+)
     objects = S3.list_objects_v2(bucket, Dict("prefix" => target))
     if haskey(objects, "Contents")
         for contents in objects["Contents"]
