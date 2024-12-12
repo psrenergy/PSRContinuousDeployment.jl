@@ -24,7 +24,7 @@ function write_version_jl(
     path::AbstractString,
     sha1::AbstractString,
     date::AbstractString,
-    pkg_version::VersionNumber,
+    pkg_version::Union{VersionNumber, String},
     pkg_build_date::AbstractString,
 )
     open(joinpath(path, "version.jl"), "w") do io
