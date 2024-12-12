@@ -45,7 +45,6 @@ include("psrhub.jl")
 include("sign.jl")
 include("slack.jl")
 include("setup.jl")
-include("testrunner.jl")
 
 include("deploy/psrmodels.jl")
 include("deploy/psrmodules.jl")
