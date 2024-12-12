@@ -1,13 +1,9 @@
+function get_key(contents::Any)
+    return contents["Key"]
+end
+
 function get_key(contents::Pair)
     return contents.second
-end
-
-function get_key(contents::Dict)
-    return contents["Key"]
-end
-
-function get_key(contents::OrderedCollections.LittleDict)
-    return contents["Key"]
 end
 
 function generate_unique_key(;
