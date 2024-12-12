@@ -30,7 +30,7 @@ function testall()
 
     create_setup(
         configuration,
-        sign = true,
+        sign = false,
     )
 
     url = deploy_to_psrmodels(
