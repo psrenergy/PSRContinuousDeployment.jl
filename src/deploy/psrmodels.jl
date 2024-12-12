@@ -6,6 +6,10 @@ function get_key(contents::Dict)
     return contents["Key"]
 end
 
+function get_key(contents::OrderedCollections.LittleDict)
+    return contents["Key"]
+end
+
 function generate_unique_key(;
     bucket::AbstractString,
     version::VersionNumber,
