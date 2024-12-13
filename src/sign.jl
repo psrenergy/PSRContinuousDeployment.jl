@@ -9,15 +9,11 @@ function upload_file_to_certificate_server(
     connect_timeout::Integer = CONNECT_TIMEOUT,
     connect_retries::Integer = CONNECT_RETRIES,
 )
-    target = configuration.target
-    version = configuration.version
-    setup_exe_path = joinpath(configuration.setup_path, "$target-$version-setup.exe")
-
     certificate_server_url = configuration.certificate_server_url
     url = "$certificate_server_url/upload"
 
     headers = []
-    data = ["filename" => "", "file" => open(setup_exe_path)]
+    data = ["filename" => "", "file" => open(setup_exe_path(configuration))]
     body = HTTP.Form(data)
 
     t = time()
@@ -38,10 +34,6 @@ function download_file_from_server(
     connect_timeout::Integer = CONNECT_TIMEOUT,
     connect_retries::Integer = CONNECT_RETRIES,
 )
-    target = configuration.target
-    version = configuration.version
-    setup_exe_path = joinpath(configuration.setup_path, "$target-$version-setup.exe")
-
     certificate_server_url = configuration.certificate_server_url
     url = "$certificate_server_url/download/$filename"
 
@@ -50,7 +42,7 @@ function download_file_from_server(
     Log.info("SETUP: Downloaded file from certificate server in $(time() - t) seconds")
 
     if response.status == 200
-        open(setup_exe_path, "w") do io
+        open(setup_exe_path(configuration), "w") do io
             write(io, response.body)
             return nothing
         end
