@@ -1,6 +1,6 @@
 name = "Example"
 uuid = "28d347f4-7536-4c5e-b41f-4013aab74eac"
-version = "0.2.0"
+version = "0.3.0"
 
 [deps]
 
