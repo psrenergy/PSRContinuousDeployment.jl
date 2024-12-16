@@ -53,6 +53,8 @@ function generate_unique_key(;
     end
 
     error("Failed to generate a unique hash")
+
+    return nothing
 end
 
 function deploy_to_psrmodels(;
