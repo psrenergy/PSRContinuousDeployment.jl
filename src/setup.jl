@@ -47,7 +47,7 @@ function create_setup(
         writeln(f, "VersionInfoProductName=$target$version")
         writeln(f, "DisableDirPage=no")
         writeln(f, "OutputDir=.\\")
-        writeln(f, "OutputBaseFilename=$target-$version-setup")
+        writeln(f, "OutputBaseFilename=$target-$version-win64")
         writeln(f, "Compression=lzma")
         writeln(f, "SolidCompression=yes")
         writeln(f, "AlwaysShowComponentsList=yes")

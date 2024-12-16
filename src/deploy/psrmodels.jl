@@ -10,7 +10,7 @@ function generate_unique_key(;
     bucket::AbstractString,
     version::VersionNumber,
     target::AbstractString,
-    setup_zip::AbstractString,
+    filename::AbstractString,
     overwrite::Bool = false,
 )
     objects = S3.list_objects_v2(bucket, Dict("prefix" => target))
@@ -20,10 +20,10 @@ function generate_unique_key(;
 
             if startswith(key, "$target/$version/")
                 if overwrite
-                    Log.info("PSRMODELS: Overwriting the $setup_zip in the $bucket bucket")
+                    Log.info("PSRMODELS: Overwriting the $filename in the $bucket bucket")
                     return key
                 else
-                    Log.fatal_error("PSRMODELS: The $setup_zip already exists in the $bucket bucket")
+                    Log.fatal_error("PSRMODELS: The $filename already exists in the $bucket bucket")
                 end
             end
         end
@@ -31,7 +31,7 @@ function generate_unique_key(;
 
     for _ in 1:10
         hash = randstring(['a':'z'; '0':'9'], 6)
-        key = "$target/$version/$hash/$setup_zip"
+        key = "$target/$version/$hash/$filename"
 
         objects = S3.list_objects_v2(bucket, Dict("prefix" => target))
         if haskey(objects, "Contents")
@@ -53,6 +53,8 @@ function generate_unique_key(;
     end
 
     error("Failed to generate a unique hash")
+
+    return nothing
 end
 
 function deploy_to_psrmodels(;
@@ -65,17 +67,6 @@ function deploy_to_psrmodels(;
 
     target = configuration.target
     version = configuration.version
-    setup_path = configuration.setup_path
-
-    setup_exe = "$target-$version-setup.exe"
-    setup_exe_path = joinpath(setup_path, setup_exe)
-
-    setup_zip = "$target-$version.zip"
-    setup_zip_path = joinpath(setup_path, setup_zip)
-
-    Log.info("PSRMODELS: Zipping $setup_exe")
-    run(`$(p7zip_jll.p7zip()) a -tzip $setup_zip_path $setup_exe_path`)
-    @assert isfile(setup_zip_path)
 
     aws_credentials = AWSCredentials(aws_access_key, aws_secret_key)
     aws_config = AWSConfig(; creds = aws_credentials, region = "us-east-1")
@@ -85,12 +76,13 @@ function deploy_to_psrmodels(;
         bucket = bucket,
         version = version,
         target = target,
-        setup_zip = setup_zip,
+        filename = setup_exe(configuration),
         overwrite = overwrite,
     )
 
-    Log.info("PSRMODELS: Uploading $setup_zip")
-    S3.put_object(bucket, key, Dict("body" => read(setup_zip_path)))
+    Log.info("PSRMODELS: Uploading $(setup_exe(configuration))")
+    @assert isfile(setup_exe_path(configuration))
+    S3.put_object(bucket, key, Dict("body" => read(setup_exe_path(configuration))))
 
     Log.info("PSRMODELS: Success")
 
