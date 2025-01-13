@@ -28,10 +28,17 @@ function testall()
         skip_version_jl = true,
     )
 
-    binary_path = create_setup(
-        configuration,
-        sign = false,
-    )
+    binary_path =
+        if Sys.iswindows()
+            create_setup(
+                configuration,
+                sign = false,
+            )
+        else
+            create_zip(
+                configuration,
+            )
+        end
 
     url = deploy_to_psrmodels(
         configuration = configuration,

@@ -76,17 +76,13 @@ function is_stable_release(configuration::Configuration)
     return is_stable_release(configuration.development_stage)
 end
 
-function setup_exe(configuration::Configuration)
+function setup_exe_path(configuration::Configuration)
     target = configuration.target
     version = configuration.version
 
     if Sys.iswindows()
-        return "$target-$version-win64.exe"
+        return joinpath(configuration.setup_path, "$target-$version-win64.exe")
     else
         Log.fatal_error("SETUP: Creating setup file is only supported on Windows")
     end
-end
-
-function setup_exe_path(configuration::Configuration)
-    return joinpath(configuration.setup_path, setup_exe(configuration))
 end

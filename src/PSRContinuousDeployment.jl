@@ -27,6 +27,7 @@ export Configuration,
     is_release_tag_available,
     bundle_psrhub,
     create_setup,
+    create_zip,
     deploy_to_psrmodels,
     deploy_to_psrmodules,
     notify_slack_channel,
@@ -45,6 +46,7 @@ include("psrhub.jl")
 include("sign.jl")
 include("slack.jl")
 include("setup.jl")
+include("zip.jl")
 
 include("deploy/psrmodels.jl")
 include("deploy/psrmodules.jl")
