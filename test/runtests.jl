@@ -28,13 +28,14 @@ function testall()
         skip_version_jl = true,
     )
 
-    create_setup(
+    binary_path = create_setup(
         configuration,
         sign = false,
     )
 
     url = deploy_to_psrmodels(
         configuration = configuration,
+        path = binary_path,
         aws_access_key = AWS_ACCESS,
         aws_secret_key = AWS_SECRET,
         overwrite = true,

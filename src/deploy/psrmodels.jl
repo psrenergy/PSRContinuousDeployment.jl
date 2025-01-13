@@ -59,6 +59,7 @@ end
 
 function deploy_to_psrmodels(;
     configuration::Configuration,
+    path::AbstractString,
     aws_access_key::AbstractString,
     aws_secret_key::AbstractString,
     overwrite::Bool = false,
@@ -68,6 +69,9 @@ function deploy_to_psrmodels(;
     target = configuration.target
     version = configuration.version
 
+    file_name = basename(path)
+    @assert isfile(path)
+
     aws_credentials = AWSCredentials(aws_access_key, aws_secret_key)
     aws_config = AWSConfig(; creds = aws_credentials, region = "us-east-1")
     global_aws_config(aws_config)
@@ -76,13 +80,12 @@ function deploy_to_psrmodels(;
         bucket = bucket,
         version = version,
         target = target,
-        filename = setup_exe(configuration),
+        filename = file_name,
         overwrite = overwrite,
     )
 
-    Log.info("PSRMODELS: Uploading $(setup_exe(configuration))")
-    @assert isfile(setup_exe_path(configuration))
-    S3.put_object(bucket, key, Dict("body" => read(setup_exe_path(configuration))))
+    Log.info("PSRMODELS: Uploading $file_name")
+    S3.put_object(bucket, key, Dict("body" => read(path)))
 
     Log.info("PSRMODELS: Success")
 
