@@ -2,7 +2,11 @@ FROM amazonlinux:1
 
 WORKDIR /model_build
 
-RUN yum update -y && yum install -y git wget tar gcc gcc-c++ make
+RUN yum update -y
+RUN yum install wget tar -y
+RUN yum groupinstall "Development Tools" -y
+RUN yum remove libstdc++-devel -y
+RUN yum install libstdc++-devel -y
 
 RUN echo "#!/bin/bash" > entrypoint.sh && \
     echo "echo \"machine github.com login psrcloud password \$GITHUB_TOKEN\" > ~/.netrc" >> entrypoint.sh && \
