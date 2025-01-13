@@ -113,5 +113,5 @@ function create_setup(
 
     Log.info("SETUP: Success")
 
-    return nothing
+    return setup_exe_path(configuration)
 end
