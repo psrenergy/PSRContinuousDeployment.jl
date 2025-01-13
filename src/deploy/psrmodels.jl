@@ -69,7 +69,7 @@ function deploy_to_psrmodels(;
     target = configuration.target
     version = configuration.version
 
-    file_name = basename(path)
+    filename = basename(path)
     @assert isfile(path)
 
     aws_credentials = AWSCredentials(aws_access_key, aws_secret_key)
@@ -80,11 +80,11 @@ function deploy_to_psrmodels(;
         bucket = bucket,
         version = version,
         target = target,
-        filename = file_name,
+        filename = filename,
         overwrite = overwrite,
     )
 
-    Log.info("PSRMODELS: Uploading $file_name")
+    Log.info("PSRMODELS: Uploading $filename")
     S3.put_object(bucket, key, Dict("body" => read(path)))
 
     Log.info("PSRMODELS: Success")
