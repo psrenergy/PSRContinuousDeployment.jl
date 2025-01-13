@@ -83,7 +83,7 @@ function setup_exe(configuration::Configuration)
     if Sys.iswindows()
         return "$target-$version-win64.exe"
     else
-        lOG.fatal_error("SETUP: Creating setup file is only supported on Windows")
+        Log.fatal_error("SETUP: Creating setup file is only supported on Windows")
     end
 end
 
