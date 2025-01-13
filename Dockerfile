@@ -2,7 +2,7 @@ FROM amazonlinux:1
 
 WORKDIR /model_build
 
-RUN yum update -y && yum install -y git wget tar gcc
+RUN yum update -y && yum install -y git wget tar gcc gcc-c++ make
 
 RUN echo "#!/bin/bash" > entrypoint.sh && \
     echo "echo \"machine github.com login psrcloud password \$GITHUB_TOKEN\" > ~/.netrc" >> entrypoint.sh && \
@@ -16,7 +16,8 @@ RUN echo "#!/bin/bash" > entrypoint.sh && \
     echo "git clone --branch \$GIT_BRANCH https://github.com/psrenergy/\$REPOSITORY.git" >> entrypoint.sh && \
     echo "cd \$REPOSITORY" >> entrypoint.sh && \
     echo "./compile/compile.sh --development_stage \$DEVELOPMENT_STAGE --version_suffix \$VERSION_SUFFIX" >> entrypoint.sh && \
-    echo "./compile/publish.sh --development_stage \$DEVELOPMENT_STAGE --version_suffix \$VERSION_SUFFIX --overwrite \$OVERWRITE" >> entrypoint.sh
+    echo "./compile/publish.sh --development_stage \$DEVELOPMENT_STAGE --version_suffix \$VERSION_SUFFIX --overwrite \$OVERWRITE" >> entrypoint.sh && \
+    echo "sleep 10000000000" >> entrypoint.sh
 
 RUN chmod +x entrypoint.sh
 
