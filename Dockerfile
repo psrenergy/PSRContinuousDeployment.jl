@@ -19,8 +19,7 @@ RUN echo "#!/bin/bash" > entrypoint.sh && \
     echo "git clone --branch \$GIT_BRANCH https://github.com/psrenergy/\$REPOSITORY.git" >> entrypoint.sh && \
     echo "cd \$REPOSITORY" >> entrypoint.sh && \
     echo "./compile/compile.sh --development_stage \$DEVELOPMENT_STAGE --version_suffix \$VERSION_SUFFIX" >> entrypoint.sh && \
-    echo "./compile/publish.sh --development_stage \$DEVELOPMENT_STAGE --version_suffix \$VERSION_SUFFIX --overwrite \$OVERWRITE" >> entrypoint.sh && \
-    echo "sleep 10000000000" >> entrypoint.sh
+    echo "./compile/publish.sh --development_stage \$DEVELOPMENT_STAGE --version_suffix \$VERSION_SUFFIX --overwrite \$OVERWRITE" >> entrypoint.sh
 
 RUN chmod +x entrypoint.sh
 
