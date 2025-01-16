@@ -9,7 +9,7 @@ RUN yum update -y && \
     yum install libstdc++-devel -y
 
 RUN echo "#!/bin/bash" > entrypoint.sh && \
-    echo "echo \"machine github.com login psrcloud password \$GITHUB_PAT\" > ~/.netrc" >> entrypoint.sh && \
+    echo "echo \"machine github.com login psrcloud password \$PSRCLOUD_GITHUB_TOKEN\" > ~/.netrc" >> entrypoint.sh && \
     echo "export JULIA_PKG_USE_CLI_GIT=true" >> entrypoint.sh && \
     echo "JULIA_VERSION_SHORT=\$(echo \"\$JULIA_VERSION\" | cut -d '.' -f 1,2)" >> entrypoint.sh && \
     echo "JULIA_VERSION_ENV=\$(echo \"\$JULIA_VERSION\" | sed 's/\\.//g')" >> entrypoint.sh && \
