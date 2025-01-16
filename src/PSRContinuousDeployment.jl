@@ -3,6 +3,7 @@ module PSRContinuousDeployment
 using AWS
 using Base: parse, string
 using Dates
+using DotEnv
 using EnumX
 using HTTP
 using JSON
@@ -34,6 +35,8 @@ export Configuration,
     create_release
 
 @service S3
+@service Ecs
+@service Cloudwatch_Logs
 
 include("development_stage.jl")
 include("git.jl")
@@ -47,6 +50,7 @@ include("sign.jl")
 include("slack.jl")
 include("setup.jl")
 include("zip.jl")
+include("ecs.jl")
 
 include("deploy/psrmodels.jl")
 include("deploy/psrmodules.jl")
