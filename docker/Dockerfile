@@ -18,7 +18,7 @@ RUN echo "#!/bin/bash" > entrypoint.sh && \
     echo "export JULIA_\$JULIA_VERSION_ENV=\$(pwd)/julia-\$JULIA_VERSION/bin/julia" >> entrypoint.sh && \
     echo "git clone -n https://github.com/psrenergy/\$GITHUB_REPOSITORY.git" >> entrypoint.sh && \
     echo "cd \$GITHUB_REPOSITORY" >> entrypoint.sh && \
-    echo "git checkout \$GITHUB_REFERENCE" >> entrypoint.sh && \
+    echo "git checkout \$GITHUB_SHA" >> entrypoint.sh && \
     echo "./compile/compile.sh --development_stage \$DEVELOPMENT_STAGE --version_suffix \$VERSION_SUFFIX" >> entrypoint.sh && \
     echo "./compile/publish.sh --development_stage \$DEVELOPMENT_STAGE --version_suffix \$VERSION_SUFFIX --overwrite \$OVERWRITE" >> entrypoint.sh
 
