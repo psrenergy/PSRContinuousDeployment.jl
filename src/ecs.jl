@@ -13,6 +13,7 @@ function get_container_environment()
         "OVERWRITE", "JULIA_VERSION", "VERSION_SUFFIX", "AWS_ACCESS_KEY_ID",
         "AWS_SECRET_ACCESS_KEY", "SLACK_BOT_USER_OAUTH_ACCESS_TOKEN",
     ]
+
     return [Dict("name" => key, "value" => ENV[key]) for key in keys if haskey(ENV, key)]
 end
 
