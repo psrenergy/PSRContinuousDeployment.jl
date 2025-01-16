@@ -43,7 +43,7 @@ function start_task()
     return task_arn
 end
 
-function stop_task(task_id, retries = 10, delay = 5)
+function stop_task(task_id, retries = 20, delay = 15)
     Ecs.stop_task(
         task_id,
         Dict(
@@ -71,7 +71,7 @@ end
 
 function get_task_status(task_id::AbstractString)
     try
-        @show response = Ecs.describe_tasks(tasks = [task_id], Dict("cluster" => CLUSTER_NAME))
+        response = Ecs.describe_tasks([task_id], Dict("cluster" => CLUSTER_NAME))
         return response["tasks"][1]["lastStatus"]
     catch e
         @error "Error retrieving task status $e"
@@ -81,7 +81,7 @@ end
 
 function get_task_exit_code(task_id::AbstractString)
     try
-        response = Ecs.describe_tasks(tasks = [task_id], Dict("cluster" => CLUSTER_NAME))
+        response = Ecs.describe_tasks([task_id], Dict("cluster" => CLUSTER_NAME))
         return response["tasks"][1]["containers"][1]["exitCode"]
     catch e
         @error "Error retrieving task exit code" exception = e
@@ -116,11 +116,15 @@ function start_task_and_watch()
     task_id = split(task_arn, "/")[end]
     log_stream_name = "ecs/julia_publish/$task_id"
     next_token = nothing
+    last_status = nothing
 
     try
         while true
             status = get_task_status(task_id)
-            println("Task $task_id status: $status")
+            if status != last_status
+                println("Task $task_id status: $status")
+                last_status = status
+            end
             if status == "STOPPED"
                 exit_code = get_task_exit_code(task_id)
                 println("Task $task_id finished with exit code $exit_code.")
