@@ -40,19 +40,20 @@ function start_ecs_task()
         ),
     )
     task_arn = response["tasks"][1]["taskArn"]
-    println("Task started: $task_arn")
+    Log.info("ECS: Task started: $task_arn")
     return task_arn
 end
 
 function stop_ecs_task(task_id, retries = 20, delay = 15)
+    Log.info("ECS: Stopping task $task_id...")
     Ecs.stop_ecs_task(
         task_id,
         Dict(
             "cluster" => CLUSTER_NAME,
         ),
     )
-    println("Stopping task $task_id...")
-    for attempt in 1:retries
+
+    for _ in 1:retries
         response = Ecs.describe_tasks(
             [task_id],
             Dict(
@@ -61,12 +62,12 @@ function stop_ecs_task(task_id, retries = 20, delay = 15)
         )
         task_status = response["tasks"][1]["lastStatus"]
         if task_status in ["STOPPED", "DEACTIVATING", "DEPROVISIONING"]
-            println("Task $task_id stopped successfully.")
+            Log.info("ECS: Task $task_id stopped successfully")
             return true
         end
         sleep(delay)
     end
-    println("Task $task_id did not stop within $retries retries.")
+    Log.info("ECS: Task $task_id did not stop within $retries retries")
     return false
 end
 
@@ -75,8 +76,7 @@ function get_ecs_task_status(task_id::AbstractString)
         response = Ecs.describe_tasks([task_id], Dict("cluster" => CLUSTER_NAME))
         return response["tasks"][1]["lastStatus"]
     catch e
-        @error "Error retrieving task status $e"
-        exit(1)
+        Log.fatal_error("Error retrieving task status")
     end
 end
 
@@ -85,8 +85,7 @@ function get_ecs_task_exit_code(task_id::AbstractString)
         response = Ecs.describe_tasks([task_id], Dict("cluster" => CLUSTER_NAME))
         return response["tasks"][1]["containers"][1]["exitCode"]
     catch e
-        @error "Error retrieving task exit code" exception = e
-        exit(1)
+        Log.fatal_error("Error retrieving task exit code")
     end
 end
 
@@ -102,12 +101,12 @@ function get_ecs_log_stream(log_stream_name, next_token = nothing)
 
         response = Cloudwatch_Logs.get_log_events(log_stream_name, params)
         for event in response["events"]
-            println(event["message"])
+            Log.info(event["message"])
         end
 
         return get(response, "nextForwardToken", nothing)
     catch e
-        @error "Error retrieving logs" exception = e
+        Log.fatal_error("Error retrieving logs")
         return nothing
     end
 end
@@ -123,12 +122,12 @@ function start_ecs_task_and_watch()
         while true
             status = get_ecs_task_status(task_id)
             if status != last_status
-                println("Task $task_id status: $status")
+                Log.info("ECS: Task $task_id status: $status")
                 last_status = status
             end
             if status == "STOPPED"
                 exit_code = get_ecs_task_exit_code(task_id)
-                println("Task $task_id finished with exit code $exit_code.")
+                Log.info("ECS: Task $task_id finished with exit code $exit_code")
                 exit(exit_code)
             elseif status == "RUNNING"
                 next_token = get_ecs_log_stream(log_stream_name, next_token)
@@ -136,7 +135,7 @@ function start_ecs_task_and_watch()
             sleep(1)
         end
     catch e
-        @error "An error occurred. Stopping task..." exception = e
+        Log.error("An error occurred. Stopping task...")
         stop_ecs_task(task_id)
     end
 
