@@ -17,7 +17,7 @@ function get_container_environment()
     return [Dict("name" => key, "value" => ENV[key]) for key in keys if haskey(ENV, key)]
 end
 
-function start_task()
+function start_ecs_task()
     CONTAINER_ENVIRONMENT = get_container_environment()
     response = Ecs.run_task(
         TASK_DEFINITION,
@@ -44,8 +44,8 @@ function start_task()
     return task_arn
 end
 
-function stop_task(task_id, retries = 20, delay = 15)
-    Ecs.stop_task(
+function stop_ecs_task(task_id, retries = 20, delay = 15)
+    Ecs.stop_ecs_task(
         task_id,
         Dict(
             "cluster" => CLUSTER_NAME,
@@ -70,7 +70,7 @@ function stop_task(task_id, retries = 20, delay = 15)
     return false
 end
 
-function get_task_status(task_id::AbstractString)
+function get_ecs_task_status(task_id::AbstractString)
     try
         response = Ecs.describe_tasks([task_id], Dict("cluster" => CLUSTER_NAME))
         return response["tasks"][1]["lastStatus"]
@@ -80,7 +80,7 @@ function get_task_status(task_id::AbstractString)
     end
 end
 
-function get_task_exit_code(task_id::AbstractString)
+function get_ecs_task_exit_code(task_id::AbstractString)
     try
         response = Ecs.describe_tasks([task_id], Dict("cluster" => CLUSTER_NAME))
         return response["tasks"][1]["containers"][1]["exitCode"]
@@ -90,7 +90,7 @@ function get_task_exit_code(task_id::AbstractString)
     end
 end
 
-function stream_logs(log_stream_name, next_token = nothing)
+function get_ecs_log_stream(log_stream_name, next_token = nothing)
     try
         params = Dict(
             "logGroupName" => LOG_GROUP_NAME,
@@ -112,8 +112,8 @@ function stream_logs(log_stream_name, next_token = nothing)
     end
 end
 
-function start_task_and_watch()
-    task_arn = start_task()
+function start_ecs_task_and_watch()
+    task_arn = start_ecs_task()
     task_id = split(task_arn, "/")[end]
     log_stream_name = "ecs/julia_publish/$task_id"
     next_token = nothing
@@ -121,23 +121,23 @@ function start_task_and_watch()
 
     try
         while true
-            status = get_task_status(task_id)
+            status = get_ecs_task_status(task_id)
             if status != last_status
                 println("Task $task_id status: $status")
                 last_status = status
             end
             if status == "STOPPED"
-                exit_code = get_task_exit_code(task_id)
+                exit_code = get_ecs_task_exit_code(task_id)
                 println("Task $task_id finished with exit code $exit_code.")
                 exit(exit_code)
             elseif status == "RUNNING"
-                next_token = stream_logs(log_stream_name, next_token)
+                next_token = get_ecs_log_stream(log_stream_name, next_token)
             end
             sleep(1)
         end
     catch e
         @error "An error occurred. Stopping task..." exception = e
-        stop_task(task_id)
+        stop_ecs_task(task_id)
     end
 
     return nothing
