@@ -10,11 +10,11 @@ RUN yum update -y && \
 
 RUN echo "#!/bin/bash" > entrypoint.sh && \
     echo "set -e" >> entrypoint.sh && \
-    echo "echo \"machine github.com login psrcloud password \$PSRCLOUD_GITHUB_TOKEN\" > ~/.netrc" >> entrypoint.sh && \
+    echo "echo \"machine github.com login psrcloud password \$PERSONAL_ACCESS_TOKEN\" > ~/.netrc" >> entrypoint.sh && \
     echo "export JULIA_PKG_USE_CLI_GIT=true" >> entrypoint.sh && \
     echo "JULIA_VERSION_SHORT=\$(echo \"\$JULIA_VERSION\" | cut -d '.' -f 1,2)" >> entrypoint.sh && \
     echo "JULIA_VERSION_ENV=\$(echo \"\$JULIA_VERSION\" | sed 's/\\.//g')" >> entrypoint.sh && \
-    echo "wget https://julialang-s3.julialang.org/bin/linux/x64/\$JULIA_VERSION_SHORT/julia-\$JULIA_VERSION-linux-x86_64.tar.gz" >> entrypoint.sh && \
+    echo "wget -nv https://julialang-s3.julialang.org/bin/linux/x64/\$JULIA_VERSION_SHORT/julia-\$JULIA_VERSION-linux-x86_64.tar.gz" >> entrypoint.sh && \
     echo "tar -xzf julia-\$JULIA_VERSION-linux-x86_64.tar.gz" >> entrypoint.sh && \
     echo "export JULIA_\$JULIA_VERSION_ENV=\$(pwd)/julia-\$JULIA_VERSION/bin/julia" >> entrypoint.sh && \
     echo "git clone -n https://github.com/\$GITHUB_REPOSITORY.git" >> entrypoint.sh && \

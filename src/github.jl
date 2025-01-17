@@ -1,8 +1,8 @@
 # https://docs.github.com/pt/rest/releases/releases?apiVersion=2022-11-28#create-a-release
-function create_release(configuration::Configuration, github_key::AbstractString)
+function create_release(configuration::Configuration, token::AbstractString)
     headers = [
         "Accept" => "application/vnd.github+json",
-        "Authorization" => "Bearer $(github_key)",
+        "Authorization" => "Bearer $token",
         "X-GitHub-Api-Version" => "2022-11-28",
     ]
 
@@ -20,12 +20,14 @@ function create_release(configuration::Configuration, github_key::AbstractString
     else
         Log.fatal_error("GITHUB: Failed")
     end
+
+    return nothing
 end
 
-function is_release_tag_available(configuration::Configuration, github_key::AbstractString)
+function is_release_tag_available(configuration::Configuration, token::AbstractString)
     headers = [
         "Accept" => "application/vnd.github+json",
-        "Authorization" => "Bearer $github_key",
+        "Authorization" => "Bearer $token",
         "X-GitHub-Api-Version" => "2022-11-28",
     ]
 
@@ -34,9 +36,8 @@ function is_release_tag_available(configuration::Configuration, github_key::Abst
 
     try
         HTTP.get("https://api.github.com/repos/psrenergy/$target.jl/releases/tags/v$version", headers)
+        return false
     catch
         return true
     end
-
-    return false
 end

@@ -1,25 +1,10 @@
 const CLUSTER_NAME = "ClusterTest"
 
-function get_container_environment()
-    keys = [
-        "AWS_ACCESS_KEY_ID",
-        "AWS_SECRET_ACCESS_KEY",
-        "DEVELOPMENT_STAGE",
-        "GITHUB_REPOSITORY",
-        "GITHUB_SHA",
-        "JULIA_VERSION",
-        "OVERWRITE",
-        "PSRCLOUD_GITHUB_TOKEN",
-        "SLACK_BOT_USER_OAUTH_ACCESS_TOKEN",
-        "VERSION_SUFFIX",
-    ]
-
-    return [Dict("name" => key, "value" => ENV[key]) for key in keys if haskey(ENV, key)]
-end
-
-function start_ecs_task()
-    container_environment = get_container_environment()
-
+function start_ecs_task(;
+    configuration::Configuration,
+    github_sha::AbstractString,
+    overwrite::Bool = false,
+)
     response = Ecs.run_task(
         "julia-publish",
         Dict(
@@ -35,7 +20,20 @@ function start_ecs_task()
             "overrides" => Dict(
                 "containerOverrides" => [Dict(
                     "name" => "julia_publish",
-                    "environment" => container_environment,
+                    "environment" => [
+                        # environment variables
+                        Dict("name" => "AWS_ACCESS_KEY_ID", "value" => ENV["AWS_ACCESS_KEY_ID"]),
+                        Dict("name" => "AWS_SECRET_ACCESS_KEY", "value" => ENV["AWS_SECRET_ACCESS_KEY"]),
+                        Dict("name" => "PERSONAL_ACCESS_TOKEN", "value" => ENV["PERSONAL_ACCESS_TOKEN"]),
+                        Dict("name" => "SLACK_BOT_USER_OAUTH_ACCESS_TOKEN", "value" => ENV["SLACK_BOT_USER_OAUTH_ACCESS_TOKEN"]),
+                        # configuration
+                        Dict("name" => "DEVELOPMENT_STAGE", "value" => string(configuration.development_stage)),
+                        Dict("name" => "GITHUB_REPOSITORY", "value" => "psrenergy/$(configuration.target).jl"),
+                        Dict("name" => "GITHUB_SHA", "value" => github_sha),
+                        Dict("name" => "JULIA_VERSION", "value" => VERSION),
+                        Dict("name" => "OVERWRITE", "value" => string(overwrite)),
+                        Dict("name" => "VERSION_SUFFIX", "value" => configuration.version.prerelease),
+                    ],
                 )],
             ),
         ),
