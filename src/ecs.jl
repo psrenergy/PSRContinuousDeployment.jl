@@ -7,7 +7,7 @@ const SECURITY_GROUP_ID = "sg-4719b522"
 
 function get_container_environment()
     keys = [
-        "GITHUB_REPOSITORY", "GITHUB_REFERENCE", "GITHUB_TOKEN", "DEVELOPMENT_STAGE",
+        "GITHUB_REPOSITORY", "GITHUB_REFERENCE", "PSRCLOUD_GITHUB_TOKEN", "DEVELOPMENT_STAGE",
         "OVERWRITE", "JULIA_VERSION", "VERSION_SUFFIX", "AWS_ACCESS_KEY_ID",
         "AWS_SECRET_ACCESS_KEY", "SLACK_BOT_USER_OAUTH_ACCESS_TOKEN",
     ]
@@ -16,7 +16,8 @@ function get_container_environment()
 end
 
 function start_ecs_task()
-    CONTAINER_ENVIRONMENT = get_container_environment()
+    container_environment = get_container_environment()
+
     response = Ecs.run_task(
         TASK_DEFINITION,
         Dict(
@@ -32,7 +33,7 @@ function start_ecs_task()
             "overrides" => Dict(
                 "containerOverrides" => [Dict(
                     "name" => "julia_publish",
-                    "environment" => CONTAINER_ENVIRONMENT,
+                    "environment" => container_environment,
                 )],
             ),
         ),
@@ -42,7 +43,7 @@ function start_ecs_task()
     return task_arn
 end
 
-function stop_ecs_task(task_id, retries = 20, delay = 15)
+function stop_ecs_task(task_id::AbstractString, retries::Integer = 20, delay::Integer = 15)
     Log.info("ECS: Stopping task $task_id...")
     Ecs.stop_ecs_task(
         task_id,
@@ -112,7 +113,7 @@ end
 function start_ecs_task_and_watch()
     task_arn = start_ecs_task()
     task_id = split(task_arn, "/")[end]
-    log_stream_name = "ecs/julia_publish/$task_id"
+
     next_token = nothing
     last_status = nothing
 
@@ -128,7 +129,7 @@ function start_ecs_task_and_watch()
                 Log.info("ECS: Task $task_id finished with exit code $exit_code")
                 exit(exit_code)
             elseif status == "RUNNING"
-                next_token = get_ecs_log_stream(log_stream_name, next_token)
+                next_token = get_ecs_log_stream("ecs/julia_publish/$task_id", next_token)
             end
             sleep(1)
         end
