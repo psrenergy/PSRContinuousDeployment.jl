@@ -5,6 +5,27 @@ function start_ecs_task(;
     github_sha::AbstractString,
     overwrite::Bool,
 )
+    version_suffix = if isempty(configuration.version.prerelease)
+        ""
+    else
+        string(configuration.version.prerelease[2])
+    end
+
+    environment = [
+        # environment variables
+        Dict("name" => "AWS_ACCESS_KEY_ID", "value" => ENV["AWS_ACCESS_KEY_ID"]),
+        Dict("name" => "AWS_SECRET_ACCESS_KEY", "value" => ENV["AWS_SECRET_ACCESS_KEY"]),
+        Dict("name" => "PERSONAL_ACCESS_TOKEN", "value" => ENV["PERSONAL_ACCESS_TOKEN"]),
+        Dict("name" => "SLACK_BOT_USER_OAUTH_ACCESS_TOKEN", "value" => ENV["SLACK_BOT_USER_OAUTH_ACCESS_TOKEN"]),
+        # configuration
+        Dict("name" => "DEVELOPMENT_STAGE", "value" => string(configuration.development_stage)),
+        Dict("name" => "GITHUB_REPOSITORY", "value" => "psrenergy/$(configuration.target).jl"),
+        Dict("name" => "GITHUB_SHA", "value" => github_sha),
+        Dict("name" => "JULIA_VERSION", "value" => string(VERSION)),
+        Dict("name" => "OVERWRITE", "value" => string(overwrite)),
+        Dict("name" => "VERSION_SUFFIX", "value" => version_suffix),
+    ]
+
     response = Ecs.run_task(
         "julia-publish",
         Dict(
@@ -20,20 +41,7 @@ function start_ecs_task(;
             "overrides" => Dict(
                 "containerOverrides" => [Dict(
                     "name" => "julia_publish",
-                    "environment" => [
-                        # environment variables
-                        Dict("name" => "AWS_ACCESS_KEY_ID", "value" => ENV["AWS_ACCESS_KEY_ID"]),
-                        Dict("name" => "AWS_SECRET_ACCESS_KEY", "value" => ENV["AWS_SECRET_ACCESS_KEY"]),
-                        Dict("name" => "PERSONAL_ACCESS_TOKEN", "value" => ENV["PERSONAL_ACCESS_TOKEN"]),
-                        Dict("name" => "SLACK_BOT_USER_OAUTH_ACCESS_TOKEN", "value" => ENV["SLACK_BOT_USER_OAUTH_ACCESS_TOKEN"]),
-                        # configuration
-                        Dict("name" => "DEVELOPMENT_STAGE", "value" => string(configuration.development_stage)),
-                        Dict("name" => "GITHUB_REPOSITORY", "value" => "psrenergy/$(configuration.target).jl"),
-                        Dict("name" => "GITHUB_SHA", "value" => github_sha),
-                        Dict("name" => "JULIA_VERSION", "value" => VERSION),
-                        Dict("name" => "OVERWRITE", "value" => string(overwrite)),
-                        Dict("name" => "VERSION_SUFFIX", "value" => configuration.version.prerelease),
-                    ],
+                    "environment" => environment,
                 )],
             ),
         ),
