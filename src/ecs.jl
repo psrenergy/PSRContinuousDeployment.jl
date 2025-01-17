@@ -5,7 +5,7 @@ function get_container_environment()
         "AWS_ACCESS_KEY_ID",
         "AWS_SECRET_ACCESS_KEY",
         "DEVELOPMENT_STAGE",
-        "GITHUB_REFERENCE",
+        "GITHUB_REPOSITORY",
         "GITHUB_SHA",
         "JULIA_VERSION",
         "OVERWRITE",
