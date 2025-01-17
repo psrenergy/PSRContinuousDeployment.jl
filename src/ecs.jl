@@ -83,7 +83,7 @@ function get_ecs_task_status(task_id::AbstractString)
         response = Ecs.describe_tasks([task_id], Dict("cluster" => CLUSTER_NAME))
         return response["tasks"][1]["lastStatus"]
     catch e
-        Log.fatal_error("ECS: Error retrieving task status")
+        Log.fatal_error("ECS: Error retrieving task status ($e)")
     end
 end
 
@@ -92,7 +92,7 @@ function get_ecs_task_exit_code(task_id::AbstractString)
         response = Ecs.describe_tasks([task_id], Dict("cluster" => CLUSTER_NAME))
         return response["tasks"][1]["containers"][1]["exitCode"]
     catch e
-        Log.fatal_error("ECS: Error retrieving task exit code")
+        Log.fatal_error("ECS: Error retrieving task exit code ($e)")
     end
 end
 
@@ -113,7 +113,7 @@ function get_ecs_log_stream(log_stream_name::AbstractString, next_token::Union{A
 
         return get(response, "nextForwardToken", nothing)
     catch e
-        Log.fatal_error("ECS: Error retrieving logs")
+        Log.fatal_error("ECS: Error retrieving logs ($e)")
         return nothing
     end
 end
