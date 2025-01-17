@@ -3,7 +3,7 @@ const CLUSTER_NAME = "ClusterTest"
 function start_ecs_task(;
     configuration::Configuration,
     github_sha::AbstractString,
-    overwrite::Bool = false,
+    overwrite::Bool,
 )
     response = Ecs.run_task(
         "julia-publish",
@@ -110,8 +110,16 @@ function get_ecs_log_stream(log_stream_name::AbstractString, next_token::Union{A
     end
 end
 
-function start_ecs_task_and_watch()
-    task_arn = start_ecs_task()
+function start_ecs_task_and_watch(;
+    configuration::Configuration,
+    github_sha::AbstractString,
+    overwrite::Bool = false,
+)
+    task_arn = start_ecs_task(
+        configuration = configuration,
+        github_sha = github_sha,
+        overwrite = overwrite,
+    )
     task_id = split(task_arn, "/")[end]
 
     next_token = nothing
