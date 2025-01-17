@@ -17,8 +17,10 @@ RUN echo "#!/bin/bash" > entrypoint.sh && \
     echo "wget -nv https://julialang-s3.julialang.org/bin/linux/x64/\$JULIA_VERSION_SHORT/julia-\$JULIA_VERSION-linux-x86_64.tar.gz" >> entrypoint.sh && \
     echo "tar -xzf julia-\$JULIA_VERSION-linux-x86_64.tar.gz" >> entrypoint.sh && \
     echo "export JULIA_\$JULIA_VERSION_ENV=\$(pwd)/julia-\$JULIA_VERSION/bin/julia" >> entrypoint.sh && \
-    echo "git clone -n \$GITHUB_REPOSITORY && cd \"$(basename \"$_\" .git)\"" >> entrypoint.sh && \
-    echo "git checkout \$GITHUB_SHA" >> entrypoint.sh && \
+    echo "repository=\$(basename \"\$GITHUB_REPOSITORY\" .git)" >> entrypoint.sh && \
+    echo "git clone -n \"\$GITHUB_REPOSITORY\" \"\$repository\"" >> entrypoint.sh && \
+    echo "cd \"\$repository\"" >> entrypoint.sh && \
+    echo "git checkout \"\$GITHUB_SHA\"" >> entrypoint.sh && \
     echo "./compile/compile.sh --development_stage \$DEVELOPMENT_STAGE --version_suffix \$VERSION_SUFFIX" >> entrypoint.sh && \
     echo "./compile/publish.sh --development_stage \$DEVELOPMENT_STAGE --version_suffix \$VERSION_SUFFIX --overwrite \$OVERWRITE" >> entrypoint.sh
 
