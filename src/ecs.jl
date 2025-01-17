@@ -4,9 +4,8 @@ function start_ecs_task(;
     configuration::Configuration,
     overwrite::Bool,
 )
-    version_suffix = if isempty(configuration.version.prerelease)
-        ""
-    else
+    version_suffix = ""
+    if !isempty(configuration.version.prerelease)
         string(configuration.version.prerelease[2])
     end
 
@@ -54,23 +53,24 @@ function start_ecs_task(;
 end
 
 function stop_ecs_task(task_id::AbstractString, retries::Integer = 20, delay::Integer = 15)
-    Log.info("ECS: Stopping task $task_id...")
-    Ecs.stop_task(
-        task_id,
-        Dict("cluster" => CLUSTER_NAME),
-    )
+    try
+        Log.info("ECS: Stopping task $task_id...")
+        Ecs.stop_task(task_id, Dict("cluster" => CLUSTER_NAME))
 
-    for _ in 1:retries
-        response = Ecs.describe_tasks(
-            [task_id],
-            Dict("cluster" => CLUSTER_NAME),
-        )
-        task_status = response["tasks"][1]["lastStatus"]
-        if task_status in ["STOPPED", "DEACTIVATING", "DEPROVISIONING"]
-            Log.info("ECS: Task $task_id stopped successfully")
-            return true
+        for _ in 1:retries
+            response = Ecs.describe_tasks(
+                [task_id],
+                Dict("cluster" => CLUSTER_NAME),
+            )
+            task_status = response["tasks"][1]["lastStatus"]
+            if task_status in ["STOPPED", "DEACTIVATING", "DEPROVISIONING"]
+                Log.info("ECS: Task $task_id stopped successfully")
+                return true
+            end
+            sleep(delay)
         end
-        sleep(delay)
+    catch e
+        Log.warn("ECS: Failed to stop task $task_id: $e")
     end
 
     Log.info("ECS: Task $task_id did not stop within $retries retries")
@@ -78,55 +78,40 @@ function stop_ecs_task(task_id::AbstractString, retries::Integer = 20, delay::In
 end
 
 function get_ecs_task_status(task_id::AbstractString)
-    try
-        response = Ecs.describe_tasks([task_id], Dict("cluster" => CLUSTER_NAME))
-        return response["tasks"][1]["lastStatus"]
-    catch e
-        Log.fatal_error("ECS: Error retrieving task status ($e)")
-    end
+    response = Ecs.describe_tasks([task_id], Dict("cluster" => CLUSTER_NAME))
+    return response["tasks"][1]["lastStatus"]
 end
 
 function get_ecs_task_exit_code(task_id::AbstractString)
-    try
-        response = Ecs.describe_tasks([task_id], Dict("cluster" => CLUSTER_NAME))
-        return response["tasks"][1]["containers"][1]["exitCode"]
-    catch e
-        Log.fatal_error("ECS: Error retrieving task exit code ($e)")
-    end
+    response = Ecs.describe_tasks([task_id], Dict("cluster" => CLUSTER_NAME))
+    return response["tasks"][1]["containers"][1]["exitCode"]
 end
 
 function get_ecs_log_stream(log_stream_name::AbstractString, next_token::Union{AbstractString, Nothing} = nothing)
-    try
-        params = Dict(
-            "logGroupName" => "/ecs/julia-publish",
-            "startFromHead" => true,
-        )
-        if next_token !== nothing
-            params["nextToken"] = next_token
-        end
-
-        response = Cloudwatch_Logs.get_log_events(log_stream_name, params)
-        for event in response["events"]
-            Log.info(event["message"])
-        end
-
-        return get(response, "nextForwardToken", nothing)
-    catch e
-        Log.fatal_error("ECS: Error retrieving logs ($e)")
-        return nothing
+    params = Dict(
+        "logGroupName" => "/ecs/julia-publish",
+        "startFromHead" => true,
+    )
+    if next_token !== nothing
+        params["nextToken"] = next_token
     end
+
+    response = Cloudwatch_Logs.get_log_events(log_stream_name, params)
+    for event in response["events"]
+        Log.info(event["message"])
+    end
+
+    return get(response, "nextForwardToken", nothing)
 end
 
 function start_ecs_task_and_watch(;
     configuration::Configuration,
-    github_sha::AbstractString,
     overwrite::Bool = false,
 )
     Base.exit_on_sigint(false)
 
     task_arn = start_ecs_task(
         configuration = configuration,
-        github_sha = github_sha,
         overwrite = overwrite,
     )
     task_id = split(task_arn, "/") |> last
@@ -154,20 +139,15 @@ function start_ecs_task_and_watch(;
             sleep(1)
         end
     catch e
+        stop_ecs_task(task_id)
         if e isa InterruptException
             Log.warn("ECS: Task $task_id interrupted")
         else
-            Log.error("ECS: An error occurred: $e\n$(catch_backtrace())")
+            Log.fatal_error("ECS: An error occurred: $e\n$(catch_backtrace())")
         end
-    finally
-        if last_status != "STOPPED"
-            try
-                stop_ecs_task(task_id)
-            catch stop_err
-                Log.warn("ECS: Failed to stop task $task_id: $stop_err\n$(catch_backtrace())")
-            end
-        end
+        return get_ecs_task_exit_code(task_id)
     end
 
+    stop_ecs_task(task_id)
     return get_ecs_task_exit_code(task_id)
 end
