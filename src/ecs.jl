@@ -150,7 +150,7 @@ function start_ecs_task_and_watch(;
             sleep(1)
         end
     catch e
-        Log.error("ECS: An error occurred. Stopping task...")
+        Log.error("ECS: An error occurred. Stopping task ($e)")
         stop_ecs_task(task_id)
     end
 
