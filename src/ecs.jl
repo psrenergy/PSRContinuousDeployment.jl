@@ -96,7 +96,7 @@ function get_ecs_task_exit_code(task_id::AbstractString)
     end
 end
 
-function get_ecs_log_stream(log_stream_name::AbstractString, next_token::Union{AbstractString, Nothing} = nothing)
+function get_ecs_log_stream(log_stream_name::AbstractString, next_token = nothing)
     try
         params = Dict(
             "logGroupName" => "/ecs/julia-publish",
