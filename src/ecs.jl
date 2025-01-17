@@ -1,15 +1,17 @@
 const CLUSTER_NAME = "ClusterTest"
-const TASK_DEFINITION = "julia-publish"
-const LOG_GROUP_NAME = "/ecs/julia-publish"
-const REGION = "us-east-1"
-const SUBNET_ID = "subnet-39095b11"
-const SECURITY_GROUP_ID = "sg-4719b522"
 
 function get_container_environment()
     keys = [
-        "GITHUB_REPOSITORY", "GITHUB_REFERENCE", "PSRCLOUD_GITHUB_TOKEN", "DEVELOPMENT_STAGE",
-        "OVERWRITE", "JULIA_VERSION", "VERSION_SUFFIX", "AWS_ACCESS_KEY_ID",
-        "AWS_SECRET_ACCESS_KEY", "SLACK_BOT_USER_OAUTH_ACCESS_TOKEN",
+        "AWS_ACCESS_KEY_ID",
+        "AWS_SECRET_ACCESS_KEY",
+        "DEVELOPMENT_STAGE",
+        "GITHUB_REFERENCE",
+        "GITHUB_REPOSITORY",
+        "JULIA_VERSION",
+        "OVERWRITE",
+        "PSRCLOUD_GITHUB_TOKEN",
+        "SLACK_BOT_USER_OAUTH_ACCESS_TOKEN",
+        "VERSION_SUFFIX",
     ]
 
     return [Dict("name" => key, "value" => ENV[key]) for key in keys if haskey(ENV, key)]
@@ -19,14 +21,14 @@ function start_ecs_task()
     container_environment = get_container_environment()
 
     response = Ecs.run_task(
-        TASK_DEFINITION,
+        "julia-publish",
         Dict(
             "cluster" => CLUSTER_NAME,
             "launchType" => "FARGATE",
             "networkConfiguration" => Dict(
                 "awsvpcConfiguration" => Dict(
-                    "subnets" => [SUBNET_ID],
-                    "securityGroups" => [SECURITY_GROUP_ID],
+                    "subnets" => ["subnet-39095b11"],
+                    "securityGroups" => ["sg-4719b522"],
                     "assignPublicIp" => "ENABLED",
                 ),
             ),
@@ -75,7 +77,7 @@ function get_ecs_task_status(task_id::AbstractString)
         response = Ecs.describe_tasks([task_id], Dict("cluster" => CLUSTER_NAME))
         return response["tasks"][1]["lastStatus"]
     catch e
-        Log.fatal_error("Error retrieving task status")
+        Log.fatal_error("ECS: Error retrieving task status")
     end
 end
 
@@ -84,14 +86,14 @@ function get_ecs_task_exit_code(task_id::AbstractString)
         response = Ecs.describe_tasks([task_id], Dict("cluster" => CLUSTER_NAME))
         return response["tasks"][1]["containers"][1]["exitCode"]
     catch e
-        Log.fatal_error("Error retrieving task exit code")
+        Log.fatal_error("ECS: Error retrieving task exit code")
     end
 end
 
-function get_ecs_log_stream(log_stream_name, next_token = nothing)
+function get_ecs_log_stream(log_stream_name::AbstractString, next_token::Union{AbstractString, Nothing} = nothing)
     try
         params = Dict(
-            "logGroupName" => LOG_GROUP_NAME,
+            "logGroupName" => "/ecs/julia-publish",
             "startFromHead" => true,
         )
         if next_token !== nothing
@@ -105,7 +107,7 @@ function get_ecs_log_stream(log_stream_name, next_token = nothing)
 
         return get(response, "nextForwardToken", nothing)
     catch e
-        Log.fatal_error("Error retrieving logs")
+        Log.fatal_error("ECS: Error retrieving logs")
         return nothing
     end
 end
@@ -134,7 +136,7 @@ function start_ecs_task_and_watch()
             sleep(1)
         end
     catch e
-        Log.error("An error occurred. Stopping task...")
+        Log.error("ECS: An error occurred. Stopping task...")
         stop_ecs_task(task_id)
     end
 
