@@ -11,6 +11,8 @@ function start_ecs_task(;
         string(configuration.version.prerelease[2])
     end
 
+    repository = readchomp(`git remote get-url origin`)
+
     environment = [
         # environment variables
         Dict("name" => "AWS_ACCESS_KEY_ID", "value" => ENV["AWS_ACCESS_KEY_ID"]),
@@ -19,7 +21,7 @@ function start_ecs_task(;
         Dict("name" => "SLACK_BOT_USER_OAUTH_ACCESS_TOKEN", "value" => ENV["SLACK_BOT_USER_OAUTH_ACCESS_TOKEN"]),
         # configuration
         Dict("name" => "DEVELOPMENT_STAGE", "value" => string(configuration.development_stage)),
-        Dict("name" => "GITHUB_REPOSITORY", "value" => "psrenergy/$(configuration.target).jl"),
+        Dict("name" => "GITHUB_REPOSITORY", "value" => repository),
         Dict("name" => "GITHUB_SHA", "value" => github_sha),
         Dict("name" => "JULIA_VERSION", "value" => string(VERSION)),
         Dict("name" => "OVERWRITE", "value" => string(overwrite)),
