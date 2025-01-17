@@ -152,7 +152,11 @@ function start_ecs_task_and_watch(;
             sleep(1)
         end
     catch e
-        Log.error("ECS: An error occurred: $e\n$(catch_backtrace())")
+        if e isa InterruptException
+            Log.warn("ECS: Task $task_id interrupted")
+        else
+            Log.error("ECS: An error occurred: $e\n$(catch_backtrace())")
+        end
     finally
         if last_status != "STOPPED"
             try
