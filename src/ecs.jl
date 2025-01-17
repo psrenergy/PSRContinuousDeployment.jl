@@ -134,8 +134,7 @@ function start_ecs_task_and_watch(;
             end
 
             if status == "STOPPED"
-                exit_code = get_ecs_task_exit_code(task_id)
-                Log.info("ECS: Task $task_id finished with exit code $exit_code")
+                Log.info("ECS: Task $task_id finished")
                 break
             elseif status == "RUNNING"
                 next_token = get_ecs_log_stream("ecs/julia_publish/$task_id", next_token)
@@ -144,15 +143,17 @@ function start_ecs_task_and_watch(;
             sleep(1)
         end
     catch e
-        stop_ecs_task(task_id)
         if e isa InterruptException
             Log.warn("ECS: Task $task_id interrupted")
         else
-            Log.fatal_error("ECS: An error occurred: $e\n$(catch_backtrace())")
+            Log.error("ECS: An error occurred: $e\n$(catch_backtrace())")
         end
-        return get_ecs_task_exit_code(task_id)
+    finally
+        stop_ecs_task(task_id)
     end
 
-    stop_ecs_task(task_id)
-    return get_ecs_task_exit_code(task_id)
+    exit_code = get_ecs_task_exit_code(task_id)
+    Log.info("ECS: Task $task_id exit code: $exit_code")
+
+    return exit_code
 end
