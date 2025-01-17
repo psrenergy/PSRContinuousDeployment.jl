@@ -74,7 +74,7 @@ end
 
 function Configuration(;
     package_path::AbstractString,
-    development_stage::DevelopmentStage.T,
+    development_stage::AbstractString,
     version_suffix::AbstractString = "",
 )
     return Configuration(
