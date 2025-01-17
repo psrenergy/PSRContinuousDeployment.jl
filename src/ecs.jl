@@ -6,8 +6,6 @@ const SUBNET_ID = "subnet-39095b11"
 const SECURITY_GROUP_ID = "sg-4719b522"
 
 function get_container_environment()
-    DotEnv.load!()
-
     keys = [
         "GITHUB_REPOSITORY", "GITHUB_REFERENCE", "GITHUB_TOKEN", "DEVELOPMENT_STAGE",
         "OVERWRITE", "JULIA_VERSION", "VERSION_SUFFIX", "AWS_ACCESS_KEY_ID",
