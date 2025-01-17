@@ -55,17 +55,13 @@ function stop_ecs_task(task_id::AbstractString, retries::Integer = 20, delay::In
     Log.info("ECS: Stopping task $task_id...")
     Ecs.stop_ecs_task(
         task_id,
-        Dict(
-            "cluster" => CLUSTER_NAME,
-        ),
+        Dict("cluster" => CLUSTER_NAME),
     )
 
     for _ in 1:retries
         response = Ecs.describe_tasks(
             [task_id],
-            Dict(
-                "cluster" => CLUSTER_NAME,
-            ),
+            Dict("cluster" => CLUSTER_NAME),
         )
         task_status = response["tasks"][1]["lastStatus"]
         if task_status in ["STOPPED", "DEACTIVATING", "DEPROVISIONING"]
