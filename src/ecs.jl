@@ -70,6 +70,7 @@ function stop_ecs_task(task_id::AbstractString, retries::Integer = 20, delay::In
         end
         sleep(delay)
     end
+
     Log.info("ECS: Task $task_id did not stop within $retries retries")
     return false
 end
@@ -119,12 +120,14 @@ function start_ecs_task_and_watch(;
     github_sha::AbstractString,
     overwrite::Bool = false,
 )
+    Base.exit_on_sigint(false)
+
     task_arn = start_ecs_task(
         configuration = configuration,
         github_sha = github_sha,
         overwrite = overwrite,
     )
-    task_id = split(task_arn, "/")[end]
+    task_id = split(task_arn, "/") |> last
 
     next_token = nothing
     last_status = nothing
@@ -132,23 +135,33 @@ function start_ecs_task_and_watch(;
     try
         while true
             status = get_ecs_task_status(task_id)
+
             if status != last_status
                 Log.info("ECS: Task $task_id status: $status")
                 last_status = status
             end
+
             if status == "STOPPED"
                 exit_code = get_ecs_task_exit_code(task_id)
                 Log.info("ECS: Task $task_id finished with exit code $exit_code")
-                exit(exit_code)
+                break
             elseif status == "RUNNING"
                 next_token = get_ecs_log_stream("ecs/julia_publish/$task_id", next_token)
             end
+
             sleep(1)
         end
     catch e
-        Log.error("ECS: An error occurred. Stopping task ($e)")
-        stop_ecs_task(task_id)
+        Log.error("ECS: An error occurred: $e\n$(catch_backtrace())")
+    finally
+        if last_status != "STOPPED"
+            try
+                stop_ecs_task(task_id)
+            catch stop_err
+                Log.warn("ECS: Failed to stop task $task_id: $stop_err\n$(catch_backtrace())")
+            end
+        end
     end
 
-    return nothing
+    return get_ecs_task_exit_code(task_id)
 end
