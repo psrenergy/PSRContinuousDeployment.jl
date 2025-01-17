@@ -2,7 +2,6 @@ const CLUSTER_NAME = "ClusterTest"
 
 function start_ecs_task(;
     configuration::Configuration,
-    github_sha::AbstractString,
     overwrite::Bool,
 )
     version_suffix = if isempty(configuration.version.prerelease)
@@ -11,7 +10,8 @@ function start_ecs_task(;
         string(configuration.version.prerelease[2])
     end
 
-    @show repository = readchomp(`git remote get-url origin`)
+    repository = readchomp(`git remote get-url origin`)
+    sha = readchomp(`git rev-parse HEAD`)
 
     environment = [
         # environment variables
@@ -22,7 +22,7 @@ function start_ecs_task(;
         # configuration
         Dict("name" => "DEVELOPMENT_STAGE", "value" => string(configuration.development_stage)),
         Dict("name" => "GITHUB_REPOSITORY", "value" => repository),
-        Dict("name" => "GITHUB_SHA", "value" => github_sha),
+        Dict("name" => "GITHUB_SHA", "value" => sha),
         Dict("name" => "JULIA_VERSION", "value" => string(VERSION)),
         Dict("name" => "OVERWRITE", "value" => string(overwrite)),
         Dict("name" => "VERSION_SUFFIX", "value" => version_suffix),
