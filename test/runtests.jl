@@ -14,7 +14,7 @@ function testall()
 
     configuration = PSRContinuousDeployment.Configuration(
         package_path,
-        development_stage = PSRContinuousDeployment.DevelopmentStage.StableRelease,
+        development_stage = "stable release",
     )
 
     PSRContinuousDeployment.compile(

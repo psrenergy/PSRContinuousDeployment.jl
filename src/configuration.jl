@@ -42,8 +42,8 @@ struct Configuration
     end
 end
 
-function Configuration(
-    package_path::AbstractString;
+function Configuration(;
+    package_path::AbstractString,
     development_stage::DevelopmentStage.T,
     version_suffix::AbstractString = "",
 )
@@ -69,6 +69,18 @@ function Configuration(
         build_path = build_path,
         setup_path = setup_path,
         development_stage = development_stage,
+    )
+end
+
+function Configuration(;
+    package_path::AbstractString,
+    development_stage::DevelopmentStage.T,
+    version_suffix::AbstractString = "",
+)
+    return Configuration(
+        package_path = package_path,
+        development_stage = parse(DevelopmentStage.T, development_stage),
+        version_suffix = version_suffix,
     )
 end
 
