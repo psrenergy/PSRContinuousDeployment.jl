@@ -53,7 +53,7 @@ end
 
 function stop_ecs_task(task_id::AbstractString, retries::Integer = 20, delay::Integer = 15)
     Log.info("ECS: Stopping task $task_id...")
-    Ecs.stop_ecs_task(
+    Ecs.stop_task(
         task_id,
         Dict("cluster" => CLUSTER_NAME),
     )
