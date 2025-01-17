@@ -11,7 +11,7 @@ function start_ecs_task(;
         string(configuration.version.prerelease[2])
     end
 
-    repository = readchomp(`git remote get-url origin`)
+    @show repository = readchomp(`git remote get-url origin`)
 
     environment = [
         # environment variables
