@@ -1,11 +1,15 @@
-function bundle_psrhub(
+function bundle_psrhub(;
     configuration::Configuration,
-    aws_access_key::AbstractString,
-    aws_secret_key::AbstractString,
-    psrhub_version::AbstractString;
+    psrhub_version::AbstractString,
     examples_path::Union{Nothing, AbstractString} = nothing,
     documentation_path::Union{Nothing, AbstractString} = nothing,
 )
+    aws_access_key = ENV["AWS_ACCESS_KEY_ID"]
+    aws_secret_key = ENV["AWS_SECRET_ACCESS_KEY"]
+
+    @assert !isnothing(aws_access_key)
+    @assert !isnothing(aws_secret_key)
+
     bucket = "psr-update-modules"
 
     target = configuration.target

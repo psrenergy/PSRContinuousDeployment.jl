@@ -36,7 +36,7 @@ export Configuration,
 
 @service S3
 @service Ecs use_response_type=true
-@service Cloudwatch_Logs
+@service Cloudwatch_Logs use_response_type=true
 
 include("development_stage.jl")
 include("git.jl")

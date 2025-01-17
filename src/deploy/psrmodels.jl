@@ -60,10 +60,11 @@ end
 function deploy_to_psrmodels(;
     configuration::Configuration,
     path::AbstractString,
-    aws_access_key::AbstractString,
-    aws_secret_key::AbstractString,
     overwrite::Bool = false,
 )
+    aws_access_key = ENV["AWS_ACCESS_KEY_ID"]
+    aws_secret_key = ENV["AWS_SECRET_ACCESS_KEY"]
+
     bucket = "psr-models"
 
     target = configuration.target
