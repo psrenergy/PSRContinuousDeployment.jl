@@ -27,6 +27,11 @@ function start_ecs_task(;
         Dict("name" => "VERSION_SUFFIX", "value" => version_suffix),
     ]
 
+    Log.info("ECS: Environment variables:")
+    for entry in environment
+        Log.info("$(entry["name"]): $(entry["value"])")
+    end
+
     response = Ecs.run_task(
         "julia-publish",
         Dict(
