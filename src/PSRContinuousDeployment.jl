@@ -32,7 +32,9 @@ export Configuration,
     deploy_to_psrmodels,
     deploy_to_psrmodules,
     notify_slack_channel,
-    create_release
+    create_release,
+    build_configuration,
+    start_ecs_task_and_watch
 
 @service S3
 @service Ecs

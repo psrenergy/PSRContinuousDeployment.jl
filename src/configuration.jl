@@ -42,11 +42,13 @@ struct Configuration
     end
 end
 
-function Configuration(;
+function build_configuration(;
     package_path::AbstractString,
-    development_stage::DevelopmentStage.T,
+    development_stage::AbstractString,
     version_suffix::AbstractString = "",
 )
+    development_stage_enum = parse(DevelopmentStage.T, development_stage)
+
     compile_path = joinpath(package_path, "compile")
     build_path = joinpath(compile_path, "build")
     setup_path = joinpath(compile_path, "setup")
@@ -56,9 +58,9 @@ function Configuration(;
     target = project["name"]
 
     version = if isempty(version_suffix)
-        project["version"] * string(development_stage)
+        project["version"] * string(development_stage_enum)
     else
-        project["version"] * string(development_stage) * "." * version_suffix
+        project["version"] * string(development_stage_enum) * "." * version_suffix
     end
 
     return Configuration(
@@ -68,19 +70,7 @@ function Configuration(;
         compile_path = compile_path,
         build_path = build_path,
         setup_path = setup_path,
-        development_stage = development_stage,
-    )
-end
-
-function Configuration(;
-    package_path::AbstractString,
-    development_stage::AbstractString,
-    version_suffix::AbstractString = "",
-)
-    return Configuration(
-        package_path = package_path,
-        development_stage = parse(DevelopmentStage.T, development_stage),
-        version_suffix = version_suffix,
+        development_stage = development_stage_enum,
     )
 end
 

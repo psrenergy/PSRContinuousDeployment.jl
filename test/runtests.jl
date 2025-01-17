@@ -12,7 +12,7 @@ function testall()
     package_path = joinpath(@__DIR__, "Example.jl")
     database_path = joinpath(package_path, "database")
 
-    configuration = PSRContinuousDeployment.Configuration(
+    configuration = build_configuration(
         package_path = package_path,
         development_stage = "stable release",
     )
