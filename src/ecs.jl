@@ -5,8 +5,8 @@ function start_ecs_task(;
     overwrite::Bool,
 )
     version_suffix = ""
-    if !isempty(configuration.version.prerelease)
-        string(configuration.version.prerelease[2])
+    if !isempty(configuration.version.prerelease) && configuration.version.prerelease isa Tuple{String, UInt64}
+        version_suffix = string(configuration.version.prerelease[2])
     end
 
     repository = readchomp(`git remote get-url origin`)
