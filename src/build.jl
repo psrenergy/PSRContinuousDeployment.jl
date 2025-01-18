@@ -1,4 +1,6 @@
-function build_docs()
+function build_docs(configuration::Configuration)
+    package_path = configuration.package_path
+
     filename = if Sys.iswindows()
         "docs.bat"
     else
@@ -10,7 +12,9 @@ function build_docs()
     return nothing
 end
 
-function build_examples()
+function build_examples(configuration::Configuration)
+    package_path = configuration.package_path
+
     filename = if Sys.iswindows()
         "examples.bat"
     else
