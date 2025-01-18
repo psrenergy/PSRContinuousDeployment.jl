@@ -3,7 +3,6 @@ module PSRContinuousDeployment
 using AWS
 using Base: parse, string
 using Dates
-using DotEnv
 using EnumX
 using HTTP
 using JSON
