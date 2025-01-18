@@ -7,6 +7,7 @@ function build_docs(configuration::Configuration)
         "docs.sh"
     end
 
+    Log.info("Building documentation")
     run(`$(joinpath(package_path, "docs", filename))`)
 
     return nothing
@@ -21,6 +22,7 @@ function build_examples(configuration::Configuration)
         "examples.sh"
     end
 
+    Log.info("Building examples")
     run(`$(joinpath(package_path, "examples", filename))`)
 
     return nothing
