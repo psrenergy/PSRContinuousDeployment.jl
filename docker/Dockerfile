@@ -10,9 +10,6 @@ RUN yum update -y && \
 
 RUN echo "#!/bin/bash" > entrypoint.sh && \
     echo "set -e" >> entrypoint.sh && \
-    echo "if [ -z \"\$VERSION_SUFFIX\" ]; then" >> entrypoint.sh && \
-    echo "VERSION_SUFFIX=\"\"" >> entrypoint.sh && \
-    echo "fi" >> entrypoint.sh && \ 
     echo "echo \"machine github.com login psrcloud password \$PERSONAL_ACCESS_TOKEN\" > ~/.netrc" >> entrypoint.sh && \
     echo "export JULIA_PKG_USE_CLI_GIT=true" >> entrypoint.sh && \
     echo "JULIA_VERSION_SHORT=\$(echo \"\$JULIA_VERSION\" | cut -d '.' -f 1,2)" >> entrypoint.sh && \
