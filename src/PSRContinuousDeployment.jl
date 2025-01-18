@@ -34,7 +34,8 @@ export Configuration,
     notify_slack_channel,
     create_release,
     build_configuration,
-    start_ecs_task_and_watch
+    start_ecs_task_and_watch,
+    make_docs
 
 @service S3
 @service Ecs
@@ -53,6 +54,7 @@ include("slack.jl")
 include("setup.jl")
 include("zip.jl")
 include("ecs.jl")
+include("docs.jl")
 
 include("deploy/psrmodels.jl")
 include("deploy/psrmodules.jl")
