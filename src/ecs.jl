@@ -22,7 +22,6 @@ function start_ecs_task(;
         Dict("name" => "DEVELOPMENT_STAGE", "value" => string(configuration.development_stage)),
         Dict("name" => "GITHUB_REPOSITORY", "value" => repository),
         Dict("name" => "GITHUB_SHA", "value" => sha),
-        Dict("name" => "JULIA_VERSION", "value" => string(VERSION)),
         Dict("name" => "OVERWRITE", "value" => string(overwrite)),
         Dict("name" => "VERSION_SUFFIX", "value" => version_suffix),
     ]
