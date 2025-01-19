@@ -1,7 +1,25 @@
 const CLUSTER_NAME = "ClusterTest"
 
+# https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-cpu-memory-error.html
+function get_ecs_parameters(memory_in_gb::Integer)
+    if memory_in_gb == 1
+        return 256, 1024
+    elseif memory_in_gb == 2
+        return 256, 2048
+    elseif memory_in_gb == 4
+        return 512, 4096
+    elseif memory_in_gb == 8
+        return 1024, 8192
+    elseif memory_in_gb == 16
+        return 2048, 16384
+    else 
+        Log.fatal_error("ECS: Unsupported memory size ($memory_in_gb GB)")
+    end
+end
+
 function start_ecs_task(;
     configuration::Configuration,
+    memory_in_gb::Integer,
     overwrite::Bool,
 )
     version_suffix = ""
@@ -11,6 +29,7 @@ function start_ecs_task(;
 
     repository = readchomp(`git remote get-url origin`)
     sha = readchomp(`git rev-parse HEAD`)
+    cpu, memory = get_ecs_parameters(memory_in_gb)
 
     environment = [
         # environment variables
@@ -39,13 +58,13 @@ function start_ecs_task(;
                 ),
             ),
             "overrides" => Dict(
-                "cpu" => "2048",
-                "memory" => "16384",
+                "cpu" => string(cpu),
+                "memory" => string(memory),
                 "containerOverrides" => [Dict(
                     "name" => "julia_publish",
                     "environment" => environment,
-                    "cpu" => 2048,
-                    "memory" => 16384,
+                    "cpu" => cpu,
+                    "memory" => memory,
                 )],
             ),
         ),
@@ -109,12 +128,14 @@ end
 
 function start_ecs_task_and_watch(;
     configuration::Configuration,
+    memory_in_gb::Integer,
     overwrite::Bool = false,
 )
     Base.exit_on_sigint(false)
 
     task_arn = start_ecs_task(
         configuration = configuration,
+        memory_in_gb = memory_in_gb,
         overwrite = overwrite,
     )
     task_id = split(task_arn, "/") |> last
