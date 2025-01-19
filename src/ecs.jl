@@ -39,10 +39,12 @@ function start_ecs_task(;
                 ),
             ),
             "overrides" => Dict(
+                "cpu" => "2048",
                 "memory" => "16384",
                 "containerOverrides" => [Dict(
                     "name" => "julia_publish",
                     "environment" => environment,
+                    "cpu" => 2048,
                     "memory" => 16384,
                 )],
             ),
