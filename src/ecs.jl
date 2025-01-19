@@ -42,6 +42,7 @@ function start_ecs_task(;
                 "containerOverrides" => [Dict(
                     "name" => "julia_publish",
                     "environment" => environment,
+                    "memory": 16384,
                 )],
             ),
         ),
