@@ -38,11 +38,12 @@ function start_ecs_task(;
                     "assignPublicIp" => "ENABLED",
                 ),
             ),
+            "memory" => 16384,
             "overrides" => Dict(
                 "containerOverrides" => [Dict(
                     "name" => "julia_publish",
                     "environment" => environment,
-                    "memory": 16384,
+                    "memory" => "16384",
                 )],
             ),
         ),
