@@ -4,11 +4,7 @@ function bundle_psrhub(;
     examples_path::Union{Nothing, AbstractString} = nothing,
     documentation_path::Union{Nothing, AbstractString} = nothing,
 )
-    aws_access_key = ENV["AWS_ACCESS_KEY_ID"]
-    aws_secret_key = ENV["AWS_SECRET_ACCESS_KEY"]
-
-    @assert !isnothing(aws_access_key)
-    @assert !isnothing(aws_secret_key)
+    initialize_aws()
 
     bucket = "psr-update-modules"
 
@@ -32,10 +28,6 @@ function bundle_psrhub(;
         destiny = joinpath(model_path, folder)
         mv(source, destiny, force = true)
     end
-
-    aws_credentials = AWSCredentials(aws_access_key, aws_secret_key)
-    aws_config = AWSConfig(; creds = aws_credentials, region = "us-east-1")
-    global_aws_config(aws_config)
 
     psrhub_zip = "$psrhub_version.zip"
     psrhub_zip_path = joinpath(build_path, psrhub_zip)

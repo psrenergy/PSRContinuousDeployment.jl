@@ -19,11 +19,17 @@ function generate_unique_key(;
             key = get_key(contents)
 
             if startswith(key, "$target/$version/")
-                if overwrite
-                    Log.info("PSRMODELS: Overwriting the $filename in the $bucket bucket")
-                    return key
+                if endswith(key, filename)
+                    if overwrite
+                        Log.info("PSRMODELS: Overwriting $filename")
+                        return key
+                    else
+                        Log.fatal_error("PSRMODELS: $filename already exists")
+                    end
                 else
-                    Log.fatal_error("PSRMODELS: The $filename already exists in the $bucket bucket")
+                    Log.info("PSRMODELS: Found version $target $version")
+                    _, _, hash, _ = split(key, "/")
+                    return "$target/$version/$hash/$filename"
                 end
             end
         end
@@ -62,8 +68,7 @@ function deploy_to_psrmodels(;
     path::AbstractString,
     overwrite::Bool = false,
 )
-    aws_access_key = ENV["AWS_ACCESS_KEY_ID"]
-    aws_secret_key = ENV["AWS_SECRET_ACCESS_KEY"]
+    initialize_aws()
 
     bucket = "psr-models"
 
@@ -72,10 +77,6 @@ function deploy_to_psrmodels(;
 
     filename = basename(path)
     @assert isfile(path)
-
-    aws_credentials = AWSCredentials(aws_access_key, aws_secret_key)
-    aws_config = AWSConfig(; creds = aws_credentials, region = "us-east-1")
-    global_aws_config(aws_config)
 
     key = generate_unique_key(
         bucket = bucket,

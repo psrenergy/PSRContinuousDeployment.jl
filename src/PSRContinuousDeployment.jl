@@ -41,6 +41,7 @@ export Configuration,
 @service Ecs
 @service Cloudwatch_Logs
 
+include("aws.jl")
 include("development_stage.jl")
 include("git.jl")
 include("images.jl")
