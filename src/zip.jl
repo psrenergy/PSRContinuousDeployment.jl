@@ -6,12 +6,7 @@ function create_zip(;
     build_path = joinpath(configuration.build_path, "*")
     setup_path = configuration.setup_path
 
-    zip_filename = if Sys.iswindows()
-        "$target-$version-win64.zip"
-    else
-        "$target-$version-linux.zip"
-    end
-
+    zip_filename = build_zip_filename(configuration = configuration)
     zip_path = joinpath(setup_path, zip_filename)
 
     Log.info("ZIP: Zipping the $zip_filename")
