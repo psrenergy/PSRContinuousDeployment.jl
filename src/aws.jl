@@ -88,8 +88,7 @@ end
 function fetch_aws_linux_zip(configuration::Configuration)
     filename = build_zip_filename(configuration = configuration, os = :Linux)
 
-    key = find_aws_key(
-        configuratio)
+    key = find_aws_key(configuration)
 
     if isnothing(key)
         Log.fatal_error("PSRMODELS: $filename not found")
