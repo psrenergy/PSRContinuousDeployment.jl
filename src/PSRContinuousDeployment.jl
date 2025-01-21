@@ -41,12 +41,13 @@ export Configuration,
 @service Ecs
 @service Cloudwatch_Logs
 
-include("aws.jl")
 include("development_stage.jl")
 include("git.jl")
 include("images.jl")
 include("util.jl")
 include("configuration.jl")
+
+include("aws.jl")
 include("compile.jl")
 include("github.jl")
 include("psrhub.jl")
