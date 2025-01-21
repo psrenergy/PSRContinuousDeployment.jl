@@ -80,7 +80,7 @@ function fetch_aws_linux_zip(configuration::Configuration)
     key = fetch_aws_key(;
         configuration = configuration,
         filename = filename,
-        overwrite = false,
+        overwrite = true,
     )
 
     return models_url() * key
