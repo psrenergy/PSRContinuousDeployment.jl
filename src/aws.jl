@@ -34,7 +34,7 @@ function find_aws_key(configuration::Configuration)
     return nothing
 end
 
-function fetch_aws_key(;
+function build_aws_key(;
     configuration::Configuration,
     filename::AbstractString,
     overwrite::Bool,
@@ -85,7 +85,7 @@ function fetch_aws_key(;
     return nothing
 end
 
-function fetch_aws_linux_zip(configuration::Configuration)
+function find_aws_linux_zip(configuration::Configuration)
     filename = build_zip_filename(configuration = configuration, os = :Linux)
 
     key = find_aws_key(configuration)

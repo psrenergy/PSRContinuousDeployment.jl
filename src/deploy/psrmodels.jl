@@ -16,7 +16,7 @@ function deploy_to_psrmodels(;
     filename = basename(path)
     @assert isfile(path)
 
-    key = fetch_aws_key(
+    key = build_aws_key(
         configuration = configuration,
         filename = filename,
         overwrite = overwrite,
