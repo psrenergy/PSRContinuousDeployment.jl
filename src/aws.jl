@@ -16,11 +16,7 @@ function models_url()
     return "https://models.psr-inc.com/"
 end
 
-function fetch_aws_key(;
-    configuration::Configuration,
-    filename::AbstractString,
-    overwrite::Bool,
-)
+function find_aws_key(configuration::Configuration)
     target = configuration.target
     version = configuration.version
 
@@ -30,20 +26,35 @@ function fetch_aws_key(;
             key = get_key(contents)
 
             if startswith(key, "$target/$version/")
-                if endswith(key, filename)
-                    if overwrite
-                        Log.info("PSRMODELS: Overwriting $filename")
-                        return key
-                    else
-                        Log.fatal_error("PSRMODELS: $filename already exists")
-                    end
-                else
-                    Log.info("PSRMODELS: Found version $target $version")
-                    _, _, hash, _ = split(key, "/")
-                    return "$target/$version/$hash/$filename"
-                end
+                return key
             end
         end
+    end
+
+    return nothing
+end
+
+function fetch_aws_key(;
+    configuration::Configuration,
+    filename::AbstractString,
+    overwrite::Bool,
+)
+    target = configuration.target
+    version = configuration.version
+
+    key = find_aws_key(configuration)
+
+    if endswith(key, filename)
+        if overwrite
+            Log.info("PSRMODELS: Overwriting $filename")
+            return key
+        else
+            Log.fatal_error("PSRMODELS: $filename already exists")
+        end
+    else
+        Log.info("PSRMODELS: Found version $target $version")
+        _, _, hash, _ = split(key, "/")
+        return "$target/$version/$hash/$filename"
     end
 
     for _ in 1:10
@@ -77,11 +88,12 @@ end
 function fetch_aws_linux_zip(configuration::Configuration)
     filename = build_zip_filename(configuration = configuration, os = :Linux)
 
-    key = fetch_aws_key(;
-        configuration = configuration,
-        filename = filename,
-        overwrite = true,
-    )
+    key = find_aws_key(
+        configuratio)
+
+    if isnothing(key)
+        Log.fatal_error("PSRMODELS: $filename not found")
+    end
 
     return models_url() * key
 end
