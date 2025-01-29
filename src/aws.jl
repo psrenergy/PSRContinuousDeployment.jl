@@ -45,17 +45,19 @@ function build_aws_key(;
 
     key = find_aws_key(configuration)
 
-    if endswith(key, filename)
-        if overwrite
-            Log.info("PSRMODELS: Overwriting $filename")
-            return key
+    if !isnothing(key)
+        if endswith(key, filename)
+            if overwrite
+                Log.info("PSRMODELS: Overwriting $filename")
+                return key
+            else
+                Log.fatal_error("PSRMODELS: $filename already exists")
+            end
         else
-            Log.fatal_error("PSRMODELS: $filename already exists")
+            Log.info("PSRMODELS: Found version $target $version")
+            _, _, hash, _ = split(key, "/")
+            return "$target/$version/$hash/$filename"
         end
-    else
-        Log.info("PSRMODELS: Found version $target $version")
-        _, _, hash, _ = split(key, "/")
-        return "$target/$version/$hash/$filename"
     end
 
     for _ in 1:10
