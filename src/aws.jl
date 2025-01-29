@@ -64,7 +64,7 @@ function build_aws_key(;
         hash = randstring(['a':'z'; '0':'9'], 6)
         key = "$target/$version/$hash/$filename"
 
-        objects = S3.list_objects_v2(bucket, Dict("prefix" => target))
+        objects = S3.list_objects_v2("psr-models", Dict("prefix" => target))
         if haskey(objects, "Contents")
             unique = true
             for contents in objects["Contents"]
