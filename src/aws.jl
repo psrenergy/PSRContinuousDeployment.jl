@@ -26,6 +26,7 @@ function find_aws_key(configuration::Configuration)
             key = get_key(contents)
 
             if startswith(key, "$target/$version/")
+                Log.info("PSRMODELS: Found key -> $target/$version")
                 return key
             end
         end
