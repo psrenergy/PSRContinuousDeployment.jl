@@ -4,6 +4,7 @@ function create_setup(
     setup_icon::Union{Nothing, AbstractString} = nothing,
     sign::Bool = true,
     additional_options::Union{Nothing, AbstractString} = nothing,
+    shortcut::Union{Nothing, AbstractString} = nothing,
 )
     if !Sys.iswindows()
         Log.fatal_error("SETUP: Creating setup file is only supported on Windows")
@@ -75,7 +76,11 @@ function create_setup(
         writeln(f, "Type: filesandordirs; Name: {app}\\*")
         writeln(f, "")
         writeln(f, "[Icons]")
-        writeln(f, "Name: {commondesktop}\\$target; Filename: {app}\\$target.exe; WorkingDir: {app}")
+        if isnothing(shortcut)
+            writeln(f, "Name: {commondesktop}\\$target; Filename: {app}\\$target.exe; WorkingDir: {app}")
+        else
+            writeln(f, shortcut)
+        end
         writeln(f, "")
         writeln(f, "[Registry]")
         writeln(f, "Root: HKLM64; Subkey: SOFTWARE\\PSR\\$target\\0.0.x\\; ValueType: string; ValueName: Path; ValueData: {app}; Flags: uninsdeletekey")
