@@ -78,28 +78,16 @@ function is_stable_release(configuration::Configuration)
     return is_stable_release(configuration.development_stage)
 end
 
-function fetch_operating_system()
-    return if Sys.iswindows()
-        :Windows
-    elseif Sys.islinux()
-        :Linux
-    elseif Sys.isapple()
-        :MacOS
-    else
-        Log.fatal_error("Unsupported operating system")
-    end
-end
-
-function build_zip_filename(; configuration::Configuration, os::Symbol = fetch_operating_system())
+function build_zip_filename(; configuration::Configuration, os::Symbol = Base.BinaryPlatforms.os())
     target = configuration.target
     version = configuration.version
 
-    if os == :Windows
+    if os == "windows"
         return "$target-$version-win64.zip"
-    elseif os == :Linux
+    elseif os == "linux"
         return "$target-$version-linux.zip"
     else
-        Log.fatal_error("Unsupported operating system")
+        Log.fatal_error("Unsupported operating system ($os)")
     end
 end
 
