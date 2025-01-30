@@ -78,7 +78,7 @@ function is_stable_release(configuration::Configuration)
     return is_stable_release(configuration.development_stage)
 end
 
-function build_zip_filename(; configuration::Configuration, os::Symbol = Base.BinaryPlatforms.os())
+function build_zip_filename(; configuration::Configuration, os::String = Base.BinaryPlatforms.os())
     target = configuration.target
     version = configuration.version
 

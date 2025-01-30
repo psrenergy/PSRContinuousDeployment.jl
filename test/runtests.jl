@@ -17,6 +17,12 @@ function testall()
         development_stage = "stable release",
     )
 
+    if Sys.iswindows()
+        @test PSRContinuousDeployment.build_zip_filename(
+            configuration = configuration,
+        ) == "$(configuration.target)-$(configuration.version)-win64.zip"
+    end
+
     PSRContinuousDeployment.compile(
         configuration,
         additional_files_path = [
