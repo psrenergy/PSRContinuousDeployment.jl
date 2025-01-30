@@ -12,6 +12,8 @@ function get_ecs_parameters(memory_in_gb::Integer)
         return 1024, 8192
     elseif memory_in_gb == 16
         return 2048, 16384
+    elseif memory_in_gb == 32
+        return 8192, 32768
     else 
         Log.fatal_error("ECS: Unsupported memory size ($memory_in_gb GB)")
     end
