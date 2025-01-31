@@ -15,3 +15,13 @@ function create_zip(;
 
     return zip_path
 end
+
+function zip(path::AbstractString, destination::AbstractString)
+    Log.info("ZIP: Zipping $path to $destination")
+    run(`$(p7zip_jll.p7zip()) a -tzip $destination $path`)
+end
+
+function unzip(path::AbstractString, destination::AbstractString)
+    Log.info("ZIP: Unzipping $path to $destination")
+    run(`$(p7zip_jll.p7zip()) x -o$destination $path`)
+end

@@ -57,6 +57,7 @@ include("setup.jl")
 include("zip.jl")
 include("ecs.jl")
 include("build.jl")
+include("psrcloud.jl")
 
 include("deploy/psrmodels.jl")
 include("deploy/psrmodules.jl")
