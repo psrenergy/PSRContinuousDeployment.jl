@@ -1,6 +1,6 @@
 function prepare_psrcloud(;
     url::AbstractString,
-    executables::Dict{AbstractString, AbstractString},
+    executables::Dict{String, String},
 )
     temp_path = mktempdir()
     bin_path = joinpath(temp_path, "bin")
