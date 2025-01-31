@@ -15,7 +15,7 @@ function prepare_psrcloud(;
         end
     end
 
-    zip_path = tempname()
+    zip_path = tempname() * ".zip"
     zip(bin_path, zip_path)
 
     return zip_path
