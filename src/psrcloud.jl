@@ -2,8 +2,7 @@ function prepare_psrcloud(;
     url::AbstractString,
     executables::Dict{String, String},
 )
-    temp_path = mktempdir()
-    bin_path = joinpath(temp_path, "bin")
+    bin_path = joinpath(mktempdir(), "bin")
     mkdir(bin_path)
 
     model_path = download(url)
@@ -15,7 +14,7 @@ function prepare_psrcloud(;
         end
     end
 
-    zip_path = tempname() * ".zip"
+    zip_path = joinpath(mktempdir(), randstring(8) * ".zip")
     zip(bin_path, zip_path)
 
     return zip_path
