@@ -17,8 +17,7 @@ function prepare_psrcloud(;
 
     chmod(bin_path, 0o755)
 
-    zip_path = joinpath(mktempdir(), randstring(8) * ".zip")
-    zip(bin_path, zip_path)
-
+    zip_path = mktempdir() 
+    zip(bin_path, joinpath(zip_path, "psrcloud.zip"))
     return zip_path
 end
