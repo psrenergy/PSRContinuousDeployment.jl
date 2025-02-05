@@ -89,7 +89,7 @@ function build_aws_key(;
 end
 
 function find_aws_linux_zip(configuration::Configuration)
-    filename = build_zip_filename(configuration = configuration, os = :Linux)
+    filename = build_zip_filename(configuration = configuration, os = "linux")
 
     key = find_aws_key(configuration)
 
