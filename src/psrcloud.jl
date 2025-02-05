@@ -9,9 +9,11 @@ function prepare_psrcloud(;
     unzip(model_path, bin_path)
 
     for (executable_filename, executable_content) in executables
-        open(joinpath(bin_path, executable_filename), "w") do file
+        executable_path = joinpath(bin_path, executable_filename)
+        open(executable_path, "w") do file
             print(file, executable_content)
         end
+        chmod(executable_path, 0o755)
     end
 
     zip_path = joinpath(mktempdir(), randstring(8) * ".zip")
