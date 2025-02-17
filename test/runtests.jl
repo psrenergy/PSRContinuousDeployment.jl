@@ -3,9 +3,6 @@ using PSRContinuousDeployment
 using Test
 
 const SLACK_CHANNEL = "C03SSPFNTJS"
-
-const AWS_ACCESS = ENV["AWS_ACCESS_KEY_ID"]
-const AWS_SECRET = ENV["AWS_SECRET_ACCESS_KEY"]
 const SLACK_TOKEN = ENV["SLACK_BOT_USER_OAUTH_ACCESS_TOKEN"]
 
 function testall()
@@ -49,8 +46,6 @@ function testall()
     url = deploy_to_psrmodels(
         configuration = configuration,
         path = binary_path,
-        aws_access_key = AWS_ACCESS,
-        aws_secret_key = AWS_SECRET,
         overwrite = true,
     )
 
