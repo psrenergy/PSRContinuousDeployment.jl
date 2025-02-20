@@ -19,9 +19,20 @@ function get_ecs_parameters(memory_in_gb::Integer)
     end
 end
 
+function get_task_definition(os::String)
+    if os == "windows"
+        return "julia_publish_windows"
+    elseif os == "linux"
+        return "julia_publish"
+    else
+        Log.fatal_error("Unsupported operating system ($os)")
+    end
+end
+
 function start_ecs_task(;
     configuration::Configuration,
     memory_in_gb::Integer,
+    os::String,
     overwrite::Bool,
 )
     version_suffix = ""
@@ -32,6 +43,9 @@ function start_ecs_task(;
     repository = readchomp(`git remote get-url origin`)
     sha = readchomp(`git rev-parse HEAD`)
     cpu, memory = get_ecs_parameters(memory_in_gb)
+
+    task_definition = get_task_definition(os)
+    Log.info("ECS: Task definition: $task_definition")
 
     environment = [
         # environment variables
@@ -63,7 +77,7 @@ function start_ecs_task(;
                 "cpu" => string(cpu),
                 "memory" => string(memory),
                 "containerOverrides" => [Dict(
-                    "name" => "julia_publish",
+                    "name" => task_definition,
                     "environment" => environment,
                     "cpu" => cpu,
                     "memory" => memory,
@@ -98,6 +112,7 @@ function stop_ecs_task(task_id::AbstractString, retries::Integer = 20, delay::In
     end
 
     Log.info("ECS: Task $task_id did not stop within $retries retries")
+
     return false
 end
 
@@ -131,6 +146,7 @@ end
 function start_ecs_task_and_watch(;
     configuration::Configuration,
     memory_in_gb::Integer,
+    os::String,
     overwrite::Bool = false,
 )
     Base.exit_on_sigint(false)
@@ -138,12 +154,16 @@ function start_ecs_task_and_watch(;
     task_arn = start_ecs_task(
         configuration = configuration,
         memory_in_gb = memory_in_gb,
+        os = os,
         overwrite = overwrite,
     )
     task_id = split(task_arn, "/") |> last
 
     next_token = nothing
     last_status = nothing
+
+    task_definition = get_task_definition(os)
+    Log.info("ECS: Task definition: $task_definition")
 
     try
         while true
@@ -158,7 +178,7 @@ function start_ecs_task_and_watch(;
                 Log.info("ECS: Task $task_id finished")
                 break
             elseif status == "RUNNING"
-                next_token = get_ecs_log_stream("ecs/julia_publish/$task_id", next_token)
+                next_token = get_ecs_log_stream("ecs/$task_definition/$task_id", next_token)
             end
 
             sleep(1)
