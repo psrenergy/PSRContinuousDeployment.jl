@@ -1,4 +1,4 @@
-const CLUSTER_NAME = "ClusterTest"
+const CLUSTER_NAME = "automations"
 
 # https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-cpu-memory-error.html
 function get_ecs_parameters(memory_in_gb::Integer)
@@ -21,7 +21,7 @@ end
 
 function get_task_definition(os::String)
     if os == "windows"
-        return "julia_publish_windows"
+        return "julia-publish-windows"
     elseif os == "linux"
         return "julia_publish"
     else
@@ -62,7 +62,7 @@ function start_ecs_task(;
     ]
 
     response = Ecs.run_task(
-        "julia-publish",
+        task_definition,
         Dict(
             "cluster" => CLUSTER_NAME,
             "launchType" => "FARGATE",
