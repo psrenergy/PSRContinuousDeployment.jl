@@ -8,14 +8,14 @@ RUN Invoke-WebRequest -Uri "https://github.com/git-for-windows/git/releases/down
 
 RUN echo 'echo "machine github.com login psrcloud password $PERSONAL_ACCESS_TOKEN" > ~/_netrc' > entrypoint.ps1; \
     # clone the repository
-    echo '$repository = (sp -Leaf $env:GITHUB_REPOSITORY) -replace \"\.git$\", \"\"' >> entrypoint.ps1; \
+    echo '$repository = (Split-Path -Path $env:GITHUB_REPOSITORY -Leaf) -replace "\\.git$", ""' >> entrypoint.ps1; \
     echo 'git clone -n $env:GITHUB_REPOSITORY' >> entrypoint.ps1; \
     echo 'cd $repository' >> entrypoint.ps1; \
     echo 'git checkout $env:GITHUB_SHA' >> entrypoint.ps1; \
     # get the julia version
-    echo 'if ((Get-Content Manifest.toml -Raw) -match "julia_version\s*=\s*""([^"]+)"") { $JULIA_VERSION = $Matches[1] }' >> entrypoint.ps1; \
+    echo 'if ((Get-Content Manifest.toml -Raw) -match \"julia_version\s*=\s*""([^"]+)"\") { $JULIA_VERSION = $Matches[1] }' >> entrypoint.ps1; \
     # setup julia
-    echo '$JULIA_VERSION_SHORT = ($env:JULIA_VERSION -split \"\.\")[0,1] -join "."' >> entrypoint.ps1; \
+    echo '$JULIA_VERSION_SHORT = ($env:JULIA_VERSION -split \"\.\")[0,1] -join \".\"' >> entrypoint.ps1; \
     echo '$JULIA_VERSION_ENV = $JULIA_VERSION -replace \"\.\", \"\"' >> entrypoint.ps1; \
     echo 'echo $JULIA_VERSION' >> entrypoint.ps1; \
     echo 'echo $JULIA_VERSION_SHORT' >> entrypoint.ps1; \
@@ -28,4 +28,6 @@ RUN echo 'echo "machine github.com login psrcloud password $PERSONAL_ACCESS_TOKE
     echo '.\compile\compile.bat --development_stage $DEVELOPMENT_STAGE --version_suffix $VERSION_SUFFIX' >> entrypoint.ps1; \
     echo '.\compile\publish.bat --development_stage $DEVELOPMENT_STAGE --version_suffix $VERSION_SUFFIX --overwrite $OVERWRITE' >> entrypoint.ps1
 
-CMD powershell -Command "Start-Sleep -Seconds 600"
+RUN powershell -Command Set-ExecutionPolicy RemoteSigned -Scope Process; ./entrypoint.ps1
+
+CMD ["powershell", "-File", "./entrypoint.ps1"]
