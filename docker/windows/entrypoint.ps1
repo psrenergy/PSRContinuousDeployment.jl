@@ -4,11 +4,11 @@ get-content .env | foreach {
 }
 
 $repository = ($env:GITHUB_REPOSITORY -split '/' | Select-Object -Last 1) -replace '\.git$', ''
-# echo "$repository"
-# echo "$env:GITHUB_REPOSITORY"
-# git clone -n $env:GITHUB_REPOSITORY
+echo "$repository"
+echo "$env:GITHUB_REPOSITORY"
+git clone -n $env:GITHUB_REPOSITORY
 cd $repository
-# git checkout $env:GITHUB_SHA
+git checkout $env:GITHUB_SHA
 
 if ((Get-Content Manifest.toml -Raw) -match 'julia_version\s*=\s*"([^"]+)"') { $JULIA_VERSION = $Matches[1] }
 $JULIA_VERSION_SHORT = ($JULIA_VERSION -split "\.")[0,1] -join "."

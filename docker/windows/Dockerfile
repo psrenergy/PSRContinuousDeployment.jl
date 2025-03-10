@@ -13,7 +13,7 @@ RUN echo 'echo "machine github.com login psrcloud password $PERSONAL_ACCESS_TOKE
     echo 'cd $repository' >> entrypoint.ps1; \
     echo 'git checkout $env:GITHUB_SHA' >> entrypoint.ps1; \
     # get the julia version
-    echo 'if ((Get-Content Manifest.toml -Raw) -match \'julia_version\\s*=\\s*\"([^\"]+)\"\') { $JULIA_VERSION = $Matches[1] }' >> entrypoint.ps1; \
+    echo 'if ((Get-Content Manifest.toml -Raw) -match "julia_version\s*=\s*""([^"]+)"") { $JULIA_VERSION = $Matches[1] }' >> entrypoint.ps1; \
     # setup julia
     echo '$JULIA_VERSION_SHORT = ($env:JULIA_VERSION -split \"\.\")[0,1] -join "."' >> entrypoint.ps1; \
     echo '$JULIA_VERSION_ENV = $JULIA_VERSION -replace \"\.\", \"\"' >> entrypoint.ps1; \
