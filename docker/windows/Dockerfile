@@ -6,9 +6,9 @@ RUN Invoke-WebRequest -Uri "https://github.com/git-for-windows/git/releases/down
     Start-Process -Wait -FilePath "Git-Installer.exe" -ArgumentList "/VERYSILENT", "/NORESTART" ; \
     Remove-Item -Force "Git-Installer.exe"
 
-RUN echo 'echo "machine github.com login psrcloud password $PERSONAL_ACCESS_TOKEN" > ~/_netrc' > entrypoint.ps1; \
+RUN echo 'echo "machine github.com login psrcloud password $env:PERSONAL_ACCESS_TOKEN" | Out-File -Append -FilePath "$env:USERPROFILE\.netrc"' > entrypoint.ps1; \
     # clone the repository
-    echo '$repository = (Split-Path -Path $env:GITHUB_REPOSITORY -Leaf) -replace "\\.git$", ""' >> entrypoint.ps1; \
+    echo '$repository = ($url -split \"/\")[-1] -replace \".git$\"' >> entrypoint.ps1; \
     echo 'git clone -n $env:GITHUB_REPOSITORY' >> entrypoint.ps1; \
     echo 'cd $repository' >> entrypoint.ps1; \
     echo 'git checkout $env:GITHUB_SHA' >> entrypoint.ps1; \
@@ -28,6 +28,4 @@ RUN echo 'echo "machine github.com login psrcloud password $PERSONAL_ACCESS_TOKE
     echo '.\compile\compile.bat --development_stage $DEVELOPMENT_STAGE --version_suffix $VERSION_SUFFIX' >> entrypoint.ps1; \
     echo '.\compile\publish.bat --development_stage $DEVELOPMENT_STAGE --version_suffix $VERSION_SUFFIX --overwrite $OVERWRITE' >> entrypoint.ps1
 
-RUN powershell -Command Set-ExecutionPolicy RemoteSigned -Scope Process; ./entrypoint.ps1
-
-CMD ["powershell", "-File", "./entrypoint.ps1"]
+CMD powershell -Command "Start-Sleep -Seconds 600"
