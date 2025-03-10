@@ -18,7 +18,7 @@ function upload_file_to_certificate_server(
 
     t = time()
     response = HTTP.post(url, headers, body, connect_timeout = connect_timeout, retry = true, retries = connect_retries)
-    Log.info("SETUP: Uploaded file to certificate server in $(time() - t) seconds")
+    Log.info("SETUP: Uploaded file to certificate server in $(round(time() - t, digits = 2)) seconds")
 
     if response.status == 200
         regex = match(r"\{\"filename\":\"(.*)\"\}", String(response))
@@ -39,7 +39,7 @@ function download_file_from_server(
 
     t = time()
     response = HTTP.get(url, connect_timeout = connect_timeout, retry = true, retries = connect_retries)
-    Log.info("SETUP: Downloaded file from certificate server in $(time() - t) seconds")
+    Log.info("SETUP: Downloaded file from certificate server in $(round(time() - t, digits = 2)) seconds")
 
     if response.status == 200
         open(setup_exe_path(configuration), "w") do io
