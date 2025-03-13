@@ -126,9 +126,12 @@ function get_ecs_task_exit_code(task_id::AbstractString)
     return response["tasks"][1]["containers"][1]["exitCode"]
 end
 
-function get_ecs_log_stream(log_stream_name::AbstractString, next_token::Union{AbstractString, Nothing} = nothing)
+function get_ecs_log_stream(task_definition::AbstractString, task_id::AbstractString ,next_token::Union{AbstractString, Nothing} = nothing)
+    log_group_name = "/ecs/$task_definition"
+    log_stream_name = "ecs/$task_definition/$task_id"
+    
     params = Dict(
-        "logGroupName" => "/ecs/julia-publish",
+        "logGroupName" => log_group_name,
         "startFromHead" => true,
     )
     if next_token !== nothing
@@ -178,7 +181,7 @@ function start_ecs_task_and_watch(;
                 Log.info("ECS: Task $task_id finished")
                 break
             elseif status == "RUNNING"
-                next_token = get_ecs_log_stream("ecs/$task_definition/$task_id", next_token)
+                next_token = get_ecs_log_stream(task_definition, task_id, next_token)
             end
 
             sleep(1)
