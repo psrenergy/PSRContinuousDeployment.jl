@@ -23,7 +23,7 @@ function get_task_definition(os::String)
     if os == "windows"
         return "julia-publish-windows"
     elseif os == "linux"
-        return "julia_publish"
+        return "julia-publish-linux"
     else
         Log.fatal_error("Unsupported operating system ($os)")
     end
