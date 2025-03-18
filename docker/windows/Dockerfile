@@ -25,4 +25,4 @@ RUN echo '$repository = ($env:GITHUB_REPOSITORY -split \"/\"| Select-Object -Las
     echo '.\compile\compile.bat --development_stage $DEVELOPMENT_STAGE --version_suffix $VERSION_SUFFIX' >> entrypoint.ps1; \
     echo '.\compile\publish.bat --development_stage $DEVELOPMENT_STAGE --version_suffix $VERSION_SUFFIX --overwrite $OVERWRITE' >> entrypoint.ps1
 
-ENTRYPOINT ["powershell", "-File", "entrypoint.ps1"] 
+CMD powershell -File entrypoint.ps1
