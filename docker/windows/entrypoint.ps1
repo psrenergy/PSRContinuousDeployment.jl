@@ -1,7 +1,9 @@
 # set credentials and clone repository
-$repository = ($env:GITHUB_REPOSITORY -split "/"| Select-Object -Last 1)
-git clone -n ("https://psrcloud:" + "$env:PERSONAL_ACCESS_TOKEN@github.com/" + $env:GITHUB_REPOSITORY + ".git") $repositor
-Set-Location $repository
+# Write-Output $env:GITHUB_REPOSITORY
+# git clone -n ("https://psrcloud:" + "$env:PERSONAL_ACCESS_TOKEN" + "@github.com/" + $env:GITHUB_REPOSITORY + ".git") $repository
+# git clone -n $env:GITHUB_REPOSITORY "repository"
+git clone -n ("https://psrcloud:" + "$env:PERSONAL_ACCESS_TOKEN" + "@github.com/psrenergy/SCE.jl.git") "repository"
+Set-Location "repository"
 git checkout $env:GITHUB_SHA
 
 # get the julia version
@@ -17,6 +19,6 @@ Expand-Archive -Path julia-$JULIA_VERSION-win64.zip -DestinationPath .
 Set-Item env:JULIA_$JULIA_VERSION_ENV "$((Get-Location).Path)\julia-$($JULIA_VERSION)\bin\julia.exe"
 
 # compile and publish
-$env:JULIA_PKG_USE_CLI_GIT=$true
+Set-Item env:JULIA_PKG_USE_CLI_GIT "true"
 .\compile\compile.bat --development_stage $DEVELOPMENT_STAGE --version_suffix $VERSION_SUFFIX
 .\compile\publish.bat --development_stage $DEVELOPMENT_STAGE --version_suffix $VERSION_SUFFIX --overwrite $OVERWRITE

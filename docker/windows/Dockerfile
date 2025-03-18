@@ -8,4 +8,4 @@ RUN Invoke-WebRequest -Uri "https://github.com/git-for-windows/git/releases/down
 
 COPY entrypoint.ps1 C:/entrypoint.ps1
 
-ENTRYPOINT ["powershell", "C:/entrypoint.ps1"]
+ENTRYPOINT ["powershell", "-NoExit", "-Command", "C:/entrypoint.ps1"]
