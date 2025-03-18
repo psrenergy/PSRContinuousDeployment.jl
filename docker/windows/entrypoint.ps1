@@ -1,8 +1,3 @@
-get-content .env | foreach {
-    $name, $value = $_.split('=')
-    set-content env:\$name $value
-}
-
 # set credentials and clone repository
 $repository = ($env:GITHUB_REPOSITORY -split "/"| Select-Object -Last 1)
 git clone -n ("https://psrcloud:" + "$env:PERSONAL_ACCESS_TOKEN@github.com/" + $env:GITHUB_REPOSITORY + ".git") $repositor
