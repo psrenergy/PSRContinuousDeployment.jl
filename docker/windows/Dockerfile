@@ -6,6 +6,6 @@ RUN Invoke-WebRequest -Uri "https://github.com/git-for-windows/git/releases/down
     Start-Process -Wait -FilePath "Git-Installer.exe" -ArgumentList "/VERYSILENT", "/NORESTART" ; \
     Remove-Item -Force "Git-Installer.exe"
 
-COPY entrypoint.ps1 entrypoint.ps1
+COPY entrypoint.ps1 C:/entrypoint.ps1
 
-ENTRYPOINT ["powershell", "entrypoint.ps1"]
+ENTRYPOINT ["powershell", "C:/entrypoint.ps1"]

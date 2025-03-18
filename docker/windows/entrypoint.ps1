@@ -1,6 +1,6 @@
-# clone repo
-$repository = ($env:GITHUB_REPOSITORY -split "/"| Select-Object -Last 1) -replace ".git$", ""
+# set credentials and clone repository
 git clone -n ($env:GITHUB_REPOSITORY.Substring(0,8) + "psrcloud:" + "$env:PERSONAL_ACCESS_TOKEN@" + $env:GITHUB_REPOSITORY.Substring(8))
+$repository = ($env:GITHUB_REPOSITORY -split "/"| Select-Object -Last 1) -replace ".git$", ""
 Set-Location $repository
 git checkout $env:GITHUB_SHA
 
@@ -10,9 +10,9 @@ if ((Get-Content Manifest.toml -Raw) -match 'julia_version\s*=\s*"([^"]+)"') { $
 # setup julia
 $JULIA_VERSION_SHORT = ($JULIA_VERSION -split "\.")[0,1] -join "."
 $JULIA_VERSION_ENV = $JULIA_VERSION -replace "\.", ""
+
 $ProgressPreference = "SilentlyContinue"
-Invoke-WebRequest -Uri "https://julialang-s3.julialang.org/bin/winnt/x64/$JULIA_VERSION_SHORT/julia-$JULIA_VERSION-win64.zip" 
--OutFile julia-$JULIA_VERSION-win64.zip -UseBasicParsing
+Invoke-WebRequest -Uri "https://julialang-s3.julialang.org/bin/winnt/x64/$JULIA_VERSION_SHORT/julia-$JULIA_VERSION-win64.zip" -OutFile julia-$JULIA_VERSION-win64.zip -UseBasicParsing
 Expand-Archive -Path julia-$JULIA_VERSION-win64.zip -DestinationPath .
 Set-Item env:JULIA_$JULIA_VERSION_ENV "$((Get-Location).Path)\julia-$($JULIA_VERSION)\bin\julia.exe"
 
