@@ -5,9 +5,8 @@ set -e
 echo "machine github.com login psrcloud password $PERSONAL_ACCESS_TOKEN" > ~/.netrc
 
 # clone the repository
-repository=$(basename "$GITHUB_REPOSITORY" .git)
-git clone -n "$GITHUB_REPOSITORY" "$repository"
-cd "$repository"
+git clone -n "$GITHUB_REPOSITORY" "model"
+cd "model"
 git checkout "$GITHUB_SHA"
 
 # get the julia version
