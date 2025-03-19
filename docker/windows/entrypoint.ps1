@@ -1,8 +1,14 @@
 # set credentials and clone repository
-# Write-Output $env:GITHUB_REPOSITORY
 # git clone -n ("https://psrcloud:" + "$env:PERSONAL_ACCESS_TOKEN" + "@github.com/" + $env:GITHUB_REPOSITORY + ".git") $repository
 # git clone -n $env:GITHUB_REPOSITORY "repository"
-git clone -n ("https://psrcloud:" + "$env:PERSONAL_ACCESS_TOKEN" + "@github.com/psrenergy/SCE.jl.git") "repository"
+
+Write-Output $env:GITHUB_REPOSITORY
+
+git config --global user.name psrcloud
+git config --global user.password $env:PERSONAL_ACCESS_TOKEN
+git config --global url."https://psrcloud:${$env:PERSONAL_ACCESS_TOKEN}@github.com".insteadOf "https://github.com"
+
+git clone -n ("https://github.com/psrenergy/SCE.jl.git") "repository"
 Set-Location "repository"
 git checkout $env:GITHUB_SHA
 
