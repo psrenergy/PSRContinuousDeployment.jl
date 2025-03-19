@@ -1,9 +1,7 @@
-@enumx DevelopmentStage PreAlpha Alpha Beta ReleaseCandidate StableRelease
+@enumx DevelopmentStage Alpha Beta ReleaseCandidate StableRelease
 
 function Base.string(development_stage::DevelopmentStage.T)
-    if development_stage == DevelopmentStage.PreAlpha
-        return "prealpha"
-    elseif development_stage == DevelopmentStage.Alpha
+    if development_stage == DevelopmentStage.Alpha
         return "alpha"
     elseif development_stage == DevelopmentStage.Beta
         return "beta"
@@ -19,9 +17,7 @@ end
 function Base.parse(::Type{DevelopmentStage.T}, string::String)
     lowercase_string = lowercase(string)
 
-    if lowercase_string == "pre alpha"
-        return DevelopmentStage.PreAlpha
-    elseif lowercase_string == "alpha"
+    if lowercase_string == "alpha"
         return DevelopmentStage.Alpha
     elseif lowercase_string == "beta"
         return DevelopmentStage.Beta
