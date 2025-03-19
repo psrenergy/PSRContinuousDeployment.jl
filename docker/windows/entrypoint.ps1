@@ -1,15 +1,13 @@
 # set credentials and clone repository
-# git clone -n ("https://psrcloud:" + "$env:PERSONAL_ACCESS_TOKEN" + "@github.com/" + $env:GITHUB_REPOSITORY + ".git") $repository
-# git clone -n $env:GITHUB_REPOSITORY "repository"
+$username = "psrcloud"
+$token = $env:PERSONAL_ACCESS_TOKEN
 
-Write-Output $env:GITHUB_REPOSITORY
+git config --global user.name $username
+git config --global user.password $token
+git config --global url."https://${username}:${token}@github.com".insteadOf "https://github.com"
 
-git config --global user.name psrcloud
-git config --global user.password $env:PERSONAL_ACCESS_TOKEN
-git config --global url."https://psrcloud:${$env:PERSONAL_ACCESS_TOKEN}@github.com".insteadOf "https://github.com"
-
-git clone -n ("https://github.com/psrenergy/SCE.jl.git") "repository"
-Set-Location "repository"
+git clone -n $env:GITHUB_REPOSITORY "model"
+Set-Location "model"
 git checkout $env:GITHUB_SHA
 
 # get the julia version
