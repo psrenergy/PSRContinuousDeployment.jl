@@ -1,4 +1,4 @@
-# set credentials and clone repository
+# set the credentials
 $username = "psrcloud"
 $token = $env:PERSONAL_ACCESS_TOKEN
 
@@ -6,12 +6,13 @@ git config --global user.name $username
 git config --global user.password $token
 git config --global url."https://${username}:${token}@github.com".insteadOf "https://github.com"
 
+# clone the repository
 git clone -n $env:GITHUB_REPOSITORY "model"
 Set-Location "model"
 git checkout $env:GITHUB_SHA
 
 # get the julia version
-if ((Get-Content Manifest.toml -Raw) -match 'julia_version\s*=\s*"([^"]+)"') { $JULIA_VERSION = $Matches[1] }
+if ((Get-Content Manifest.toml -Raw) -match 'julia_version\s*=\s*"([^"]+)"') { $JULIA_VERSION = $Matches[1] } else { throw "julia_version not found in Manifest.toml" }
 
 # setup julia
 $JULIA_VERSION_SHORT = ($JULIA_VERSION -split "\.")[0,1] -join "."
