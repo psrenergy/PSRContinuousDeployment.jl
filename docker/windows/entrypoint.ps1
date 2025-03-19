@@ -30,8 +30,8 @@ try {
 
     # compile and publish
     Set-Item env:JULIA_PKG_USE_CLI_GIT "true"
-    .\compile\compile.bat --development_stage $DEVELOPMENT_STAGE --version_suffix $VERSION_SUFFIX
-    .\compile\publish.bat --development_stage $DEVELOPMENT_STAGE --version_suffix $VERSION_SUFFIX --overwrite $OVERWRITE
+    .\compile\compile.bat --development_stage $env:DEVELOPMENT_STAGE --version_suffix $env:VERSION_SUFFIX
+    .\compile\publish.bat --development_stage $env:DEVELOPMENT_STAGE --version_suffix $env:VERSION_SUFFIX --overwrite $env:OVERWRITE
 } catch {
     Write-Error "An error occurred: $_"
     exit 1
