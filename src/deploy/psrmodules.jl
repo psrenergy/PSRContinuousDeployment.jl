@@ -74,5 +74,5 @@ function deploy_to_psrmodules(;
 
     Log.info("PSRMODULES: Success")
 
-    return nothing
+    return "https://$bucket.psr-inc.com/$target/$version.zip"
 end
