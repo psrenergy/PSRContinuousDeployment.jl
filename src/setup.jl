@@ -1,5 +1,6 @@
 function create_setup(
     configuration::Configuration;
+    inno_id::Union{Nothing, AbstractString} = nothing,
     password::Union{Nothing, AbstractString} = nothing,
     setup_icon::Union{Nothing, AbstractString} = nothing,
     sign::Bool = true,
@@ -17,9 +18,12 @@ function create_setup(
     setup_path = configuration.setup_path
     url = "http://www.psr-inc.com"
 
-    # Build id from target and version
-    rng = Random.MersenneTwister(hash("$target$version"))
-    id = UUIDs.uuid4(rng) |> string |> uppercase
+    id = if isnothing(inno_id)
+        rng = Random.MersenneTwister(hash("$target$version"))    
+        UUIDs.uuid4(rng) |> string |> uppercase
+    else
+        inno_id
+    end
 
     if !isdir(setup_path)
         Log.info("SETUP: Creating setup directory")
