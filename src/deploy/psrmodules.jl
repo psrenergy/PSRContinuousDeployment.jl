@@ -1,10 +1,10 @@
-function deploy_to_psrmodules(
+function deploy_to_psrmodules(;
     configuration::Configuration,
-    aws_access_key::AbstractString,
-    aws_secret_key::AbstractString,
     stable_release::Bool;
     overwrite::Bool = false,
 )
+    initialize_aws()
+
     bucket = "psr-update-modules"
 
     target = configuration.target
@@ -20,10 +20,6 @@ function deploy_to_psrmodules(
     Log.info("PSRMODULES: Zipping the $setup_exe")
     run(`$(p7zip_jll.p7zip()) a -tzip $setup_zip_path $setup_exe_path`)
     @assert isfile(setup_zip_path)
-
-    aws_credentials = AWSCredentials(aws_access_key, aws_secret_key)
-    aws_config = AWSConfig(; creds = aws_credentials, region = "us-east-1")
-    global_aws_config(aws_config)
 
     if stable_release
         Log.info("PSRMODULES: Downloading the $target/releases.txt")
