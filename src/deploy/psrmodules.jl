@@ -11,6 +11,8 @@ function deploy_to_psrmodules(;
     version = configuration.version
     setup_path = configuration.setup_path
 
+    mv(joinpath(configuration.setup_path, "$target-$version-win64.exe"), joinpath(configuration.setup_path, "$target-$version-setup.exe"))
+
     setup_exe = "$target-$version-setup.exe"
     setup_exe_path = joinpath(setup_path, setup_exe)
 
