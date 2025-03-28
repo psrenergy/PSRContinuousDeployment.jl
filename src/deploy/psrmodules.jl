@@ -72,6 +72,11 @@ function deploy_to_psrmodules(;
     Log.info("PSRMODULES: Uploading the $setup_zip")
     S3.put_object(bucket, "$target/$setup_zip", Dict("body" => read(setup_zip_path)))
 
+    if stable_release
+        Log.info("PSRMODULES: Uploading the latest version")
+        S3.put_object(bucket, "$target/$target-last-setup.exe", Dict("body" => read(setup_exe_path)))
+    end
+
     Log.info("PSRMODULES: Success")
 
     return "https://$bucket.psr-inc.com/$target/$version.zip"
