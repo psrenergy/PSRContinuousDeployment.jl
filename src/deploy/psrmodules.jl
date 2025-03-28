@@ -1,6 +1,6 @@
 function deploy_to_psrmodules(;
     configuration::Configuration,
-    stable_release::Bool;
+    stable_release::Bool,
     overwrite::Bool = false,
 )
     initialize_aws()
