@@ -1,5 +1,8 @@
 Set-StrictMode -Version Latest
 
+$ErrorActionPreference = 'Stop'
+$PSNativeCommandUseErrorActionPreference = $true
+
 try {
     # set the credentials
     $username = "psrcloud"
