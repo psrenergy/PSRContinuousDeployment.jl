@@ -80,13 +80,6 @@ function create_setup(
         writeln(f, "[InstallDelete]")
         writeln(f, "Type: filesandordirs; Name: {app}\\*")
         writeln(f, "")
-        writeln(f, "[Icons]")
-        if icons_entry === nothing
-            writeln(f, "Name: {commondesktop}\\$target; Filename: {app}\\$target.exe; WorkingDir: {app}")
-        else
-            writeln(f, icons_entry)
-        end
-        writeln(f, "")
         writeln(f, "[Registry]")
         writeln(f, "Root: HKLM64; Subkey: SOFTWARE\\PSR\\$target\\0.0.x\\; ValueType: string; ValueName: Path; ValueData: {app}; Flags: uninsdeletekey")
         writeln(f, "")
