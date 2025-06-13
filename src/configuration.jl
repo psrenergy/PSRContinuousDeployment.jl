@@ -17,7 +17,7 @@ struct Configuration
         build_path::AbstractString,
         setup_path::AbstractString,
         development_stage::DevelopmentStage.T,
-        owner_and_repository::AbstractString="psrenergy/$target.jl",
+        owner_and_repository::AbstractString = "psrenergy/$target.jl",
     )
         level = Dict("Debug Level" => "debug", "Debug" => "debug", "Info" => "info", "Warn" => "warn", "Error" => "error", "Fatal Error" => "error")
         color = Dict("Debug Level" => :normal, "Debug" => :cyan, "Info" => :cyan, "Warn" => :yellow, "Error" => :red, "Fatal Error" => :red)

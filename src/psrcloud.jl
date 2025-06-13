@@ -12,12 +12,13 @@ function prepare_psrcloud(;
         executable_path = joinpath(bin_path, executable_filename)
         open(executable_path, "w") do file
             print(file, executable_content)
+            return nothing
         end
     end
 
     chmod(bin_path, 0o755)
 
-    zip_path = mktempdir() 
+    zip_path = mktempdir()
     zip(bin_path, joinpath(zip_path, "psrcloud.zip"))
     return zip_path
 end
