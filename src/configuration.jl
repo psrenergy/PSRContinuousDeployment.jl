@@ -7,6 +7,7 @@ struct Configuration
     setup_path::String
     development_stage::DevelopmentStage.T
     certificate_server_url::String
+    repository_url::String
 
     function Configuration(;
         target::AbstractString,
@@ -16,6 +17,7 @@ struct Configuration
         build_path::AbstractString,
         setup_path::AbstractString,
         development_stage::DevelopmentStage.T,
+        repository_address::AbstractString="psrenergy/$target.jl",
     )
         level = Dict("Debug Level" => "debug", "Debug" => "debug", "Info" => "info", "Warn" => "warn", "Error" => "error", "Fatal Error" => "error")
         color = Dict("Debug Level" => :normal, "Debug" => :cyan, "Info" => :cyan, "Warn" => :yellow, "Error" => :red, "Fatal Error" => :red)
@@ -38,6 +40,7 @@ struct Configuration
             setup_path,
             development_stage,
             "http://hannover.local.psrservices.net:5000",
+            repository_address,
         )
     end
 end
