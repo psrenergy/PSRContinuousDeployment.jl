@@ -17,12 +17,11 @@ struct Configuration
         build_path::AbstractString,
         setup_path::AbstractString,
         development_stage::DevelopmentStage.T,
-        repository_address::Union{Nothing,AbstractString}=nothing,
+        repository_address::AbstractString="psrenergy/$target.jl",
     )
         level = Dict("Debug Level" => "debug", "Debug" => "debug", "Info" => "info", "Warn" => "warn", "Error" => "error", "Fatal Error" => "error")
         color = Dict("Debug Level" => :normal, "Debug" => :cyan, "Info" => :cyan, "Warn" => :yellow, "Error" => :red, "Fatal Error" => :red)
         background = Dict("Debug Level" => false, "Debug" => false, "Info" => false, "Warn" => false, "Error" => false, "Fatal Error" => true)
-        repo_address= isnothing(repository_address) ? "psrenergy/$target.jl" : repository_address
 
         Log.create_polyglot_logger(
             joinpath(compile_path, "$target.log"),
@@ -41,7 +40,7 @@ struct Configuration
             setup_path,
             development_stage,
             "http://hannover.local.psrservices.net:5000",
-            repo_address,
+            repository_address,
         )
     end
 end
