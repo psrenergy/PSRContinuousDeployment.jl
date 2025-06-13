@@ -13,7 +13,8 @@ function create_release(configuration::Configuration, token::AbstractString)
     )
 
     target = configuration.target
-    response = HTTP.post("https://api.github.com/repos/psrenergy/$target.jl/releases", headers, JSON.json(data))
+    repo_address = configuration.repository_address
+    response = HTTP.post("https://api.github.com/repos/$repo_address/releases", headers, JSON.json(data))
 
     if response.status == 201
         Log.info("GITHUB: Success")
@@ -32,10 +33,11 @@ function is_release_tag_available(configuration::Configuration, token::AbstractS
     ]
 
     target = configuration.target
+    repo_address = configuration.repository_address
     version = VersionNumber(configuration.version.major, configuration.version.minor, configuration.version.patch)
 
     try
-        HTTP.get("https://api.github.com/repos/psrenergy/$target.jl/releases/tags/v$version", headers)
+        HTTP.get("https://api.github.com/repos/$repo_address/releases/tags/v$version", headers)
         return false
     catch
         return true
