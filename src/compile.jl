@@ -50,6 +50,14 @@ function compile(
         Log.info("COMPILE: memory total $total_memory MB")
     end
 
+    sysimage_build_args = Vector{String}([
+        "--strip-metadata",
+        # "--strip-ir",
+        # "--compile=all",
+        # "--experimental",
+        # "--trim",
+    ])
+
     PackageCompiler.create_app(
         package_path,
         build_path,
@@ -60,12 +68,7 @@ function compile(
         force = true,
         include_lazy_artifacts = include_lazy_artifacts,
         include_transitive_dependencies = include_transitive_dependencies,
-        sysimage_build_args =
-        Cmd([
-            "--strip-metadata",
-            # "--strip-ir",
-            # "--compile=all",
-        ]),
+        sysimage_build_args = Cmd(sysimage_build_args),
         kwargs...,
     )
 
