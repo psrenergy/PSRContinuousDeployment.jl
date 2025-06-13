@@ -12,9 +12,8 @@ function create_release(configuration::Configuration, token::AbstractString)
         "make_latest" => "true",
     )
 
-    target = configuration.target
-    repo_address = configuration.repository_address
-    response = HTTP.post("https://api.github.com/repos/$repo_address/releases", headers, JSON.json(data))
+    owner_and_repository = configuration.owner_and_repository
+    response = HTTP.post("https://api.github.com/repos/$owner_and_repository/releases", headers, JSON.json(data))
 
     if response.status == 201
         Log.info("GITHUB: Success")
@@ -32,12 +31,11 @@ function is_release_tag_available(configuration::Configuration, token::AbstractS
         "X-GitHub-Api-Version" => "2022-11-28",
     ]
 
-    target = configuration.target
-    repo_address = configuration.repository_address
+    owner_and_repository = configuration.owner_and_repository
     version = VersionNumber(configuration.version.major, configuration.version.minor, configuration.version.patch)
 
     try
-        HTTP.get("https://api.github.com/repos/$repo_address/releases/tags/v$version", headers)
+        HTTP.get("https://api.github.com/repos/$owner_and_repository/releases/tags/v$version", headers)
         return false
     catch
         return true
