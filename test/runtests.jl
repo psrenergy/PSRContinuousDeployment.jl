@@ -32,30 +32,30 @@ function testall()
         skip_version_jl = true,
     )
 
-    # binary_path =
-    #     if Sys.iswindows()
-    #         create_setup(
-    #             configuration,
-    #             sign = false,
-    #         )
-    #     else
-    #         create_zip(
-    #             configuration,
-    #         )
-    #     end
+    binary_path =
+        if Sys.iswindows()
+            create_setup(
+                configuration,
+                sign = false,
+            )
+        else
+            create_zip(
+                configuration,
+            )
+        end
 
-    # url = deploy_to_psrmodels(
-    #     configuration = configuration,
-    #     path = binary_path,
-    #     overwrite = true,
-    # )
+    url = deploy_to_psrmodels(
+        configuration = configuration,
+        path = binary_path,
+        overwrite = true,
+    )
 
-    # notify_slack_channel(
-    #     configuration = configuration,
-    #     slack_token = SLACK_TOKEN,
-    #     channel = SLACK_CHANNEL,
-    #     url = url,
-    # )
+    notify_slack_channel(
+        configuration = configuration,
+        slack_token = SLACK_TOKEN,
+        channel = SLACK_CHANNEL,
+        url = url,
+    )
 
     return 0
 end
