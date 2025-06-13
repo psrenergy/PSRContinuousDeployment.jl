@@ -19,7 +19,7 @@ function create_setup(
     url = "http://www.psr-inc.com"
 
     id = if isnothing(inno_id)
-        rng = Random.MersenneTwister(hash("$target$version"))    
+        rng = Random.MersenneTwister(hash("$target$version"))
         UUIDs.uuid4(rng) |> string |> uppercase
     else
         inno_id

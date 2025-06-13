@@ -7,6 +7,7 @@ const SLACK_TOKEN = ENV["SLACK_BOT_USER_OAUTH_ACCESS_TOKEN"]
 
 function testall()
     package_path = joinpath(@__DIR__, "Example.jl")
+    assets_path = joinpath(package_path, "compile", "assets")
     database_path = joinpath(package_path, "database")
 
     configuration = build_configuration(
@@ -26,7 +27,7 @@ function testall()
             database_path,
         ],
         windows_additional_files_path = [
-            joinpath(package_path, "Example.bat"),
+            joinpath(assets_path, "Example.bat"),
         ],
         skip_version_jl = true,
     )

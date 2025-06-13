@@ -14,7 +14,7 @@ function get_ecs_parameters(memory_in_gb::Integer)
         return 2048, 16384
     elseif memory_in_gb == 32
         return 8192, 32768
-    else 
+    else
         Log.fatal_error("ECS: Unsupported memory size ($memory_in_gb GB)")
     end
 end
@@ -126,10 +126,10 @@ function get_ecs_task_exit_code(task_id::AbstractString)
     return response["tasks"][1]["containers"][1]["exitCode"]
 end
 
-function get_ecs_log_stream(task_definition::AbstractString, task_id::AbstractString ,next_token::Union{AbstractString, Nothing} = nothing)
+function get_ecs_log_stream(task_definition::AbstractString, task_id::AbstractString, next_token::Union{AbstractString, Nothing} = nothing)
     log_group_name = "/ecs/$task_definition"
     log_stream_name = "ecs/$task_definition/$task_id"
-    
+
     params = Dict(
         "logGroupName" => log_group_name,
         "startFromHead" => true,

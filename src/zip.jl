@@ -19,9 +19,11 @@ end
 function zip(path::AbstractString, destination::AbstractString)
     Log.info("ZIP: Zipping $path to $destination")
     run(`$(p7zip_jll.p7zip()) a -tzip $destination $path`)
+    return nothing
 end
 
 function unzip(path::AbstractString, destination::AbstractString)
     Log.info("ZIP: Unzipping $path to $destination")
     run(`$(p7zip_jll.p7zip()) x -o$destination $path`)
+    return nothing
 end
