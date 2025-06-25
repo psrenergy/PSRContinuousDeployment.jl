@@ -11,14 +11,7 @@ function deploy_to_psrmodules(;
     version = configuration.version
     setup_path = configuration.setup_path
 
-    previous_filename = joinpath(configuration.setup_path, "$target-$version-win64.exe")
-    updated_filename = joinpath(configuration.setup_path, "$target-$version-setup.exe")
-
-    # using mv here raised IOError: $(previous_filename): resource busy or locked (EBUSY)
-    # so we copy the file and then remove with a pause in between as a workaround
-    cp(previous_filename, updated_filename)
-    sleep(1)
-    rm(previous_filename)
+    mv(joinpath(configuration.setup_path, "$target-$version-win64.exe"), joinpath(configuration.setup_path, "$target-$version-setup.exe"))
 
     setup_exe = "$target-$version-setup.exe"
     setup_exe_path = joinpath(setup_path, setup_exe)
