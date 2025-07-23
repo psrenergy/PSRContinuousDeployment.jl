@@ -9,6 +9,9 @@ git clone --recurse-submodules -n "$GITHUB_REPOSITORY" "model"
 cd "model"
 git checkout "$GITHUB_SHA"
 
+# ensure submodules are initialized and updated
+git submodule update --init --recursive
+
 # get the julia version
 JULIA_VERSION=$(grep '^julia_version\s*=' Manifest.toml | sed -E 's/^julia_version\s*=\s*"([^"]*)".*/\1/')
 

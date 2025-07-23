@@ -16,6 +16,9 @@ try {
     Set-Location "model"
     git checkout $env:GITHUB_SHA
 
+    # ensure submodules are initialized and updated
+    git submodule update --init --recursive
+
     # get the julia version
     if ((Get-Content Manifest.toml -Raw) -match 'julia_version\s*=\s*"([^"]+)"') {
         $JULIA_VERSION = $Matches[1]
