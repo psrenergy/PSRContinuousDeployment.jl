@@ -12,7 +12,7 @@ try {
     git config --global url."https://${username}:${token}@github.com".insteadOf "https://github.com"
 
     # clone the repository
-    git clone -n $env:GITHUB_REPOSITORY "model"
+    git clone --recurse-submodules -n $env:GITHUB_REPOSITORY "model"
     Set-Location "model"
     git checkout $env:GITHUB_SHA
 

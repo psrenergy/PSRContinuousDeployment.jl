@@ -5,7 +5,7 @@ set -e
 echo "machine github.com login psrcloud password $PERSONAL_ACCESS_TOKEN" > ~/.netrc
 
 # clone the repository
-git clone -n "$GITHUB_REPOSITORY" "model"
+git clone --recurse-submodules -n "$GITHUB_REPOSITORY" "model"
 cd "model"
 git checkout "$GITHUB_SHA"
 
