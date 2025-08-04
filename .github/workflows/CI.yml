@@ -12,7 +12,7 @@ concurrency:
 jobs:
   test-windows:
     name: Test Windows
-    runs-on: self-hosted
+    runs-on: [self-hosted, windows]
     steps:
       - name: Initialize instance
         run: |
