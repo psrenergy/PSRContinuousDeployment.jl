@@ -11,6 +11,10 @@ RUN Invoke-WebRequest -Uri "https://github.com/PowerShell/PowerShell/releases/do
     Start-Process -Wait -FilePath "msiexec.exe" -ArgumentList "/i", "pwsh.msi", "/qn" ; \
     Remove-Item -Force "pwsh.msi"
 
+RUN Invoke-WebRequest -Uri "https://install.julialang.org/Julia-x64.msi" -OutFile "julia.msi" ; \
+    Start-Process -Wait -FilePath "msiexec.exe" -ArgumentList "/i", "julia.msi", "ALLUSERS=1", "/qn" ; \
+    Remove-Item -Force "julia.msi"    
+
 WORKDIR C:/psr
 
 COPY entrypoint.ps1 .
