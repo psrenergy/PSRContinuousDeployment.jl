@@ -11,6 +11,8 @@ RUN yum update -y && \
 
 RUN curl -fsSL https://install.julialang.org | sh -s -- -y
 
+ENV PATH="/root/.juliaup/bin:${PATH}"
+
 COPY entrypoint.sh .
 
 RUN chmod +x entrypoint.sh
