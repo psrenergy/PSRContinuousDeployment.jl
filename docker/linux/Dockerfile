@@ -6,7 +6,12 @@ RUN yum update -y && \
     yum install wget tar -y && \
     yum groupinstall "Development Tools" -y && \
     yum remove libstdc++-devel -y && \
-    yum install libstdc++-devel -y
+    yum install libstdc++-devel -y \
+    yum install curl -y
+
+RUN curl -fsSL https://install.julialang.org | sh -s -- -y
+
+ENV PATH="/root/.juliaup/bin:${PATH}"
 
 COPY entrypoint.sh .
 

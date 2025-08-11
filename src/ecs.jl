@@ -184,7 +184,7 @@ function start_ecs_task_and_watch(;
                 next_token = get_ecs_log_stream(task_definition, task_id, next_token)
             end
 
-            sleep(1)
+            sleep(60)
         end
     catch e
         if e isa InterruptException

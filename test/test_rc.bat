@@ -1,7 +1,7 @@
 @echo off
 
 SET BASEPATH=%~dp0
-SET JULIA=1.11
+SET JULIA=rc
 
 DEL /Q "%BASEPATH%\..\Manifest.toml"
 
