@@ -3,8 +3,9 @@ Pkg.instantiate()
 
 using JuliaFormatter
 
-for _ in 1:3
-    format(dirname(@__DIR__))
+if format(dirname(@__DIR__))
+    exit(0)
+else
+    @error "Some files have not been formatted!"
+    exit(1)
 end
-
-println("Done formatting")
