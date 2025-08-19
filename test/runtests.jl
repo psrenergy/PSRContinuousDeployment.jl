@@ -29,6 +29,9 @@ function testall()
         windows_additional_files_path = [
             joinpath(assets_path, "Example.bat"),
         ],
+        linux_additional_files_path = [
+            joinpath(assets_path, "Example.sh"),
+        ],
         skip_version_jl = true,
     )
 
