@@ -42,9 +42,7 @@ function testall()
                 sign = false,
             )
         else
-            create_zip(
-                configuration,
-            )
+            create_zip(configuration = configuration)
         end
 
     url = deploy_to_psrmodels(
