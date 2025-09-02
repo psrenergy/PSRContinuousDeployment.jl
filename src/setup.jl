@@ -7,6 +7,8 @@ function create_setup(
     additional_options::Union{Nothing, AbstractString} = nothing,
     run_entry::Union{Nothing, AbstractString} = nothing,
     icons_entry::Union{Nothing, AbstractString} = nothing,
+    sddp_inno_id::Union{Nothing, AbstractString} = nothing,
+    sddp_tool_path::Union{Nothing, AbstractString} = nothing
 )
     if !Sys.iswindows()
         Log.fatal_error("SETUP: Creating setup file is only supported on Windows")
@@ -49,6 +51,32 @@ function create_setup(
         writeln(f, "AppSupportURL=$url")
         writeln(f, "AppUpdatesURL=$url")
         writeln(f, "DefaultDirName={sd}\\PSR\\$target$version")
+        if !isnothing(sddp_inno_id) && !isnothing(sddp_tool_path)
+            writeln(f, "")
+            writeln(f, "[Code]")
+            inno_code = """
+            procedure InitializeWizard();
+            var
+              OtherAppPath: string;
+              UninstallKey: string;
+              OtherAppId: string;
+            begin
+              OtherAppId := '$(sddp_inno_id)';
+              UninstallKey := 'Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{' + OtherAppId + '}_is1';
+
+              if not RegQueryStringValue(HKLM, UninstallKey, 'InstallLocation', OtherAppPath) then
+              begin
+                RegQueryStringValue(HKCU, UninstallKey, 'InstallLocation', OtherAppPath);
+              end;
+
+              if OtherAppPath <> '' then
+              begin
+                WizardForm.DirEdit.Text := AddBackslash(OtherAppPath) + '$(sddp_tool_path)';
+              end;
+            end;
+            """
+            writeln(f, inno_code)
+        end
         writeln(f, "DefaultGroupName=PSR/$target$version")
         writeln(f, "VersionInfoProductName=$target$version")
         writeln(f, "DisableDirPage=no")
