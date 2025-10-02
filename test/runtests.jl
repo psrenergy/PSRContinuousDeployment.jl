@@ -12,7 +12,8 @@ function testall()
 
     configuration = build_configuration(
         package_path = package_path,
-        development_stage = "stable release",
+        development_stage = "beta",
+        version_suffix = "abcd.1234"
     )
 
     if Sys.iswindows()
