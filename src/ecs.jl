@@ -76,12 +76,12 @@ function start_ecs_task(;
             ),
             "overrides" => Dict(
                 "cpu" => string(cpu),
-                "memory" => string(memory),
+                "memory" => string(memory_in_mb),
                 "containerOverrides" => [Dict(
                     "name" => task_definition,
                     "environment" => environment,
                     "cpu" => cpu,
-                    "memory" => memory,
+                    "memory" => memory_in_mb,
                 )],
             ),
         ),
