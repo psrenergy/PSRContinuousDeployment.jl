@@ -49,7 +49,7 @@ function compile(
     total_memory = round(Int, Sys.total_memory() / 2^20)
     Log.info("COMPILE: memory free $free_memory MB")
     Log.info("COMPILE: memory total $total_memory MB")
-    versioninfo(verbose=true)
+    versioninfo(verbose = true)
 
     sysimage_build_args = Vector{String}([
         "--strip-metadata",
