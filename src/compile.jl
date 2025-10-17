@@ -43,12 +43,13 @@ function compile(
         date = read_git_date(package_path)
         build_date = Dates.format(Dates.now(Dates.UTC), dateformat"yyyy-mm-dd HH:MM:SS -0000")
         write_version_jl(src_path, sha1, date, version, build_date)
-
-        free_memory = round(Int, Sys.free_memory() / 2^20)
-        total_memory = round(Int, Sys.total_memory() / 2^20)
-        Log.info("COMPILE: memory free $free_memory MB")
-        Log.info("COMPILE: memory total $total_memory MB")
     end
+
+    free_memory = round(Int, Sys.free_memory() / 2^20)
+    total_memory = round(Int, Sys.total_memory() / 2^20)
+    Log.info("COMPILE: memory free $free_memory MB")
+    Log.info("COMPILE: memory total $total_memory MB")
+    versioninfo(verbose=true)
 
     sysimage_build_args = Vector{String}([
         "--strip-metadata",
