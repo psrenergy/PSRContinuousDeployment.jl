@@ -1,19 +1,13 @@
 const CLUSTER_NAME = "automations"
 
 # https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-cpu-memory-error.html
-function get_ecs_parameters(memory_in_gb::Integer)
-    if memory_in_gb == 1
-        return 256, 1 * 1024
-    elseif memory_in_gb == 2
-        return 256, 2 * 1024
-    elseif memory_in_gb == 4
-        return 512, 4 * 1024
-    elseif memory_in_gb == 8
-        return 1024, 8 * 1024
-    elseif memory_in_gb == 16
-        return 2048, 16 * 1024
-    elseif memory_in_gb == 32
-        return 4096, 30 * 1024
+function get_ecs_cpu(memory_in_gb::Integer)
+    if memory_in_gb <= 8
+        return 1024
+    elseif memory_in_gb <= 16
+        return 2048
+    elseif memory_in_gb <= 32
+        return 4096
     else
         Log.fatal_error("ECS: Unsupported memory size ($memory_in_gb GB)")
     end
@@ -42,7 +36,8 @@ function start_ecs_task(;
 
     repository = readchomp(`git remote get-url origin`)
     sha = readchomp(`git rev-parse HEAD`)
-    cpu, memory = get_ecs_parameters(memory_in_gb)
+    cpu = get_ecs_cpu(memory_in_gb)
+    memory_in_mb = memory_in_gb * 1024
 
     task_definition = get_task_definition(os)
     Log.info("ECS: Task definition: $task_definition")
@@ -75,12 +70,12 @@ function start_ecs_task(;
             ),
             "overrides" => Dict(
                 "cpu" => string(cpu),
-                "memory" => string(memory),
+                "memory" => string(memory_in_mb),
                 "containerOverrides" => [Dict(
                     "name" => task_definition,
                     "environment" => environment,
                     "cpu" => cpu,
-                    "memory" => memory,
+                    "memory" => memory_in_mb,
                 )],
             ),
         ),
