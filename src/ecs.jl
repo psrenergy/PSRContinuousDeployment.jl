@@ -3,17 +3,17 @@ const CLUSTER_NAME = "automations"
 # https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-cpu-memory-error.html
 function get_ecs_parameters(memory_in_gb::Integer)
     if memory_in_gb == 1
-        return 256, 1024
+        return 256, 1000
     elseif memory_in_gb == 2
-        return 256, 2048
+        return 256, 2000
     elseif memory_in_gb == 4
-        return 512, 4096
+        return 512, 4000
     elseif memory_in_gb == 8
-        return 1024, 8192
+        return 1024, 8000
     elseif memory_in_gb == 16
-        return 2048, 16384
+        return 2048, 16000
     elseif memory_in_gb == 32
-        return 8192, 32768
+        return 4096, 30000
     else
         Log.fatal_error("ECS: Unsupported memory size ($memory_in_gb GB)")
     end
