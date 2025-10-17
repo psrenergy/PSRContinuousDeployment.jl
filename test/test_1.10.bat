@@ -4,4 +4,6 @@ SET BASEPATH=%~dp0
 
 DEL /Q "%BASEPATH%\..\Manifest.toml"
 
-CALL "%JULIA_1107%" --project=%BASEPATH%\.. -e "import Pkg; Pkg.test()"
+SET JULIA=1.10
+CALL juliaup add %JULIA%
+CALL julia +%JULIA% --project=%BASEPATH%\.. -e "import Pkg; Pkg.test()"

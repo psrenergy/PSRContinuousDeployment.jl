@@ -5,6 +5,7 @@ using Base: parse, string
 using Dates
 using EnumX
 using HTTP
+using InteractiveUtils
 using JSON
 using PackageCompiler
 using Pkg.PlatformEngines
