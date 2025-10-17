@@ -13,7 +13,7 @@ function testall()
     configuration = build_configuration(
         package_path = package_path,
         development_stage = "beta",
-        version_suffix = "abcd.1234",
+        version_suffix = "Julia.$VERSION",
     )
 
     if Sys.iswindows()
