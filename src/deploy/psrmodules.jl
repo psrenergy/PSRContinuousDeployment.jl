@@ -83,3 +83,12 @@ function deploy_to_psrmodules(;
 
     return "https://$bucket.psr-inc.com/$target/$version.zip"
 end
+
+function copy_to_psrmodules(path::AbstractString, key::AbstractString)
+    initialize_aws()
+
+    bucket = "psr-update-modules"
+    S3.put_object(bucket, key, Dict("body" => read(path)))
+
+    return "https://$bucket.psr-inc.com/$key"
+end
