@@ -15,10 +15,16 @@ function notify_slack_channel(configuration::Configuration, slack_token::Abstrac
 end
 
 function notify_slack_channel(; configuration::Configuration, slack_token::AbstractString, channel::AbstractString, url::AbstractString)
-    Log.info("NOTIFY: Notifying the Slack channel of code $channel")
     target = configuration.target
     version = configuration.version
     message = "$target v$version has been published: $url"
+
+    slack_channel_message(; channel, message, slack_token)
+    return nothing
+end
+
+function slack_channel_message(; channel::AbstractString, message::AbstractString, slack_token::AbstractString = ENV["SLACK_BOT_USER_OAUTH_ACCESS_TOKEN"])
+    Log.info("NOTIFY: Notifying the Slack channel of code $channel")
 
     context = SlackContext(slack_token)
     response = SlackAPI.channel_message(context, channel, message)
