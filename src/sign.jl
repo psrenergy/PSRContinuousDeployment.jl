@@ -6,19 +6,18 @@ function sync_file_with_certificate_server(configuration::Configuration)
     return nothing
 end
 
-function sync_file_with_certificate_server(; path::AbstractString, certificate_server_url::AbstractString)
+function sync_file_with_certificate_server(;
+    path::AbstractString,
+    certificate_server_url::AbstractString,
+)
     filename = upload_file_to_certificate_server(
         path = path,
         certificate_server_url = certificate_server_url,
-        connect_timeout = connect_timeout,
-        connect_retries = connect_retries,
     )
     download_file_from_server(
         path = path,
         filename = filename,
         certificate_server_url = certificate_server_url,
-        connect_timeout = connect_timeout,
-        connect_retries = connect_retries,
     )
     return nothing
 end
