@@ -1,19 +1,38 @@
 function sync_file_with_certificate_server(configuration::Configuration)
-    filename = upload_file_to_certificate_server(configuration)
-    download_file_from_server(configuration, filename)
+    sync_file_with_certificate_server(
+        path = setup_exe_path(configuration),
+        certificate_server_url = configuration.certificate_server_url,
+    )
     return nothing
 end
 
-function upload_file_to_certificate_server(
-    configuration::Configuration;
+function sync_file_with_certificate_server(; path::AbstractString, certificate_server_url::AbstractString)
+    filename = upload_file_to_certificate_server(
+        path = path,
+        certificate_server_url = certificate_server_url,
+        connect_timeout = connect_timeout,
+        connect_retries = connect_retries,
+    )
+    download_file_from_server(
+        path = path,
+        filename = filename,
+        certificate_server_url = certificate_server_url,
+        connect_timeout = connect_timeout,
+        connect_retries = connect_retries,
+    )
+    return nothing
+end
+
+function upload_file_to_certificate_server(;
+    path::AbstractString,
+    certificate_server_url::AbstractString,
     connect_timeout::Integer = CONNECT_TIMEOUT,
     connect_retries::Integer = CONNECT_RETRIES,
 )
-    certificate_server_url = configuration.certificate_server_url
     url = "$certificate_server_url/upload"
 
     headers = []
-    data = ["filename" => "", "file" => open(setup_exe_path(configuration))]
+    data = ["filename" => "", "file" => open(path)]
     body = HTTP.Form(data)
 
     t = time()
@@ -28,13 +47,13 @@ function upload_file_to_certificate_server(
     end
 end
 
-function download_file_from_server(
-    configuration::Configuration,
-    filename::AbstractString;
+function download_file_from_server(;
+    path::AbstractString,
+    filename::AbstractString,
+    certificate_server_url::AbstractString,
     connect_timeout::Integer = CONNECT_TIMEOUT,
     connect_retries::Integer = CONNECT_RETRIES,
 )
-    certificate_server_url = configuration.certificate_server_url
     url = "$certificate_server_url/download/$filename"
 
     t = time()
@@ -42,7 +61,7 @@ function download_file_from_server(
     Log.info("SETUP: Downloaded file from certificate server in $(round(time() - t, digits = 2)) seconds")
 
     if response.status == 200
-        open(setup_exe_path(configuration), "w") do io
+        open(path, "w") do io
             write(io, response.body)
             return nothing
         end
