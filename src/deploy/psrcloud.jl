@@ -61,7 +61,7 @@ function deploy_to_psrcloud(
         return nothing
     end
 
-    open(joinpath(compile_path, "psrcloud.py"), "w") do io
+    open(joinpath(compile_path, "pyproject.toml"), "w") do io
         writeln(io, "[project]")
         writeln(io, "name = \"psrcloud\"")
         writeln(io, "version = \"0.1.0\"")
