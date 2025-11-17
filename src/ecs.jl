@@ -157,6 +157,8 @@ function start_ecs_task_and_watch(;
     )
     task_id = split(task_arn, "/") |> last
 
+    Log.info("ECS: https://us-east-1.console.aws.amazon.com/ecs/v2/clusters/automations/tasks/$task_id/logs?region=us-east-1")
+
     next_token = nothing
     last_status = nothing
 
