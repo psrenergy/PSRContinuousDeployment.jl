@@ -157,13 +157,14 @@ function start_ecs_task_and_watch(;
     )
     task_id = split(task_arn, "/") |> last
 
-    Log.info("ECS: https://us-east-1.console.aws.amazon.com/ecs/v2/clusters/automations/tasks/$task_id/logs?region=us-east-1")
-
     next_token = nothing
     last_status = nothing
 
     task_definition = get_task_definition(os)
     Log.info("ECS: Task definition: $task_definition")
+
+    Log.info("ECS: https://us-east-1.console.aws.amazon.com/ecs/v2/clusters/automations/tasks/$task_id/logs?region=us-east-1")
+    Log.info("ECS: https://us-east-1.console.aws.amazon.com/cloudwatch/home?region=us-east-1#logsV2:log-groups/log-group/%2Fecs%2F$task_definition/log-events/ecs%2F$task_definition%$task_id")
 
     try
         while true
