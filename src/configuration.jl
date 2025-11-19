@@ -61,9 +61,9 @@ function build_configuration(;
     target = project["name"]
 
     version = if isempty(version_suffix)
-        project["version"] * string(development_stage_enum)
+        project["version"] * to_version(development_stage_enum)
     else
-        project["version"] * string(development_stage_enum) * "." * version_suffix
+        project["version"] * to_version(development_stage_enum) * "." * version_suffix
     end
 
     return Configuration(

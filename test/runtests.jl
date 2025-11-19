@@ -12,7 +12,7 @@ function testall()
 
     configuration = build_configuration(
         package_path = package_path,
-        development_stage = "beta",
+        development_stage = "release candidate",
         version_suffix = "Julia.$VERSION",
     )
 

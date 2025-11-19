@@ -1,6 +1,6 @@
 @enumx DevelopmentStage PreAlpha Alpha Beta ReleaseCandidate StableRelease
 
-function Base.string(development_stage::DevelopmentStage.T)
+function to_version(development_stage::DevelopmentStage.T)
     if development_stage == DevelopmentStage.PreAlpha
         return "prealpha"
     elseif development_stage == DevelopmentStage.Alpha
@@ -9,6 +9,22 @@ function Base.string(development_stage::DevelopmentStage.T)
         return "beta"
     elseif development_stage == DevelopmentStage.ReleaseCandidate
         return "rc"
+    elseif development_stage == DevelopmentStage.StableRelease
+        return ""
+    else
+        error("Invalid development stage ($development_stage)")
+    end
+end
+
+function Base.string(development_stage::DevelopmentStage.T)
+    if development_stage == DevelopmentStage.PreAlpha
+        return "pre alpha"
+    elseif development_stage == DevelopmentStage.Alpha
+        return "alpha"
+    elseif development_stage == DevelopmentStage.Beta
+        return "beta"
+    elseif development_stage == DevelopmentStage.ReleaseCandidate
+        return "release candidate"
     elseif development_stage == DevelopmentStage.StableRelease
         return ""
     else
