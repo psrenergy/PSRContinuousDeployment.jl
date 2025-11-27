@@ -33,7 +33,7 @@ function deploy_to_psrcloud(
     zip_path::String,
     execution_types::Vector{String},
     groups::Vector{String},
-    pycloud_rev::String,        
+    pycloud_version::String,        
 )
     compile_path = configuration.compile_path
     version = configuration.version
@@ -70,10 +70,10 @@ function deploy_to_psrcloud(
         writeln(io, "name = \"psrcloud\"")
         writeln(io, "version = \"0.1.0\"")
         writeln(io, "requires-python = \">=3.13,<3.14\"")
-        writeln(io, "dependencies = [\"psr-cloud>=0.3.14\"]")
+        writeln(io, "dependencies = [\"psr-cloud==$pycloud_version\"]")
         writeln(io, "")
         writeln(io, "[tool.uv.sources]")
-        writeln(io, "psr-cloud = { git = \"https://github.com/psrenergy/pycloud.git\", rev = \"$pycloud_rev\" }")
+        writeln(io, "psr-cloud = { git = \"https://github.com/psrenergy/pycloud.git\" }")
         return nothing
     end
 
