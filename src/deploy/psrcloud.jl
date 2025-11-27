@@ -72,7 +72,7 @@ function deploy_to_psrcloud(
         writeln(io, "dependencies = [\"psr-cloud>=0.3.14\"]")
         writeln(io, "")
         writeln(io, "[tool.uv.sources]")
-        writeln(io, "psr-cloud = { git = \"https://github.com/psrenergy/pycloud.git\" }")
+        writeln(io, "psr-cloud = { git = \"https://github.com/psrenergy/pycloud.git\", rev = \"59970e70d18b9dde2ee9cf8d32ccd717efa0fbf3\" }")
         return nothing
     end
 
