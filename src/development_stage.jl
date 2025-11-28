@@ -26,7 +26,7 @@ function Base.string(development_stage::DevelopmentStage.T)
     elseif development_stage == DevelopmentStage.ReleaseCandidate
         return "release candidate"
     elseif development_stage == DevelopmentStage.StableRelease
-        return ""
+        return "stable release"
     else
         error("Invalid development stage ($development_stage)")
     end
