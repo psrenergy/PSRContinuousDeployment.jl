@@ -2,6 +2,7 @@ using PSRContinuousDeployment
 
 using Test
 
+const PSRHUB_VERSION = "1.0.0-alpha.10"
 const SLACK_CHANNEL = "C03SSPFNTJS"
 const SLACK_TOKEN = ENV["SLACK_BOT_USER_OAUTH_ACCESS_TOKEN"]
 
@@ -35,6 +36,14 @@ function testall()
         ],
         skip_version_jl = true,
     )
+
+    if Sys.iswindows()
+        bundle_psrhub(;
+            configuration = configuration,
+            psrhub_version = PSRHUB_VERSION,
+            icon_path = joinpath(assets_path, "app_icon.ico"),
+        )
+    end
 
     binary_path =
         if Sys.iswindows()
