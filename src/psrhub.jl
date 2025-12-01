@@ -1,6 +1,7 @@
 function bundle_psrhub(;
     configuration::Configuration,
     psrhub_version::AbstractString,
+    sign::Bool = false,
     examples_path::Union{Nothing, AbstractString} = nothing,
     documentation_path::Union{Nothing, AbstractString} = nothing,
     icon_path::Union{Nothing, AbstractString} = nothing,
@@ -11,6 +12,8 @@ function bundle_psrhub(;
 
     target = configuration.target
     build_path = configuration.build_path
+
+    target_build_path = joinpath(build_path, "$target.exe")
 
     build_folders = readdir(build_path)
 
@@ -47,7 +50,7 @@ function bundle_psrhub(;
     rm(psrhub_zip_path, force = true)
 
     Log.info("PSRHUB: Renaming psrhub.exe to $target.exe")
-    mv(joinpath(build_path, "psrhub.exe"), joinpath(build_path, "$target.exe"), force = true)
+    mv(joinpath(build_path, "psrhub.exe"), target_build_path, force = true)
 
     Log.info("PSRHUB: Creating $target-debug.bat")
     open(joinpath(build_path, "$target-debug.bat"), "w") do io
@@ -93,7 +96,12 @@ function bundle_psrhub(;
         @assert PlatformEngines.download_verify(rcedit_url, rcedit_hash, rcedit_path)
 
         Log.info("SETUP: Running rcedit")
-        run(`$rcedit_path $(joinpath(build_path, "$target.exe")) --set-icon $icon_path`)
+        run(`$rcedit_path $target_build_path --set-icon $icon_path`)
+
+        if sign
+            Log.info("SETUP: Resigning the executable")
+            sync_file_with_certificate_server(configuration, target_build_path)
+        end
     end
 
     return nothing
