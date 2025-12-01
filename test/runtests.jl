@@ -24,19 +24,19 @@ function testall()
         ) == "$(configuration.target)-$(configuration.version)-win64.zip"
     end
 
-    # PSRContinuousDeployment.compile(
-    #     configuration,
-    #     additional_files_path = [
-    #         database_path,
-    #     ],
-    #     windows_additional_files_path = [
-    #         joinpath(assets_path, "Example.bat"),
-    #     ],
-    #     linux_additional_files_path = [
-    #         joinpath(assets_path, "Example.sh"),
-    #     ],
-    #     skip_version_jl = true,
-    # )
+    PSRContinuousDeployment.compile(
+        configuration,
+        additional_files_path = [
+            database_path,
+        ],
+        windows_additional_files_path = [
+            joinpath(assets_path, "Example.bat"),
+        ],
+        linux_additional_files_path = [
+            joinpath(assets_path, "Example.sh"),
+        ],
+        skip_version_jl = true,
+    )
 
     if Sys.iswindows()
         bundle_psrhub(;
