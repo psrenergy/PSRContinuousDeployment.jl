@@ -1,6 +1,6 @@
-function sync_file_with_certificate_server(configuration::Configuration)
+function sync_file_with_certificate_server(configuration::Configuration, path::AbstractString = setup_exe_path(configuration))
     sync_file_with_certificate_server(
-        path = setup_exe_path(configuration),
+        path = path,
         certificate_server_url = configuration.certificate_server_url,
     )
     return nothing
