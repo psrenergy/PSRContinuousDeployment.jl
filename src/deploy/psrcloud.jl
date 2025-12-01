@@ -5,7 +5,7 @@ function prepare_psrcloud(
 )
     compile_path = configuration.compile_path
 
-    bin_path = joinpath(mktempdir(compile_path; prefix="psrcloud_bin_", cleanup=false), "bin")
+    bin_path = joinpath(mktempdir(compile_path; prefix = "psrcloud_bin_", cleanup = false), "bin")
     mkdir(bin_path)
 
     model_path = download(url)
@@ -21,7 +21,7 @@ function prepare_psrcloud(
 
     chmod(bin_path, 0o755)
 
-    zip_path = mktempdir(compile_path; prefix="psrcloud_zip_", cleanup=false)
+    zip_path = mktempdir(compile_path; prefix = "psrcloud_zip_", cleanup = false)
     zip(bin_path, joinpath(zip_path, "psrcloud.zip"))
     return zip_path
 end
@@ -33,7 +33,7 @@ function deploy_to_psrcloud(
     zip_path::String,
     execution_types::Vector{String},
     groups::Vector{String},
-    pycloud_version::String,        
+    pycloud_version::String,
 )
     compile_path = configuration.compile_path
     version = configuration.version

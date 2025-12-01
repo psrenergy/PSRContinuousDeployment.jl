@@ -89,7 +89,7 @@ function bundle_psrhub(;
         Log.info("SETUP: Downloading rcedit")
         rcedit_url = "https://github.com/electron/rcedit/releases/download/v2.0.0/rcedit-x64.exe"
         rcedit_hash = "3e7801db1a5edbec91b49a24a094aad776cb4515488ea5a4ca2289c400eade2a"
-        rcedit_path = joinpath(mktempdir(; cleanup=false), "rcedit.exe")
+        rcedit_path = joinpath(mktempdir(; cleanup = true), "rcedit.exe")
         @assert PlatformEngines.download_verify(rcedit_url, rcedit_hash, rcedit_path)
 
         Log.info("SETUP: Running rcedit")
