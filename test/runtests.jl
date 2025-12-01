@@ -2,6 +2,7 @@ using PSRContinuousDeployment
 
 using Test
 
+const PSRHUB_VERSION = "1.0.0-alpha.11"
 const SLACK_CHANNEL = "C03SSPFNTJS"
 const SLACK_TOKEN = ENV["SLACK_BOT_USER_OAUTH_ACCESS_TOKEN"]
 
@@ -9,6 +10,7 @@ function testall()
     package_path = joinpath(@__DIR__, "Example.jl")
     assets_path = joinpath(package_path, "compile", "assets")
     database_path = joinpath(package_path, "database")
+    sign = false
 
     configuration = build_configuration(
         package_path = package_path,
@@ -36,11 +38,20 @@ function testall()
         skip_version_jl = true,
     )
 
+    if Sys.iswindows()
+        bundle_psrhub(;
+            configuration = configuration,
+            psrhub_version = PSRHUB_VERSION,
+            icon_path = joinpath(assets_path, "app_icon.ico"),
+            sign = sign,
+        )
+    end
+
     binary_path =
         if Sys.iswindows()
             create_setup(
                 configuration,
-                sign = false,
+                sign = sign,
             )
         else
             create_zip(configuration = configuration)

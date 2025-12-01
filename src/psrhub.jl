@@ -1,8 +1,10 @@
 function bundle_psrhub(;
     configuration::Configuration,
     psrhub_version::AbstractString,
+    sign::Bool = false,
     examples_path::Union{Nothing, AbstractString} = nothing,
     documentation_path::Union{Nothing, AbstractString} = nothing,
+    icon_path::Union{Nothing, AbstractString} = nothing,
 )
     initialize_aws()
 
@@ -10,6 +12,8 @@ function bundle_psrhub(;
 
     target = configuration.target
     build_path = configuration.build_path
+
+    target_build_path = joinpath(build_path, "$target.exe")
 
     build_folders = readdir(build_path)
 
@@ -46,7 +50,7 @@ function bundle_psrhub(;
     rm(psrhub_zip_path, force = true)
 
     Log.info("PSRHUB: Renaming psrhub.exe to $target.exe")
-    mv(joinpath(build_path, "psrhub.exe"), joinpath(build_path, "$target.exe"), force = true)
+    mv(joinpath(build_path, "psrhub.exe"), target_build_path, force = true)
 
     Log.info("PSRHUB: Creating $target-debug.bat")
     open(joinpath(build_path, "$target-debug.bat"), "w") do io
@@ -82,6 +86,22 @@ function bundle_psrhub(;
 
         Log.info("PSRHUB: Copying documentation")
         cp(documentation_path, build_documentation_path, force = true)
+    end
+
+    if !isnothing(icon_path)
+        Log.info("SETUP: Downloading rcedit")
+        rcedit_url = "https://github.com/electron/rcedit/releases/download/v2.0.0/rcedit-x64.exe"
+        rcedit_hash = "3e7801db1a5edbec91b49a24a094aad776cb4515488ea5a4ca2289c400eade2a"
+        rcedit_path = joinpath(mktempdir(; cleanup = true), "rcedit.exe")
+        @assert PlatformEngines.download_verify(rcedit_url, rcedit_hash, rcedit_path)
+
+        Log.info("SETUP: Running rcedit")
+        run(`$rcedit_path $target_build_path --set-icon $icon_path`)
+    end
+
+    if sign
+        Log.info("SETUP: Signing the executable")
+        sync_file_with_certificate_server(configuration, target_build_path)
     end
 
     return nothing
