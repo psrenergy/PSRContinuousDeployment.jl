@@ -97,11 +97,11 @@ function bundle_psrhub(;
 
         Log.info("SETUP: Running rcedit")
         run(`$rcedit_path $target_build_path --set-icon $icon_path`)
+    end
 
-        if sign
-            Log.info("SETUP: Resigning the executable")
-            sync_file_with_certificate_server(configuration, target_build_path)
-        end
+    if sign
+        Log.info("SETUP: Signing the executable")
+        sync_file_with_certificate_server(configuration, target_build_path)
     end
 
     return nothing
