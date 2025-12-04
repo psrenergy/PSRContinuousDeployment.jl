@@ -9,7 +9,7 @@ function get_ecs_cpu(memory_in_gb::Integer)
     elseif memory_in_gb <= 32
         return 4096
     else
-        throw(ErrorException("ECS: Unsupported memory size ($memory_in_gb GB)")
+        throw(ErrorException("ECS: Unsupported memory size ($memory_in_gb GB)"))
     end
 end
 
