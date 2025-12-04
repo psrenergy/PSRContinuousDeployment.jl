@@ -26,7 +26,7 @@ function deploy_to_distribution(
     elseif Sys.islinux()
         joinpath(publish_path, "linux")
     else
-        error("DISTRIBUTION: Unknown platform")
+        throw(ErrorException("DISTRIBUTION: Unknown platform"))
     end
 
     rm(os_path, force = true, recursive = true)
@@ -42,7 +42,7 @@ function deploy_to_distribution(
         elseif Sys.islinux()
             run(`git commit -m "Linux $version ($sha1)"`)
         else
-            error("DISTRIBUTION: Unknown platform")
+            throw(ErrorException("DISTRIBUTION: Unknown platform"))
         end
 
         run(`git pull`)

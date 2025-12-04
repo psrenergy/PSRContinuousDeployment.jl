@@ -98,7 +98,7 @@ function compile(
             copy(dirname(file_path), bin_path, basename(file_path))
         end
     else
-        error("COMPILE: Unsupported platform")
+        throw(ErrorException("COMPILE: Unsupported platform"))
     end
 
     @info("COMPILE: Copying Project.toml")

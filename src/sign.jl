@@ -42,7 +42,7 @@ function upload_file_to_certificate_server(;
         regex = match(r"\{\"filename\":\"(.*)\"\}", String(response))
         return String(regex[1])
     else
-        error("SETUP: Could not upload file to certificate server")
+        throw(ErrorException("SETUP: Could not upload file to certificate server"))
     end
 end
 
@@ -65,6 +65,6 @@ function download_file_from_server(;
             return nothing
         end
     else
-        error("SETUP: Could not download file from certificate server")
+        throw(ErrorException("SETUP: Could not download file from certificate server"))
     end
 end

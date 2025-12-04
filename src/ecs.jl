@@ -9,7 +9,7 @@ function get_ecs_cpu(memory_in_gb::Integer)
     elseif memory_in_gb <= 32
         return 4096
     else
-        error("ECS: Unsupported memory size ($memory_in_gb GB)")
+        throw(ErrorException("ECS: Unsupported memory size ($memory_in_gb GB)")
     end
 end
 
@@ -19,7 +19,7 @@ function get_task_definition(os::String)
     elseif os == "linux"
         return "julia-publish-linux"
     else
-        error("Unsupported operating system ($os)")
+        throw(ErrorException("Unsupported operating system ($os)"))
     end
 end
 

@@ -51,7 +51,7 @@ function build_aws_key(;
                 @info("PSRMODELS: Overwriting $filename")
                 return key
             else
-                error("PSRMODELS: $filename already exists")
+                throw(ErrorException("PSRMODELS: $filename already exists"))
             end
         else
             @info("PSRMODELS: Found version $target $version")
@@ -83,7 +83,7 @@ function build_aws_key(;
         end
     end
 
-    error("Failed to generate a unique hash")
+    throw(ErrorException("Failed to generate a unique hash"))
 
     return nothing
 end
@@ -94,7 +94,7 @@ function find_aws_linux_zip(configuration::Configuration)
     key = find_aws_key(configuration)
 
     if isnothing(key)
-        error("PSRMODELS: $filename not found")
+        throw(ErrorException("PSRMODELS: $filename not found"))
     end
 
     return models_url() * key

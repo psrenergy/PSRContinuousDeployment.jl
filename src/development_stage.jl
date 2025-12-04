@@ -12,7 +12,7 @@ function to_version(development_stage::DevelopmentStage.T)
     elseif development_stage == DevelopmentStage.StableRelease
         return ""
     else
-        error("Invalid development stage ($development_stage)")
+        throw(ErrorException("Invalid development stage ($development_stage)"))
     end
 end
 
@@ -28,7 +28,7 @@ function Base.string(development_stage::DevelopmentStage.T)
     elseif development_stage == DevelopmentStage.StableRelease
         return "stable release"
     else
-        error("Invalid development stage ($development_stage)")
+        throw(ErrorException("Invalid development stage ($development_stage)"))
     end
 end
 
@@ -46,7 +46,7 @@ function Base.parse(::Type{DevelopmentStage.T}, string::String)
     elseif lowercase_string == "stable release"
         return DevelopmentStage.StableRelease
     else
-        error("Invalid development stage ($string)")
+        throw(ErrorException("Invalid development stage ($string)"))
     end
 end
 

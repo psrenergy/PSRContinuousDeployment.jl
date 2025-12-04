@@ -82,7 +82,7 @@ function build_zip_filename(; configuration::Configuration, os::String = Base.Bi
     elseif os == "linux"
         return "$target-$version-linux.zip"
     else
-        error("Unsupported operating system ($os)")
+        throw(ErrorException("Unsupported operating system ($os)"))
     end
 end
 
@@ -93,6 +93,6 @@ function setup_exe_path(configuration::Configuration)
     if Sys.iswindows()
         return joinpath(configuration.setup_path, "$target-$version-win64.exe")
     else
-        error("SETUP: Creating setup file is only supported on Windows")
+        throw(ErrorException("SETUP: Creating setup file is only supported on Windows"))
     end
 end

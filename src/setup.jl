@@ -9,7 +9,7 @@ function create_setup(
     icons_entry::Union{Nothing, AbstractString} = nothing,
 )
     if !Sys.iswindows()
-        error("SETUP: Creating setup file is only supported on Windows")
+        throw(ErrorException("SETUP: Creating setup file is only supported on Windows"))
     end
 
     target = configuration.target

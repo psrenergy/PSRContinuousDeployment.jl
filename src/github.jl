@@ -18,7 +18,7 @@ function create_release(configuration::Configuration, token::AbstractString)
     if response.status == 201
         @info("GITHUB: Success")
     else
-        error("GITHUB: Failed")
+        throw(ErrorException("GITHUB: Failed"))
     end
 
     return nothing

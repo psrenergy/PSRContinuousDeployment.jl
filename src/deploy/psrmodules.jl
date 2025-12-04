@@ -52,7 +52,7 @@ function deploy_to_psrmodules(;
                             append = false
                             @info("PSRMODULES: Overwriting the $setup_zip in the psr-update-modules bucket")
                         else
-                            error("PSRMODULES: The $setup_zip already exists in the psr-update-modules bucket")
+                            throw(ErrorException("PSRMODULES: The $setup_zip already exists in the psr-update-modules bucket"))
                             return nothing
                         end
                     end
