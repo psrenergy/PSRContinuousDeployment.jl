@@ -14,11 +14,11 @@ function deploy_to_distribution(
     sha1 = read_git_sha1(package_path)
 
     if isdir(publish_path)
-        Log.info("DISTRIBUTION: Removing publish directory")
+        @info("DISTRIBUTION: Removing publish directory")
         rm(publish_path, force = true, recursive = true)
     end
 
-    Log.info("DISTRIBUTION: Clonning the $url")
+    @info("DISTRIBUTION: Clonning the $url")
     run(`git clone --branch develop $url $publish_path`)
 
     os_path = if Sys.iswindows()
@@ -26,14 +26,14 @@ function deploy_to_distribution(
     elseif Sys.islinux()
         joinpath(publish_path, "linux")
     else
-        Log.fatal_error("DISTRIBUTION: Unknown platform")
+        throw(ErrorException("DISTRIBUTION: Unknown platform"))
     end
 
     rm(os_path, force = true, recursive = true)
     mkdir(os_path)
     cp(build_path, os_path, force = true)
 
-    Log.info("DISTRIBUTION: Updating the $url")
+    @info("DISTRIBUTION: Updating the $url")
     cd(publish_path) do
         run(`git add --all`)
 
@@ -42,7 +42,7 @@ function deploy_to_distribution(
         elseif Sys.islinux()
             run(`git commit -m "Linux $version ($sha1)"`)
         else
-            Log.fatal_error("DISTRIBUTION: Unknown platform")
+            throw(ErrorException("DISTRIBUTION: Unknown platform"))
         end
 
         run(`git pull`)
@@ -51,7 +51,7 @@ function deploy_to_distribution(
     end
 
     if create_tag
-        Log.info("DISTRIBUTION: Creating tag $version")
+        @info("DISTRIBUTION: Creating tag $version")
         cd(publish_path) do
             run(`git fetch --progress --prune --force --recurse-submodules=no origin refs/heads/develop:refs/remotes/origin/develop`)
             run(`git branch --no-track release/$version refs/heads/develop`)
@@ -71,10 +71,10 @@ function deploy_to_distribution(
         end
     end
 
-    Log.info("DISTRIBUTION: Removing publish directory")
+    @info("DISTRIBUTION: Removing publish directory")
     rm(publish_path, force = true, recursive = true)
 
-    Log.info("DISTRIBUTION: Success")
+    @info("DISTRIBUTION: Success")
 
     return nothing
 end

@@ -16,9 +16,9 @@ function create_release(configuration::Configuration, token::AbstractString)
     response = HTTP.post("https://api.github.com/repos/$owner_and_repository/releases", headers, JSON.json(data))
 
     if response.status == 201
-        Log.info("GITHUB: Success")
+        @info("GITHUB: Success")
     else
-        Log.fatal_error("GITHUB: Failed")
+        throw(ErrorException("GITHUB: Failed"))
     end
 
     return nothing

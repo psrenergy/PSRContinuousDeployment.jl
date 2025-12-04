@@ -23,14 +23,6 @@ struct Configuration
         color = Dict("Debug Level" => :normal, "Debug" => :cyan, "Info" => :cyan, "Warn" => :yellow, "Error" => :red, "Fatal Error" => :red)
         background = Dict("Debug Level" => false, "Debug" => false, "Info" => false, "Warn" => false, "Error" => false, "Fatal Error" => true)
 
-        Log.create_polyglot_logger(
-            joinpath(compile_path, "$target.log"),
-            level_dict = level,
-            color_dict = color,
-            background_reverse_dict = background,
-            # append_log = true,
-        )
-
         return new(
             target,
             VersionNumber(version),
@@ -90,7 +82,7 @@ function build_zip_filename(; configuration::Configuration, os::String = Base.Bi
     elseif os == "linux"
         return "$target-$version-linux.zip"
     else
-        Log.fatal_error("Unsupported operating system ($os)")
+        throw(ErrorException("Unsupported operating system ($os)"))
     end
 end
 
@@ -101,6 +93,6 @@ function setup_exe_path(configuration::Configuration)
     if Sys.iswindows()
         return joinpath(configuration.setup_path, "$target-$version-win64.exe")
     else
-        Log.fatal_error("SETUP: Creating setup file is only supported on Windows")
+        throw(ErrorException("SETUP: Creating setup file is only supported on Windows"))
     end
 end

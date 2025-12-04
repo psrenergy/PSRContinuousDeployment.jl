@@ -1,5 +1,5 @@
 function notify_slack_channel(configuration::Configuration, slack_token::AbstractString, channel::AbstractString)
-    Log.info("NOTIFY: Notifying the Slack channel of code $channel")
+    @info("NOTIFY: Notifying the Slack channel of code $channel")
     target = configuration.target
     version = configuration.version
     message = "Version $version has been published: https://psr-update-modules.psr-inc.com/$target/$version.zip"
@@ -7,7 +7,7 @@ function notify_slack_channel(configuration::Configuration, slack_token::Abstrac
     context = SlackContext(slack_token)
     response = SlackAPI.channel_message(context, channel, message)
     if response.status != 200
-        Log.warn("NOTIFY: Failed to notify the Slack channel of code $channel. Status: $(response.status)")
+        @warn("NOTIFY: Failed to notify the Slack channel of code $channel. Status: $(response.status)")
         return nothing
     end
 
@@ -24,12 +24,12 @@ function notify_slack_channel(; configuration::Configuration, slack_token::Abstr
 end
 
 function slack_channel_message(; channel::AbstractString, message::AbstractString, slack_token::AbstractString = ENV["SLACK_BOT_USER_OAUTH_ACCESS_TOKEN"])
-    Log.info("NOTIFY: Notifying the Slack channel of code $channel")
+    @info("NOTIFY: Notifying the Slack channel of code $channel")
 
     context = SlackContext(slack_token)
     response = SlackAPI.channel_message(context, channel, message)
     if response.status != 200
-        Log.warn("NOTIFY: Failed to notify the Slack channel of code $channel. Status: $(response.status)")
+        @warn("NOTIFY: Failed to notify the Slack channel of code $channel. Status: $(response.status)")
         return nothing
     end
 

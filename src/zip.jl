@@ -9,7 +9,7 @@ function create_zip(;
     zip_filename = build_zip_filename(configuration = configuration)
     zip_path = joinpath(setup_path, zip_filename)
 
-    Log.info("ZIP: Zipping the $zip_filename")
+    @info("ZIP: Zipping the $zip_filename")
     run(`$(p7zip_jll.p7zip()) a -tzip $zip_path $build_path`)
     @assert isfile(zip_path)
 
@@ -17,13 +17,13 @@ function create_zip(;
 end
 
 function zip(path::AbstractString, destination::AbstractString)
-    Log.info("ZIP: Zipping $path to $destination")
+    @info("ZIP: Zipping $path to $destination")
     run(`$(p7zip_jll.p7zip()) a -tzip $destination $path`)
     return nothing
 end
 
 function unzip(path::AbstractString, destination::AbstractString)
-    Log.info("ZIP: Unzipping $path to $destination")
+    @info("ZIP: Unzipping $path to $destination")
     run(`$(p7zip_jll.p7zip()) x -o$destination $path`)
     return nothing
 end
