@@ -27,18 +27,18 @@ function compile(
     precompile_path = joinpath(compile_path, "precompile.jl")
     @assert isfile(precompile_path)
 
-    Log.info("COMPILE: Compiling $target v$version")
+    @info("COMPILE: Compiling $target v$version")
 
     if isdir(build_path)
-        Log.info("COMPILE: Removing build directory")
+        @info("COMPILE: Removing build directory")
         rm(build_path, force = true, recursive = true)
     end
 
-    Log.info("COMPILE: Creating build directory")
+    @info("COMPILE: Creating build directory")
     mkdir(build_path)
 
     if !skip_version_jl
-        Log.info("COMPILE: Creating version.jl")
+        @info("COMPILE: Creating version.jl")
         sha1 = read_git_sha1(package_path)
         date = read_git_date(package_path)
         build_date = Dates.format(Dates.now(Dates.UTC), dateformat"yyyy-mm-dd HH:MM:SS -0000")
@@ -47,8 +47,8 @@ function compile(
 
     free_memory = round(Int, Sys.free_memory() / 2^20)
     total_memory = round(Int, Sys.total_memory() / 2^20)
-    Log.info("COMPILE: memory free $free_memory MB")
-    Log.info("COMPILE: memory total $total_memory MB")
+    @info("COMPILE: memory free $free_memory MB")
+    @info("COMPILE: memory total $total_memory MB")
     versioninfo(verbose = true)
 
     sysimage_build_args = Vector{String}([
@@ -74,17 +74,17 @@ function compile(
     )
 
     if !skip_version_jl
-        Log.info("COMPILE: Cleaning version.jl")
+        @info("COMPILE: Cleaning version.jl")
         clean_version_jl(src_path)
 
-        Log.info("COMPILE: Creating $target.ver")
+        @info("COMPILE: Creating $target.ver")
         open(joinpath(bin_path, "$target.ver"), "w") do io
             writeln(io, sha1)
             return nothing
         end
     end
 
-    Log.info("COMPILE: Copying additional files")
+    @info("COMPILE: Copying additional files")
     for file_path in additional_files_path
         copy(dirname(file_path), bin_path, basename(file_path))
     end
@@ -98,10 +98,10 @@ function compile(
             copy(dirname(file_path), bin_path, basename(file_path))
         end
     else
-        Log.fatal_error("COMPILE: Unsupported platform")
+        error("COMPILE: Unsupported platform")
     end
 
-    Log.info("COMPILE: Copying Project.toml")
+    @info("COMPILE: Copying Project.toml")
 
     open(joinpath(bin_path, "Project.toml"), "w") do io
         writeln(io, "name = \"$target\"")
@@ -109,14 +109,14 @@ function compile(
         return nothing
     end
 
-    Log.info("COMPILE: Removing julia")
+    @info("COMPILE: Removing julia")
     if Sys.iswindows()
         rm(joinpath(bin_path, "julia.exe"), force = true)
     elseif Sys.islinux()
         rm(joinpath(bin_path, "julia"), force = true)
     end
 
-    Log.info("COMPILE: Success")
+    @info("COMPILE: Success")
     touch(joinpath(compile_path, "build.ok"))
 
     return nothing

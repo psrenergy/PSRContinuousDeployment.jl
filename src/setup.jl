@@ -9,7 +9,7 @@ function create_setup(
     icons_entry::Union{Nothing, AbstractString} = nothing,
 )
     if !Sys.iswindows()
-        Log.fatal_error("SETUP: Creating setup file is only supported on Windows")
+        error("SETUP: Creating setup file is only supported on Windows")
     end
 
     target = configuration.target
@@ -26,7 +26,7 @@ function create_setup(
     end
 
     if !isdir(setup_path)
-        Log.info("SETUP: Creating setup directory")
+        @info("SETUP: Creating setup directory")
         mkdir(setup_path)
     end
 
@@ -36,7 +36,7 @@ function create_setup(
     wizard_small_image_path = joinpath(setup_path, "header_instalador_138.bmp")
     write(wizard_small_image_path, wizard_small_image)
 
-    Log.info("SETUP: Creating setup file for $target $version")
+    @info("SETUP: Creating setup file for $target $version")
     iss_path = joinpath(setup_path, "setup.iss")
     open(iss_path, "w") do f
         writeln(f, "[Setup]")
@@ -103,29 +103,29 @@ function create_setup(
         return nothing
     end
 
-    Log.info("SETUP: Downloading Inno Setup")
+    @info("SETUP: Downloading Inno Setup")
     inno_url = "https://julia-artifacts.s3.amazonaws.com/inno/4b330/inno.tgz"
     inno_hash = "4b3303c32724af530789f7844f656ba8510977222bb79c5e95e88f67350864d7"
     inno_path = tempname()
     @assert download_verify_unpack(inno_url, inno_hash, inno_path)
 
-    Log.info("SETUP: Running Inno Setup")
+    @info("SETUP: Running Inno Setup")
     inno_executable_path = joinpath(inno_path, "inno", "ISCC.exe")
     inno_flags = Cmd(["/Qp"])
     run(`$inno_executable_path $inno_flags $iss_path`)
 
     if sign
-        Log.info("SETUP: Signing setup file")
+        @info("SETUP: Signing setup file")
         sync_file_with_certificate_server(configuration)
     end
 
-    Log.info("SETUP: Removing temporary files")
+    @info("SETUP: Removing temporary files")
     rm(iss_path, force = true)
     rm(wizard_image_path, force = true)
     rm(wizard_small_image_path, force = true)
     rm(inno_path, force = true, recursive = true)
 
-    Log.info("SETUP: Success")
+    @info("SETUP: Success")
 
     return setup_exe_path(configuration)
 end

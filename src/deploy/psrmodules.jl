@@ -19,12 +19,12 @@ function deploy_to_psrmodules(;
     setup_zip = "$version.zip"
     setup_zip_path = joinpath(setup_path, setup_zip)
 
-    Log.info("PSRMODULES: Zipping the $setup_exe")
+    @info("PSRMODULES: Zipping the $setup_exe")
     run(`$(p7zip_jll.p7zip()) a -tzip $setup_zip_path $setup_exe_path`)
     @assert isfile(setup_zip_path)
 
     if stable_release
-        Log.info("PSRMODULES: Downloading the $target/releases.txt")
+        @info("PSRMODULES: Downloading the $target/releases.txt")
 
         releases_versions = Vector{String}()
 
@@ -50,9 +50,9 @@ function deploy_to_psrmodules(;
                     if releases_version == setup_zip
                         if overwrite
                             append = false
-                            Log.info("PSRMODULES: Overwriting the $setup_zip in the psr-update-modules bucket")
+                            @info("PSRMODULES: Overwriting the $setup_zip in the psr-update-modules bucket")
                         else
-                            Log.fatal_error("PSRMODULES: The $setup_zip already exists in the psr-update-modules bucket")
+                            error("PSRMODULES: The $setup_zip already exists in the psr-update-modules bucket")
                             return nothing
                         end
                     end
@@ -64,22 +64,22 @@ function deploy_to_psrmodules(;
             return nothing
         end
 
-        Log.info("PSRMODULES: Uploading the $releases_path")
+        @info("PSRMODULES: Uploading the $releases_path")
         S3.put_object(bucket, "$target/releases.txt", Dict("body" => read(releases_path)))
 
-        Log.info("PSRMODULES: Removing temporary files")
+        @info("PSRMODULES: Removing temporary files")
         rm(releases_path; force = true)
     end
 
-    Log.info("PSRMODULES: Uploading the $setup_zip")
+    @info("PSRMODULES: Uploading the $setup_zip")
     S3.put_object(bucket, "$target/$setup_zip", Dict("body" => read(setup_zip_path)))
 
     if stable_release
-        Log.info("PSRMODULES: Uploading the latest version")
+        @info("PSRMODULES: Uploading the latest version")
         S3.put_object(bucket, "$target/$target-last-setup.exe", Dict("body" => read(setup_exe_path)))
     end
 
-    Log.info("PSRMODULES: Success")
+    @info("PSRMODULES: Success")
 
     return "https://$bucket.psr-inc.com/$target/$version.zip"
 end

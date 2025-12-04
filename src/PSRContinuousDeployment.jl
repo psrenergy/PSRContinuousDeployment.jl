@@ -15,7 +15,6 @@ using TOML
 using UUIDs
 
 import Git
-import LoggingPolyglot as Log
 import p7zip_jll
 
 const git = Git.git()

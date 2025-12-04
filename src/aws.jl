@@ -26,7 +26,7 @@ function find_aws_key(configuration::Configuration)
             key = get_key(contents)
 
             if startswith(key, "$target/$version/")
-                Log.info("PSRMODELS: Found key -> $target/$version")
+                @info("PSRMODELS: Found key -> $target/$version")
                 return key
             end
         end
@@ -48,13 +48,13 @@ function build_aws_key(;
     if !isnothing(key)
         if endswith(key, filename)
             if overwrite
-                Log.info("PSRMODELS: Overwriting $filename")
+                @info("PSRMODELS: Overwriting $filename")
                 return key
             else
-                Log.fatal_error("PSRMODELS: $filename already exists")
+                error("PSRMODELS: $filename already exists")
             end
         else
-            Log.info("PSRMODELS: Found version $target $version")
+            @info("PSRMODELS: Found version $target $version")
             _, _, hash, _ = split(key, "/")
             return "$target/$version/$hash/$filename"
         end
@@ -75,7 +75,7 @@ function build_aws_key(;
             end
 
             if unique
-                Log.info("PSRMODELS: Generated a unique key: $key")
+                @info("PSRMODELS: Generated a unique key: $key")
                 return key
             end
         else
@@ -94,7 +94,7 @@ function find_aws_linux_zip(configuration::Configuration)
     key = find_aws_key(configuration)
 
     if isnothing(key)
-        Log.fatal_error("PSRMODELS: $filename not found")
+        error("PSRMODELS: $filename not found")
     end
 
     return models_url() * key

@@ -22,11 +22,11 @@ function deploy_to_psrmodels(;
         overwrite = overwrite,
     )
 
-    Log.info("PSRMODELS: Uploading $filename")
+    @info("PSRMODELS: Uploading $filename")
     S3.put_object("psr-models", key, Dict("body" => read(path)))
 
     url = models_url() * key
-    Log.info("PSRMODELS: Successfully deployed to $url")
+    @info("PSRMODELS: Successfully deployed to $url")
 
     return url
 end
