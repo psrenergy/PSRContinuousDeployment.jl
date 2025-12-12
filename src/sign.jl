@@ -10,15 +10,23 @@ function sync_file_with_certificate_server(;
     path::AbstractString,
     certificate_server_url::AbstractString,
 )
-    filename = upload_file_to_certificate_server(
-        path = path,
-        certificate_server_url = certificate_server_url,
-    )
-    download_file_from_server(
-        path = path,
-        filename = filename,
-        certificate_server_url = certificate_server_url,
-    )
+    for s in 1:10
+        try
+            filename = upload_file_to_certificate_server(
+                path = path,
+                certificate_server_url = certificate_server_url,
+            )
+            download_file_from_server(
+                path = path,
+                filename = filename,
+                certificate_server_url = certificate_server_url,
+            )
+            break
+        catch e
+            s == 10 ? rethrow(e) : sleep(s)
+        end
+    end
+
     return nothing
 end
 
