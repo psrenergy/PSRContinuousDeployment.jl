@@ -59,7 +59,7 @@ function compile(
         # "--trim",
     ])
 
-    PackageCompiler.create_app(
+    @time PackageCompiler.create_app(
         package_path,
         build_path,
         executables = executables,
