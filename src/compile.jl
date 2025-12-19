@@ -54,7 +54,7 @@ function compile(
     @static if VERSION >= v"1.12.0"
         img = ImageRecipe(
             output_type = "--output-exe",
-            file = raw"C:\Development\DevOps\PSRContinuousDeployment.jl2\test\Example.jl",
+            file = package_path,
             trim_mode = "safe",
             add_ccallables = false,
             verbose = true,
@@ -62,12 +62,12 @@ function compile(
 
         link = LinkRecipe(
             image_recipe = img,
-            outname = "build/example",
+            outname = build_path,
         )
 
         bun = BundleRecipe(
             link_recipe = link,
-            output_dir = "build", # or `nothing` to skip bundling
+            output_dir = build_path,
         )
 
         compile_products(img)

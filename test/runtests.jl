@@ -25,41 +25,41 @@ function testall()
     #     ) == "$(configuration.target)-$(configuration.version)-win64.zip"
     # end
 
-    # @time PSRContinuousDeployment.compile(
-    #     configuration,
-    #     additional_files_path = [
-    #         database_path,
-    #     ],
-    #     windows_additional_files_path = [
-    #         joinpath(assets_path, "Example.bat"),
-    #     ],
-    #     linux_additional_files_path = [
-    #         joinpath(assets_path, "Example.sh"),
-    #     ],
-    #     skip_version_jl = true,
+    @time PSRContinuousDeployment.compile(
+        configuration,
+        additional_files_path = [
+            database_path,
+        ],
+        windows_additional_files_path = [
+            joinpath(assets_path, "Example.bat"),
+        ],
+        linux_additional_files_path = [
+            joinpath(assets_path, "Example.sh"),
+        ],
+        skip_version_jl = true,
+    )
+
+    # img = ImageRecipe(
+    #     output_type = "--output-exe",
+    #     file        = raw"C:\Development\DevOps\PSRContinuousDeployment.jl2\test\Example.jl",
+    #     trim_mode   = "safe",
+    #     add_ccallables = false,
+    #     verbose     = true,
     # )
 
-    img = ImageRecipe(
-        output_type = "--output-exe",
-        file        = raw"C:\Development\DevOps\PSRContinuousDeployment.jl2\test\Example.jl",
-        trim_mode   = "safe",
-        add_ccallables = false,
-        verbose     = true,
-    )
+    # link = LinkRecipe(
+    #     image_recipe = img,
+    #     outname      = "build/example",
+    # )
 
-    link = LinkRecipe(
-        image_recipe = img,
-        outname      = "build/example",
-    )
+    # bun = BundleRecipe(
+    #     link_recipe = link,
+    #     output_dir  = "build", # or `nothing` to skip bundling
+    # )
 
-    bun = BundleRecipe(
-        link_recipe = link,
-        output_dir  = "build", # or `nothing` to skip bundling
-    )
-
-    compile_products(img)
-    link_products(link)
-    bundle_products(bun)
+    # compile_products(img)
+    # link_products(link)
+    # bundle_products(bun)
 
     # if Sys.iswindows()
     #     bundle_psrhub(;
