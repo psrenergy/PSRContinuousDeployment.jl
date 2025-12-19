@@ -2,4 +2,4 @@
 
 SET BASE_PATH=%~dp0
 
-CALL julia +1.12 --project=%BASE_PATH% %BASE_PATH%\main.jl %*
+CALL julia +1.12.3 --project=%BASE_PATH% %BASE_PATH%\main.jl %*
