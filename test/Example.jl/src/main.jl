@@ -7,20 +7,26 @@ function g(x::Number, y::Number)
 end
 
 function @main(ARGS)::Cint
-    arg1 = parse(Int, ARGS[1])
-    arg2 = parse(Int, ARGS[2])
+    close_logger = open_logger(@__DIR__)
 
-    result_f = f(arg1, arg2)
-    result_g = g(arg1, arg2)
+    try
+        arg1 = parse(Int, ARGS[1])
+        arg2 = parse(Int, ARGS[2])
 
-    string_f = string(result_f)
-    string_g = string(result_g)
+        result_f = f(arg1, arg2)
+        result_g = g(arg1, arg2)
 
-    # println(Core.stdout, string_f)
-    # println(Core.stdout, string_g)
+        string_f = string(result_f)
+        string_g = string(result_g)
 
-    @info string_f
-    @info string_g
+        println(Core.stdout, string_f)
+        println(Core.stdout, string_g)
+
+        # @info string_f
+        # @info string_g
+    finally
+        close_logger()
+    end
 
     return 0
 end

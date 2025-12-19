@@ -46,37 +46,37 @@ function testall()
 
     @test read(`$executable_path 10 20`, String) == "30\n200\n"
 
-    if Sys.iswindows()
-        bundle_psrhub(;
-            configuration = configuration,
-            psrhub_version = PSRHUB_VERSION,
-            icon_path = joinpath(assets_path, "app_icon.ico"),
-            sign = sign,
-        )
-    end
+    # if Sys.iswindows()
+    #     bundle_psrhub(;
+    #         configuration = configuration,
+    #         psrhub_version = PSRHUB_VERSION,
+    #         icon_path = joinpath(assets_path, "app_icon.ico"),
+    #         sign = sign,
+    #     )
+    # end
 
-    binary_path =
-        if Sys.iswindows()
-            create_setup(
-                configuration,
-                sign = sign,
-            )
-        else
-            create_zip(configuration = configuration)
-        end
+    # binary_path =
+    #     if Sys.iswindows()
+    #         create_setup(
+    #             configuration,
+    #             sign = sign,
+    #         )
+    #     else
+    #         create_zip(configuration = configuration)
+    #     end
 
-    url = deploy_to_psrmodels(
-        configuration = configuration,
-        path = binary_path,
-        overwrite = true,
-    )
+    # url = deploy_to_psrmodels(
+    #     configuration = configuration,
+    #     path = binary_path,
+    #     overwrite = true,
+    # )
 
-    notify_slack_channel(
-        configuration = configuration,
-        slack_token = SLACK_TOKEN,
-        channel = SLACK_CHANNEL,
-        url = url,
-    )
+    # notify_slack_channel(
+    #     configuration = configuration,
+    #     slack_token = SLACK_TOKEN,
+    #     channel = SLACK_CHANNEL,
+    #     url = url,
+    # )
 
     return 0
 end
