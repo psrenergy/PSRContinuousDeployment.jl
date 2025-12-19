@@ -7,6 +7,7 @@ using EnumX
 using HTTP
 using InteractiveUtils
 using JSON
+using JuliaC
 using PackageCompiler
 using Pkg.PlatformEngines
 using Random
