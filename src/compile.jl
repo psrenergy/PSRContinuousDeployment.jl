@@ -62,18 +62,17 @@ function compile(
 
         link = LinkRecipe(
             image_recipe = img,
-            outname = build_path,
+            outname = joinpath(build_path, target),
         )
 
         bun = BundleRecipe(
             link_recipe = link,
-            output_dir = build_path,
+            output_dir = build_path
         )
 
         compile_products(img)
         link_products(link)
         bundle_products(bun)
-
     else
         sysimage_build_args = Vector{String}([
             "--strip-metadata",

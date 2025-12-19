@@ -39,59 +39,45 @@ function testall()
         skip_version_jl = true,
     )
 
-    # img = ImageRecipe(
-    #     output_type = "--output-exe",
-    #     file        = raw"C:\Development\DevOps\PSRContinuousDeployment.jl2\test\Example.jl",
-    #     trim_mode   = "safe",
-    #     add_ccallables = false,
-    #     verbose     = true,
-    # )
+    executable_path = if Sys.iswindows()
+        joinpath(configuration.build_path, "bin", "$(configuration.target).exe")
+    else
+        joinpath(configuration.build_path, "bin", configuration.target)
+    end
 
-    # link = LinkRecipe(
-    #     image_recipe = img,
-    #     outname      = "build/example",
-    # )
+    @test read(`$executable_path 10 20`, String) == "30\n200\n"
 
-    # bun = BundleRecipe(
-    #     link_recipe = link,
-    #     output_dir  = "build", # or `nothing` to skip bundling
-    # )
+    if Sys.iswindows()
+        bundle_psrhub(;
+            configuration = configuration,
+            psrhub_version = PSRHUB_VERSION,
+            icon_path = joinpath(assets_path, "app_icon.ico"),
+            sign = sign,
+        )
+    end
 
-    # compile_products(img)
-    # link_products(link)
-    # bundle_products(bun)
+    binary_path =
+        if Sys.iswindows()
+            create_setup(
+                configuration,
+                sign = sign,
+            )
+        else
+            create_zip(configuration = configuration)
+        end
 
-    # if Sys.iswindows()
-    #     bundle_psrhub(;
-    #         configuration = configuration,
-    #         psrhub_version = PSRHUB_VERSION,
-    #         icon_path = joinpath(assets_path, "app_icon.ico"),
-    #         sign = sign,
-    #     )
-    # end
+    url = deploy_to_psrmodels(
+        configuration = configuration,
+        path = binary_path,
+        overwrite = true,
+    )
 
-    # binary_path =
-    #     if Sys.iswindows()
-    #         create_setup(
-    #             configuration,
-    #             sign = sign,
-    #         )
-    #     else
-    #         create_zip(configuration = configuration)
-    #     end
-
-    # url = deploy_to_psrmodels(
-    #     configuration = configuration,
-    #     path = binary_path,
-    #     overwrite = true,
-    # )
-
-    # notify_slack_channel(
-    #     configuration = configuration,
-    #     slack_token = SLACK_TOKEN,
-    #     channel = SLACK_CHANNEL,
-    #     url = url,
-    # )
+    notify_slack_channel(
+        configuration = configuration,
+        slack_token = SLACK_TOKEN,
+        channel = SLACK_CHANNEL,
+        url = url,
+    )
 
     return 0
 end
