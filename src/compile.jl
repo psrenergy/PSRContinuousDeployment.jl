@@ -67,7 +67,7 @@ function compile(
 
         bun = BundleRecipe(
             link_recipe = link,
-            output_dir = build_path
+            output_dir = build_path,
         )
 
         compile_products(img)

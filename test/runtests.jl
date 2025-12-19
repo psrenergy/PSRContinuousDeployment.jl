@@ -1,5 +1,4 @@
 using PSRContinuousDeployment
-using JuliaC
 
 using Test
 
@@ -19,11 +18,11 @@ function testall()
         version_suffix = "Julia.$VERSION",
     )
 
-    # if Sys.iswindows()
-    #     @test PSRContinuousDeployment.build_zip_filename(
-    #         configuration = configuration,
-    #     ) == "$(configuration.target)-$(configuration.version)-win64.zip"
-    # end
+    if Sys.iswindows()
+        @test PSRContinuousDeployment.build_zip_filename(
+            configuration = configuration,
+        ) == "$(configuration.target)-$(configuration.version)-win64.zip"
+    end
 
     @time PSRContinuousDeployment.compile(
         configuration,
