@@ -6,18 +6,22 @@ function g(x::Number, y::Number)
     return x * y
 end
 
-function main(args::Vector{String})
-    println("Example.jl")
-
-    println("Arguments: ", args)
-
-    println("f = ", f(parse(Float64, args[1]), parse(Float64, args[2])))
-    println("g = ", g(parse(Float64, args[1]), parse(Float64, args[2])))
-
-    return nothing
+@static if VERSION >= v"1.12.0"
+function @main(ARGS)::Cint
+else
+function main(ARGS)::Cint
 end
+    arg1 = parse(Int, ARGS[1])
+    arg2 = parse(Int, ARGS[2])
 
-function julia_main()::Cint
-    main(ARGS)
+    result_f = f(arg1, arg2)
+    result_g = g(arg1, arg2)
+
+    string_f = string(result_f)
+    string_g = string(result_g)
+    
+    println(Core.stdout, string_f)
+    println(Core.stdout, string_g)
+
     return 0
 end
