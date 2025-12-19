@@ -1,5 +1,5 @@
 @echo off
 
-SET BASEPATH=%~dp0
+SET BASE_PATH=%~dp0
 
-CALL julia +1.12 --project=%BASEPATH% --load=%BASEPATH%\revise.jl
+CALL julia +1.12 --project=%BASE_PATH% --load=%BASE_PATH%\revise.jl

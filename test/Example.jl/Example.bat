@@ -1,5 +1,5 @@
 @echo off
 
-SET BASEPATH=%~dp0
+SET BASE_PATH=%~dp0
 
-CALL "%JULIA_1113%" --project=%BASEPATH% %BASEPATH%\main.jl %*
+CALL julia +1.12 --project=%BASE_PATH% %BASE_PATH%\main.jl %*
