@@ -6,11 +6,11 @@ function g(x::Number, y::Number)
     return x * y
 end
 
-@static if VERSION >= v"1.12.0"
+# @static if VERSION >= v"1.12.0"
 function @main(ARGS)::Cint
-else
-function main(ARGS)::Cint
-end
+# else
+# function main(ARGS)::Cint
+# end
     arg1 = parse(Int, ARGS[1])
     arg2 = parse(Int, ARGS[2])
 

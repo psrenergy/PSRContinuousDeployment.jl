@@ -52,52 +52,51 @@ function compile(
     versioninfo(verbose = true)
 
     @static if VERSION >= v"1.12.0"
+        img = ImageRecipe(
+            output_type = "--output-exe",
+            file = raw"C:\Development\DevOps\PSRContinuousDeployment.jl2\test\Example.jl",
+            trim_mode = "safe",
+            add_ccallables = false,
+            verbose = true,
+        )
 
-            img = ImageRecipe(
-        output_type = "--output-exe",
-        file        = raw"C:\Development\DevOps\PSRContinuousDeployment.jl2\test\Example.jl",
-        trim_mode   = "safe",
-        add_ccallables = false,
-        verbose     = true,
-    )
+        link = LinkRecipe(
+            image_recipe = img,
+            outname = "build/example",
+        )
 
-    link = LinkRecipe(
-        image_recipe = img,
-        outname      = "build/example",
-    )
+        bun = BundleRecipe(
+            link_recipe = link,
+            output_dir = "build", # or `nothing` to skip bundling
+        )
 
-    bun = BundleRecipe(
-        link_recipe = link,
-        output_dir  = "build", # or `nothing` to skip bundling
-    )
+        compile_products(img)
+        link_products(link)
+        bundle_products(bun)
 
-    compile_products(img)
-    link_products(link)
-    bundle_products(bun)
+    else
+        sysimage_build_args = Vector{String}([
+            "--strip-metadata",
+            # "--strip-ir",
+            # "--compile=all",
+            # "--experimental",
+            # "--trim",
+        ])
 
-else
-    sysimage_build_args = Vector{String}([
-        "--strip-metadata",
-        # "--strip-ir",
-        # "--compile=all",
-        # "--experimental",
-        # "--trim",
-    ])
-
-    @time PackageCompiler.create_app(
-        package_path,
-        build_path,
-        executables = executables,
-        precompile_execution_file = precompile_path,
-        incremental = false,
-        filter_stdlibs = filter_stdlibs,
-        force = true,
-        include_lazy_artifacts = include_lazy_artifacts,
-        include_transitive_dependencies = include_transitive_dependencies,
-        sysimage_build_args = Cmd(sysimage_build_args),
-        kwargs...,
-    )
-end
+        @time PackageCompiler.create_app(
+            package_path,
+            build_path,
+            executables = executables,
+            precompile_execution_file = precompile_path,
+            incremental = false,
+            filter_stdlibs = filter_stdlibs,
+            force = true,
+            include_lazy_artifacts = include_lazy_artifacts,
+            include_transitive_dependencies = include_transitive_dependencies,
+            sysimage_build_args = Cmd(sysimage_build_args),
+            kwargs...,
+        )
+    end
 
     if !skip_version_jl
         @info("COMPILE: Cleaning version.jl")
