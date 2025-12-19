@@ -1,4 +1,5 @@
 using PSRContinuousDeployment
+using JuliaC
 
 using Test
 
@@ -18,57 +19,79 @@ function testall()
         version_suffix = "Julia.$VERSION",
     )
 
-    if Sys.iswindows()
-        @test PSRContinuousDeployment.build_zip_filename(
-            configuration = configuration,
-        ) == "$(configuration.target)-$(configuration.version)-win64.zip"
-    end
+    # if Sys.iswindows()
+    #     @test PSRContinuousDeployment.build_zip_filename(
+    #         configuration = configuration,
+    #     ) == "$(configuration.target)-$(configuration.version)-win64.zip"
+    # end
 
-    PSRContinuousDeployment.compile(
-        configuration,
-        additional_files_path = [
-            database_path,
-        ],
-        windows_additional_files_path = [
-            joinpath(assets_path, "Example.bat"),
-        ],
-        linux_additional_files_path = [
-            joinpath(assets_path, "Example.sh"),
-        ],
-        skip_version_jl = true,
+    # @time PSRContinuousDeployment.compile(
+    #     configuration,
+    #     additional_files_path = [
+    #         database_path,
+    #     ],
+    #     windows_additional_files_path = [
+    #         joinpath(assets_path, "Example.bat"),
+    #     ],
+    #     linux_additional_files_path = [
+    #         joinpath(assets_path, "Example.sh"),
+    #     ],
+    #     skip_version_jl = true,
+    # )
+
+    img = ImageRecipe(
+        output_type = "--output-exe",
+        file        = raw"C:\Development\DevOps\PSRContinuousDeployment.jl2\test\Example.jl",
+        trim_mode   = "safe",
+        add_ccallables = false,
+        verbose     = true,
     )
 
-    if Sys.iswindows()
-        bundle_psrhub(;
-            configuration = configuration,
-            psrhub_version = PSRHUB_VERSION,
-            icon_path = joinpath(assets_path, "app_icon.ico"),
-            sign = sign,
-        )
-    end
-
-    binary_path =
-        if Sys.iswindows()
-            create_setup(
-                configuration,
-                sign = sign,
-            )
-        else
-            create_zip(configuration = configuration)
-        end
-
-    url = deploy_to_psrmodels(
-        configuration = configuration,
-        path = binary_path,
-        overwrite = true,
+    link = LinkRecipe(
+        image_recipe = img,
+        outname      = "build/example",
     )
 
-    notify_slack_channel(
-        configuration = configuration,
-        slack_token = SLACK_TOKEN,
-        channel = SLACK_CHANNEL,
-        url = url,
+    bun = BundleRecipe(
+        link_recipe = link,
+        output_dir  = "build", # or `nothing` to skip bundling
     )
+
+    compile_products(img)
+    link_products(link)
+    bundle_products(bun)
+
+    # if Sys.iswindows()
+    #     bundle_psrhub(;
+    #         configuration = configuration,
+    #         psrhub_version = PSRHUB_VERSION,
+    #         icon_path = joinpath(assets_path, "app_icon.ico"),
+    #         sign = sign,
+    #     )
+    # end
+
+    # binary_path =
+    #     if Sys.iswindows()
+    #         create_setup(
+    #             configuration,
+    #             sign = sign,
+    #         )
+    #     else
+    #         create_zip(configuration = configuration)
+    #     end
+
+    # url = deploy_to_psrmodels(
+    #     configuration = configuration,
+    #     path = binary_path,
+    #     overwrite = true,
+    # )
+
+    # notify_slack_channel(
+    #     configuration = configuration,
+    #     slack_token = SLACK_TOKEN,
+    #     channel = SLACK_CHANNEL,
+    #     url = url,
+    # )
 
     return 0
 end

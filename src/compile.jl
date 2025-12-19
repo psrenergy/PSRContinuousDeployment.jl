@@ -51,6 +51,31 @@ function compile(
     @info("COMPILE: memory total $total_memory MB")
     versioninfo(verbose = true)
 
+    @static if VERSION >= v"1.12.0"
+
+            img = ImageRecipe(
+        output_type = "--output-exe",
+        file        = raw"C:\Development\DevOps\PSRContinuousDeployment.jl2\test\Example.jl",
+        trim_mode   = "safe",
+        add_ccallables = false,
+        verbose     = true,
+    )
+
+    link = LinkRecipe(
+        image_recipe = img,
+        outname      = "build/example",
+    )
+
+    bun = BundleRecipe(
+        link_recipe = link,
+        output_dir  = "build", # or `nothing` to skip bundling
+    )
+
+    compile_products(img)
+    link_products(link)
+    bundle_products(bun)
+
+else
     sysimage_build_args = Vector{String}([
         "--strip-metadata",
         # "--strip-ir",
@@ -72,6 +97,7 @@ function compile(
         sysimage_build_args = Cmd(sysimage_build_args),
         kwargs...,
     )
+end
 
     if !skip_version_jl
         @info("COMPILE: Cleaning version.jl")
