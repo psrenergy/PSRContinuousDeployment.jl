@@ -32,3 +32,4 @@ test/Example.jl/compile/build*
 test/Example.jl/compile/setup/
 test/Example.jl/compile/Example.log
 test/Example.jl/compile/build.ok
+test/Example.jl/src/example.log

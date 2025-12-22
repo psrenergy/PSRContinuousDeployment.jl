@@ -51,27 +51,27 @@ function compile(
     @info("COMPILE: memory total $total_memory MB")
     versioninfo(verbose = true)
 
-    sysimage_build_args = Vector{String}([
-        "--strip-metadata",
-        # "--strip-ir",
-        # "--compile=all",
-        # "--experimental",
-        # "--trim",
-    ])
-
-    @time PackageCompiler.create_app(
-        package_path,
-        build_path,
-        executables = executables,
-        precompile_execution_file = precompile_path,
-        incremental = false,
-        filter_stdlibs = filter_stdlibs,
-        force = true,
-        include_lazy_artifacts = include_lazy_artifacts,
-        include_transitive_dependencies = include_transitive_dependencies,
-        sysimage_build_args = Cmd(sysimage_build_args),
-        kwargs...,
+    img = ImageRecipe(
+        output_type = "--output-exe",
+        file = package_path,
+        trim_mode = "no",
+        add_ccallables = false,
+        verbose = true,
     )
+
+    link = LinkRecipe(
+        image_recipe = img,
+        outname = joinpath(build_path, target),
+    )
+
+    bun = BundleRecipe(
+        link_recipe = link,
+        output_dir = build_path,
+    )
+
+    compile_products(img)
+    link_products(link)
+    bundle_products(bun)
 
     if !skip_version_jl
         @info("COMPILE: Cleaning version.jl")

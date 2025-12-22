@@ -24,7 +24,7 @@ function testall()
         ) == "$(configuration.target)-$(configuration.version)-win64.zip"
     end
 
-    PSRContinuousDeployment.compile(
+    @time PSRContinuousDeployment.compile(
         configuration,
         additional_files_path = [
             database_path,
@@ -38,37 +38,45 @@ function testall()
         skip_version_jl = true,
     )
 
-    if Sys.iswindows()
-        bundle_psrhub(;
-            configuration = configuration,
-            psrhub_version = PSRHUB_VERSION,
-            icon_path = joinpath(assets_path, "app_icon.ico"),
-            sign = sign,
-        )
+    executable_path = if Sys.iswindows()
+        joinpath(configuration.build_path, "bin", "$(configuration.target).exe")
+    else
+        joinpath(configuration.build_path, "bin", configuration.target)
     end
 
-    binary_path =
-        if Sys.iswindows()
-            create_setup(
-                configuration,
-                sign = sign,
-            )
-        else
-            create_zip(configuration = configuration)
-        end
+    @test read(`$executable_path 10 20`, String) == "30\n200\n"
 
-    url = deploy_to_psrmodels(
-        configuration = configuration,
-        path = binary_path,
-        overwrite = true,
-    )
+    # if Sys.iswindows()
+    #     bundle_psrhub(;
+    #         configuration = configuration,
+    #         psrhub_version = PSRHUB_VERSION,
+    #         icon_path = joinpath(assets_path, "app_icon.ico"),
+    #         sign = sign,
+    #     )
+    # end
 
-    notify_slack_channel(
-        configuration = configuration,
-        slack_token = SLACK_TOKEN,
-        channel = SLACK_CHANNEL,
-        url = url,
-    )
+    # binary_path =
+    #     if Sys.iswindows()
+    #         create_setup(
+    #             configuration,
+    #             sign = sign,
+    #         )
+    #     else
+    #         create_zip(configuration = configuration)
+    #     end
+
+    # url = deploy_to_psrmodels(
+    #     configuration = configuration,
+    #     path = binary_path,
+    #     overwrite = true,
+    # )
+
+    # notify_slack_channel(
+    #     configuration = configuration,
+    #     slack_token = SLACK_TOKEN,
+    #     channel = SLACK_CHANNEL,
+    #     url = url,
+    # )
 
     return 0
 end

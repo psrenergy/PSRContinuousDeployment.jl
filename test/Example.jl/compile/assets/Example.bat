@@ -1,8 +1,8 @@
 @echo off
 
-SET BASEPATH=%~dp0
+SET BASE_PATH=%~dp0
 
 SET JULIA_HOME=
 SET JULIA_BINDIR=
 
-CALL "%BASEPATH%Example.exe" %*
+CALL "%BASE_PATH%Example.exe" %*
