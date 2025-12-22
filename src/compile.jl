@@ -54,7 +54,7 @@ function compile(
     img = ImageRecipe(
         output_type = "--output-exe",
         file = package_path,
-        trim_mode = "safe",
+        trim_mode = "no",
         add_ccallables = false,
         verbose = true,
     )
